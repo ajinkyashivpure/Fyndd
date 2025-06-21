@@ -131,6 +131,12 @@ const HomePage = () => {
                         <h3>Urban Style</h3>
                         <p>Street fashion at its best</p>
                     </div>
+                    <div className="card">
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/OldMoney.jpeg" alt="Old Money" />
+                        <h3>Old Money</h3>
+                        <p>Timeless elegance and sophistication</p>
+                    </div>
+
                 </div>
             </section>
 
