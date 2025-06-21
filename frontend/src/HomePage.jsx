@@ -113,7 +113,7 @@ const HomePage = () => {
                             <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+2+left.png" alt="Fashion 1" />
                             <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+2+right.png" alt="Fashion 2" />
                         </div>
-                        {/*<div className="grid-spacing"></div>*/}
+                        <div className="grid-spacing"></div>
                         <div className="grid-row-three">
                             <div className="grid-left">
                                 <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+3+left+.png" alt="Fashion 3" />
