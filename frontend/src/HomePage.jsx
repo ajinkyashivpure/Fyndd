@@ -127,15 +127,14 @@ const HomePage = () => {
 
 
                     <section className="trending-aesthetics">
-                        <h2>Trending Aesthetics</h2>
                         <div className="aesthetics-cards">
                             <div className="card">
-                                <img src="https://images.unsplash.com/photo-1475180098004-ca77a66827be" alt="Trending 1" />
-                                <h3>Summer Vibes</h3>
-                                <p>Explore the latest summer collection</p>
+                                <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/travis.png" alt="Trending 1" />
+                                <h3>Travis Scott Concert</h3>
+                                <p>Utility meets performance.</p>
                             </div>
                             <div className="card">
-                                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d" alt="Trending 2" />
+                                <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/urban.jpg" alt="Trending 2" />
                                 <h3>Urban Style</h3>
                                 <p>Street fashion at its best</p>
                             </div>
