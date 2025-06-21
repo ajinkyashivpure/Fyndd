@@ -1,4 +1,6 @@
 .homepage-container {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     font-family: 'Inter', Arial, sans-serif;
     background: #fff;
     color: #222;
@@ -140,8 +142,8 @@
     background: rgba(255, 255, 255, 0.8);
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     font-size: 24px;
     cursor: pointer;
     display: flex;
@@ -176,6 +178,7 @@
 .dot {
     width: 8px;
     height: 8px;
+    margin: 0 4px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
@@ -430,6 +433,9 @@
 }
 
 @media screen and (max-width: 768px) {
+    .hero{
+        padding: 16px;
+    }
     .header {
         padding: 12px 16px;
         flex-direction: row;
@@ -484,6 +490,80 @@
         font-size: 1.2rem;
         padding: 0 8px;
     }
+
+    .hero-text {
+        padding: 16px 0;
+        text-align: center;
+    }
+
+    .hero-text h1 {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+        color: #e57373; /* Maintaining the exact color */
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+        line-height: 1.4;
+        margin-bottom: 16px;
+        padding: 0 8px;
+    }
+
+    .explore-btn {
+        width: 100%;
+        max-width: 280px;
+        padding: 12px 24px;
+        background: #e61414; /* Maintaining the exact color */
+    }
+
+    .hero-carousel {
+        margin: 16px -16px;
+    }
+
+    .hero-images img {
+        height: 300px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    /* Image grid mobile styles */
+    .image-grid {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .grid-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .grid-row-two img,
+    .grid-row-three img {
+        width: 100%;
+        height: 250px;
+        flex: none;
+    }
+
+    /* Trending aesthetics mobile styles */
+    .trending-aesthetics {
+        padding: 16px;
+    }
+
+    .trending-aesthetics h2 {
+        font-size: 1.2rem;
+        margin-bottom: 16px;
+    }
+
+    .aesthetics-cards {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .card {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
 }
 
 /* For very small screens */

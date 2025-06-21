@@ -105,6 +105,35 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
+
+            <section className="image-grid">
+                <div className="grid-row grid-row-two">
+                    <img src="https://images.unsplash.com/photo-1485125639709-a60c3a500bf1" alt="Fashion 1" />
+                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b" alt="Fashion 2" />
+                </div>
+                <div className="grid-row grid-row-three">
+                    <img src="https://images.unsplash.com/photo-1495121605193-b116b5b9c5fe" alt="Fashion 3" />
+                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8" alt="Fashion 4" />
+                    <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc" alt="Fashion 5" />
+                </div>
+            </section>
+
+            <section className="trending-aesthetics">
+                <h2>Trending Aesthetics</h2>
+                <div className="aesthetics-cards">
+                    <div className="card">
+                        <img src="https://images.unsplash.com/photo-1475180098004-ca77a66827be" alt="Trending 1" />
+                        <h3>Summer Vibes</h3>
+                        <p>Explore the latest summer collection</p>
+                    </div>
+                    <div className="card">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d" alt="Trending 2" />
+                        <h3>Urban Style</h3>
+                        <p>Street fashion at its best</p>
+                    </div>
+                </div>
+            </section>
+
         </div>
     );
 };
