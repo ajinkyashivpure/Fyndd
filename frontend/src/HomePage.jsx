@@ -109,16 +109,11 @@ const HomePage = () => {
                     </section>
 
                     <section className="image-grid">
-                        {/* Two images right below carousel */}
                         <div className="grid-row-two">
                             <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+2+left.png" alt="Fashion 1" />
                             <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+2+right.png" alt="Fashion 2" />
                         </div>
-
-                        {/* White space separator */}
                         <div className="grid-spacing"></div>
-
-                        {/* Three image asymmetric grid */}
                         <div className="grid-row-three">
                             <div className="grid-left">
                                 <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+3+left+.png" alt="Fashion 3" />
