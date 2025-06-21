@@ -585,7 +585,7 @@ body {
         border-radius: 0;
     }
     .grid-spacing {
-        height: 5px;
+        height: 0;
         width: 100%;
         display: block;
         margin: 0;
