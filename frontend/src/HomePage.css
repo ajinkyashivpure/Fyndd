@@ -549,8 +549,10 @@ body {
     /* Image grid mobile styles */
     .image-grid {
         width: 100%;
+        display: flex;
+        flex-direction: column;
         padding: 0;
-        /*gap: 16px;*/
+        gap: 0;
         margin: 0;
     }
 
@@ -566,6 +568,7 @@ body {
         height: 100vw; /* Square container for the grid */
         margin: 0;
         padding: 0;
+        gap: 0;
     }
 
 
@@ -575,8 +578,9 @@ body {
         height: 100vw; /* This will maintain aspect ratio */
         margin: 0;
         padding: 0;
+        gap: 0;
     }
-    .grid-row-two img {
+    .grid-row-two img, .grid-row-three img {
         width: 50%; /* Each image takes exactly half the screen */
         height: 50vw;
         object-fit: cover;
@@ -585,7 +589,7 @@ body {
         border-radius: 0;
     }
     .grid-spacing {
-        height: 0;
+        height: 5px;
         width: 100%;
         display: block;
         margin: 0;
