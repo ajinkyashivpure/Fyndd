@@ -27,44 +27,40 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
+    padding: 18px 32px 12px 32px;
     border-bottom: 1px solid #eee;
     width: 100%;
     box-sizing: border-box;
-    flex-wrap: wrap;
-    gap: 8px;
 }
 .header-left {
     display: flex;
     align-items: center;
     flex: 1;
-    gap: 16px;
     min-width: 0;
 }
 .logo {
     font-family: 'Pacifico', cursive;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: bold;
     letter-spacing: 2px;
-    margin-right: 0;
+    margin-right: 40px;
 }
 .nav {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 32px;
 }
 .nav a {
     text-decoration: none;
     color: #222;
     font-weight: 500;
-    font-size: 0.9rem;
-    white-space: nowrap;
+    font-size: 1rem;
     padding: 0 2px;
 }
 .header-right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 }
 .search-bar-wrapper {
     position: relative;
@@ -72,12 +68,12 @@ body {
     align-items: center;
 }
 .search-bar {
-    padding: 6px 40px 6px 16px;
+    padding: 8px 48px 8px 20px;
     border-radius: 24px;
     border: 2px solid #222;
     font-size: 1rem;
-    width: 200px;
-    max-width: 100%;
+    width: 420px;
+    max-width: 520px;
     font-weight: 400;
     margin-right: 0;
     box-sizing: border-box;
@@ -99,10 +95,10 @@ body {
     display: block;
 }
 .icon {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     cursor: pointer;
     margin: 0;
-    padding: 0 2px;
+    padding: 0 4px;
 }
 
 .hero {
@@ -462,8 +458,7 @@ body {
     .header {
         padding: 8px 12px;
         flex-direction: row;
-        flex-wrap: wrap;
-        gap: 8px;
+        gap: 12px;
     }
 
     .header-left {
@@ -514,9 +509,6 @@ body {
         padding: 0 8px;
     }
 
-    .nav{
-        gap: 12px;
-    }
 
     .hero-text {
         padding: 16px 0;
