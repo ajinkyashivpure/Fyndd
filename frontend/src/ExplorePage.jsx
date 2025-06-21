@@ -47,6 +47,7 @@ const ExplorePage = () => {
                                     <img
                                         src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop"
                                         alt="Shop by Gender"
+                                        loading="lazy"
                                     />
                                 </div>
                             </div>
@@ -59,6 +60,7 @@ const ExplorePage = () => {
                                     <img
                                         src="https://images.unsplash.com/photo-1621447504864-d8686e12698c?w=400&h=300&fit=crop"
                                         alt="Shop Aesthetics"
+                                        loading="lazy"
                                     />
                                 </div>
                                 <div className="section-text">
@@ -80,7 +82,8 @@ const ExplorePage = () => {
                                 <div className="section-image">
                                     <img
                                         src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop"
-                                        alt="Fruits"
+                                        alt="Shop Brands"
+                                        loading="lazy"
                                     />
                                 </div>
                             </div>
