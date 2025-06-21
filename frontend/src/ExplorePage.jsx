@@ -64,7 +64,7 @@ const ExplorePage = () => {
                                 <div className="section-text">
                                     <h2>Shop Aesthetics</h2>
                                     <p>What era are you looking for</p>
-                                    <button className="explore-btn">Explore</button>
+                                    <button className="explore-btn-2">Explore</button>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@ const ExplorePage = () => {
                                 <div className="section-text">
                                     <h2>Shop by Brands</h2>
                                     <p>Shop from your trusted brands</p>
-                                    <button className="explore-btn">Explore</button>
+                                    <button className="explore-btn-2">Explore</button>
                                 </div>
                                 <div className="section-image">
                                     <img

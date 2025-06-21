@@ -61,7 +61,7 @@ const HomePage = () => {
                             <nav className="nav">
                                 <a href="#">Women</a>
                                 <a href="#">Men</a>
-                                <a href="#">Trending</a>
+                                {/*<a href="#">Trending</a>*/}
                             </nav>
                         </div>
                         <div className="header-right">
