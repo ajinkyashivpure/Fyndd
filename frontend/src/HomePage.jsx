@@ -4,14 +4,14 @@ import './HomePage.css';
 
 const carouselImages = [
     "https://fyndd-storage.s3.ap-south-1.amazonaws.com/OldMoney.jpeg",
-    "https://images.unsplash.com/photo-1445205170230-053b83016050",
-    "https://images.unsplash.com/photo-1485125639709-a60c3a500bf1",
-    "https://images.unsplash.com/photo-1469334031218-e382a71b716b",
-    "https://images.unsplash.com/photo-1495121605193-b116b5b9c5fe",
-    "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
-    "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc",
-    "https://images.unsplash.com/photo-1475180098004-ca77a66827be",
-    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d"
+    "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2025-06-17+at+18.29.26+(2).jpeg",
+    "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2025-06-17+at+18.29.26+(1).jpeg",
+    "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2025-06-17+at+18.29.27+(1).jpeg",
+    "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2025-06-17+at+18.29.26.jpeg",
+    "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2025-06-17+at+18.29.26+(4).jpeg",
+    "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2025-06-17+at+18.29.26+(3).jpeg",
+    "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2025-06-17+at+18.31.34.jpeg",
+    "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2025-06-17+at+18.29.27+(2).jpeg"
 ];
 
 const HomePage = () => {
@@ -107,16 +107,27 @@ const HomePage = () => {
             </section>
 
             <section className="image-grid">
-                <div className="grid-row grid-row-two">
+                {/* Two images right below carousel */}
+                <div className="grid-row-two">
                     <img src="https://images.unsplash.com/photo-1485125639709-a60c3a500bf1" alt="Fashion 1" />
                     <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b" alt="Fashion 2" />
                 </div>
-                <div className="grid-row grid-row-three">
-                    <img src="https://images.unsplash.com/photo-1495121605193-b116b5b9c5fe" alt="Fashion 3" />
-                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8" alt="Fashion 4" />
-                    <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc" alt="Fashion 5" />
+
+                {/* White space separator */}
+                <div className="grid-spacing"></div>
+
+                {/* Three image asymmetric grid */}
+                <div className="grid-row-three">
+                    <div className="grid-left">
+                        <img src="https://images.unsplash.com/photo-1495121605193-b116b5b9c5fe" alt="Fashion 3" />
+                    </div>
+                    <div className="grid-right">
+                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8" alt="Fashion 4" />
+                        <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc" alt="Fashion 5" />
+                    </div>
                 </div>
             </section>
+
 
             <section className="trending-aesthetics">
                 <h2>Trending Aesthetics</h2>
