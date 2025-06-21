@@ -140,6 +140,61 @@ const HomePage = () => {
                 </div>
             </section>
 
+            <section className="popular-brands">
+                <h2>Popular Brands</h2>
+                <div className="brands-grid">
+                    <div className="brand-card">
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/Zara.jpeg" alt="Zara" />
+                        <h3>Zara</h3>
+                    </div>
+                    <div className="brand-card">
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/HM.jpeg" alt="H&M" />
+                        <h3>H&M</h3>
+                    </div>
+                    <div className="brand-card">
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/Uniqlo.jpeg" alt="Uniqlo" />
+                        <h3>Uniqlo</h3>
+                    </div>
+                    <div className="brand-card">
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/Levis.jpeg" alt="Levi's" />
+                        <h3>Levi's</h3>
+                    </div>
+                </div>
+            </section>
+
+            <footer className="footer">
+                <div className="footer-content">
+                    <div className="footer-brand">
+                        <h2>FYNDD</h2>
+                        <p>Your Ultimate Fashion Destination</p>
+                    </div>
+
+                    <div className="social-links">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                            <i className="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                            <i className="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                            <i className="fab fa-facebook"></i>
+                        </a>
+                    </div>
+
+                    <div className="footer-links">
+                        <a href="/about">About Us</a>
+                        <a href="/contact">Contact</a>
+                        <a href="/terms">Terms & Conditions</a>
+                        <a href="/privacy">Privacy Policy</a>
+                    </div>
+
+                    <div className="footer-bottom">
+                        <p>&copy; 2024 FYNDD. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
+
+
         </div>
     );
 };
