@@ -1,7 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './HomePage.css';
 
+
+const carouselImages = [
+    "https://fyndd-storage.s3.ap-south-1.amazonaws.com/OldMoney.jpeg",
+    "https://images.unsplash.com/photo-1445205170230-053b83016050",
+    "https://images.unsplash.com/photo-1485125639709-a60c3a500bf1",
+    "https://images.unsplash.com/photo-1469334031218-e382a71b716b",
+    "https://images.unsplash.com/photo-1495121605193-b116b5b9c5fe",
+    "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+    "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc",
+    "https://images.unsplash.com/photo-1475180098004-ca77a66827be",
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d"
+];
+
+
 const HomePage = () => {
+
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const nextImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === carouselImages.length - 1 ? 0 : prevIndex + 1
+        );
+    };
+
+    const previousImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === 0 ? carouselImages.length - 1 : prevIndex - 1
+        );
+    };
+
     return (
         <div className="homepage-container">
             {/* Header */}
@@ -35,10 +64,31 @@ const HomePage = () => {
                     <p>Redefine your entire shopping experience. AI is changing the world, and that should include your wardrobe.</p>
                     <button className="explore-btn">Start Exploring</button>
                 </div>
-                <div className="hero-images">
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9" alt="Hero 1" />
+                <div className="hero-carousel">
+                    <button className="carousel-arrow left" onClick={previousImage}>
+                        &#8249;
+                    </button>
+                    <div className="hero-images">
+                        <img
+                            src={carouselImages[currentImageIndex]}
+                            alt={`Fashion item ${currentImageIndex + 1}`}
+                        />
+                    </div>
+                    <button className="carousel-arrow right" onClick={nextImage}>
+                        &#8250;
+                    </button>
+                    <div className="carousel-dots">
+                        {carouselImages.map((_, index) => (
+                            <span
+                                key={index}
+                                className={`dot ${index === currentImageIndex ? 'active' : ''}`}
+                                onClick={() => setCurrentImageIndex(index)}
+                            />
+                        ))}
+                    </div>
                 </div>
             </section>
+
 
             {/* Image Grid */}
             <section className="image-grid-v2">
