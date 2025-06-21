@@ -355,7 +355,7 @@ body {
         padding: 0 8px;
     }
     .explore-section {
-        padding: 20px 12px;
+        padding: 20px 0;
     }
 
     .section-content {
@@ -419,7 +419,8 @@ body {
     /* Gender buttons mobile */
     .gender-buttons {
         display: flex;
-        gap: 8px;
+        gap: 12px;
+        margin-bottom: 16px;
         /*margin-top: 12px;*/
     }
 
@@ -448,6 +449,8 @@ body {
         display: grid;
         grid-template-columns: 55% 45%;
         align-items: center;
+        flex-direction: column;
+        gap: 20px;
     }
     .aesthetics-content {
         display: grid;
@@ -459,14 +462,25 @@ body {
         grid-template-columns: 55% 45%;
     }
 
+    .gender-content .section-image img {
+        border-radius: 0; /* Remove border radius for full-width effect */
+        height: 280px; /* Taller height for better impact */
+    }
+
+
 
 
 
     .gender-content .section-text {
         order: 1;
+        padding: 0 16px;
+        width: 100%;
     }
     .gender-content .section-image {
         order: 2;
+        width: 100%;
+        max-width: none;
+        margin: 0;
     }
 
 
