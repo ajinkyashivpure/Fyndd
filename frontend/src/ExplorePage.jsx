@@ -58,7 +58,7 @@ const ExplorePage = () => {
                             <div className="section-content aesthetics-content">
                                 <div className="section-image">
                                     <img
-                                        src="https://images.unsplash.com/photo-1621447504864-d8686e12698c?w=400&h=300&fit=crop"
+                                        src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/399fa4ee6b48d782ab3d32af424b7a03-2.jpg"
                                         alt="Shop Aesthetics"
                                         loading="lazy"
                                     />
@@ -81,7 +81,7 @@ const ExplorePage = () => {
                                 </div>
                                 <div className="section-image">
                                     <img
-                                        src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop"
+                                        src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/5155e62c4d651437b2f79fa7c94e2bd5-2.jpg"
                                         alt="Shop Brands"
                                         loading="lazy"
                                     />
