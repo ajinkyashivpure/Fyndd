@@ -129,12 +129,12 @@ const HomePage = () => {
                     <section className="trending-aesthetics">
                         <div className="aesthetics-cards">
                             <div className="card">
-                                <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/travis.png" alt="Trending 1" />
+                                <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/travis-2.png" alt="Trending 1" />
                                 <h3>Travis Scott Concert</h3>
                                 <p>Utility meets performance.</p>
                             </div>
                             <div className="card">
-                                <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/urban.jpg" alt="Trending 2" />
+                                <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/urban-2.jpg" alt="Trending 2" />
                                 <h3>Urban Style</h3>
                                 <p>Street fashion at its best</p>
                             </div>
