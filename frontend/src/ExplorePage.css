@@ -1,5 +1,16 @@
 /* ExplorePage.css */
 
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
 .container {
     max-width: 100%;
     overflow-x: hidden;
@@ -271,6 +282,61 @@
 
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
+
+    .header {
+        padding: 12px 16px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .header-left {
+        flex: 0 0 auto; /* Don't allow the left side to grow or shrink */
+        width: auto;
+    }
+
+    .logo {
+        margin-right: 0;
+        font-size: 1.5rem;
+    }
+
+    .header-left .nav {
+        display: none;
+    }
+
+    .header-right {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .search-bar-wrapper {
+        flex: 1;
+        max-width: 250px; /* Adjust this value based on your needs */
+        margin-right: 8px;
+    }
+
+    .search-bar {
+        width: 100%;
+        padding: 6px 32px 6px 12px;
+        font-size: 0.9rem;
+    }
+
+    .camera-icon {
+        right: 8px;
+    }
+
+    .camera-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .icon {
+        font-size: 1.2rem;
+        padding: 0 8px;
+    }
     .explore-section {
         padding: 32px 16px;
     }
