@@ -1,0 +1,474 @@
+/* ExplorePage.css */
+
+.container {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px 12px 32px;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+    box-sizing: border-box;
+}
+.header-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+.logo {
+    font-family: 'Pacifico', cursive;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-right: 40px;
+}
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+.nav a {
+    text-decoration: none;
+    color: #222;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0 2px;
+}
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.search-bar-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.search-bar {
+    padding: 8px 48px 8px 20px;
+    border-radius: 24px;
+    border: 2px solid #222;
+    font-size: 1rem;
+    width: 420px;
+    max-width: 520px;
+    font-weight: 400;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+.camera-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+.camera-icon svg {
+    display: block;
+}
+.icon {
+    font-size: 1.4rem;
+    cursor: pointer;
+    margin: 0;
+    padding: 0 4px;
+}
+.explore-page {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #fff;
+    color: #222;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.explore-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.explore-section {
+    padding: 32px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.section-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.aesthetics-content {
+    flex-direction: row-reverse;
+}
+
+.section-text {
+    flex: 1;
+    min-width: 300px;
+}
+
+.section-text h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 12px;
+    line-height: 1.2;
+}
+
+.section-text p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 24px;
+    line-height: 1.4;
+}
+
+.section-image {
+    flex: 1;
+    max-width: 500px;
+}
+
+.section-image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Gender Buttons */
+.gender-buttons {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.gender-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.men-btn {
+    background: #e61414;
+    color: white;
+}
+
+.men-btn:hover {
+    background: #cc1212;
+    transform: translateY(-2px);
+}
+
+.women-btn {
+    background: #e61414;
+    color: white;
+}
+
+.women-btn:hover {
+    background: #cc1212;
+    transform: translateY(-2px);
+}
+
+/* Explore Button */
+.explore-btn {
+    background: #222;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.explore-btn:hover {
+    background: #333;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+.explore-footer {
+    background: #fafafa;
+    padding: 48px 32px 32px;
+    border-top: 1px solid #eee;
+    margin-top: 32px;
+}
+
+.footer-brand {
+    margin-bottom: 32px;
+}
+
+.footer-brand h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #222;
+    margin: 0;
+}
+
+.footer-links-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-bottom: 32px;
+    max-width: 1200px;
+}
+
+.footer-column h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 16px;
+}
+
+.footer-column a {
+    display: block;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+}
+
+.footer-column a:hover {
+    color: #e61414;
+}
+
+.footer-social {
+    border-top: 1px solid #eee;
+    padding-top: 24px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 16px;
+}
+
+.social-icons span {
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.social-icons span:hover {
+    opacity: 1;
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+
+    .header {
+        padding: 12px 16px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .header-left {
+        flex: 0 0 auto; /* Don't allow the left side to grow or shrink */
+        width: auto;
+    }
+
+    .logo {
+        margin-right: 0;
+        font-size: 1.5rem;
+    }
+
+    .header-left .nav {
+        display: none;
+    }
+
+    .header-right {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .search-bar-wrapper {
+        flex: 1;
+        max-width: 250px; /* Adjust this value based on your needs */
+        margin-right: 8px;
+    }
+
+    .search-bar {
+        width: 100%;
+        padding: 6px 32px 6px 12px;
+        font-size: 0.9rem;
+    }
+
+    .camera-icon {
+        right: 8px;
+    }
+
+    .camera-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .icon {
+        font-size: 1.2rem;
+        padding: 0 8px;
+    }
+    .explore-section {
+        padding: 24px 16px;
+    }
+
+    .section-content {
+        flex-direction: column;
+        gap: 24px;
+        text-align: center;
+    }
+
+    .aesthetics-content {
+        flex-direction: column;
+    }
+
+    .section-text {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .section-text h2 {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    .section-text p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .section-image {
+        width: 100%;
+        max-width: none;
+    }
+
+    .section-image img {
+        height: 240px;
+        border-radius: 8px;
+    }
+
+    /* Gender buttons mobile */
+    .gender-buttons {
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .gender-btn {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+        min-width: 70px;
+    }
+
+    /* Footer mobile */
+    .explore-footer {
+        padding: 32px 16px 24px;
+    }
+
+    .footer-brand {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .footer-brand h3 {
+        font-size: 1.3rem;
+    }
+
+    .footer-links-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .footer-column h4 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+
+    .footer-column a {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+
+    .footer-social {
+        text-align: center;
+        padding-top: 20px;
+    }
+
+    .social-icons {
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .social-icons span {
+        font-size: 1.4rem;
+    }
+}
+
+/* Very small screens */
+@media screen and (max-width: 360px) {
+    .explore-section {
+        padding: 20px 12px;
+    }
+
+    .section-text h2 {
+        font-size: 1.6rem;
+    }
+
+    .gender-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .gender-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .explore-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .explore-footer {
+        padding: 24px 12px 20px;
+    }
+}
+
+/* Hover effects for desktop */
+@media (hover: hover) {
+    .section-image img:hover {
+        transform: scale(1.02);
+        transition: transform 0.3s ease;
+    }
+}
+
+/* Touch feedback for mobile */
+@media (hover: none) {
+    .gender-btn:active {
+        transform: scale(0.98);
+    }
+
+    .explore-btn:active {
+        transform: scale(0.98);
+    }
+}

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import './HomePage.css';
+import { useNavigate } from 'react-router-dom';
 
 const carouselImages = [
     "https://fyndd-storage.s3.ap-south-1.amazonaws.com/OldMoney.jpeg",
@@ -15,8 +16,14 @@ const carouselImages = [
 ];
 
 const HomePage = () => {
+    const navigate = useNavigate();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+
+    const handleExploreClick = () => {
+        navigate('/explore');
+    };
+
 
     const nextImage = useCallback(() => {
         setIsLoading(true);
@@ -79,7 +86,7 @@ const HomePage = () => {
                         <div className="hero-text">
                             <h1>Explore fashion like never before</h1>
                             <p>Redefine your entire shopping experience. AI is changing the world, and that should include your wardrobe.</p>
-                            <button className="explore-btn">Start Exploring</button>
+                            <button className="explore-btn" onClick={handleExploreClick}>Start Exploring</button>
                         </div>
                         <div className="hero-carousel" {...handlers}>
                             <button className="carousel-arrow left" onClick={previousImage}>
