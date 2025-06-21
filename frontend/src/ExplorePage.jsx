@@ -34,7 +34,7 @@ const ExplorePage = () => {
                         </header>
                         {/* Shop Gender Section */}
                         <div className="explore-section">
-                            <div className="section-content">
+                            <div className="section-content gender-content">
                                 <div className="section-text">
                                     <h2>Shop Gender</h2>
                                     <p>Something for everyone</p>
@@ -46,7 +46,7 @@ const ExplorePage = () => {
                                 <div className="section-image">
                                     <img
                                         src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop"
-                                        alt="Fruits"
+                                        alt="Shop by Gender"
                                     />
                                 </div>
                             </div>
@@ -58,7 +58,7 @@ const ExplorePage = () => {
                                 <div className="section-image">
                                     <img
                                         src="https://images.unsplash.com/photo-1621447504864-d8686e12698c?w=400&h=300&fit=crop"
-                                        alt="Watermelon"
+                                        alt="Shop Aesthetics"
                                     />
                                 </div>
                                 <div className="section-text">
