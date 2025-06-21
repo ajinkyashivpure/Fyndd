@@ -109,8 +109,8 @@ const HomePage = () => {
             <section className="image-grid">
                 {/* Two images right below carousel */}
                 <div className="grid-row-two">
-                    <img src="https://images.unsplash.com/photo-1485125639709-a60c3a500bf1" alt="Fashion 1" />
-                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b" alt="Fashion 2" />
+                    <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+2+left.png" alt="Fashion 1" />
+                    <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+2+right.png" alt="Fashion 2" />
                 </div>
 
                 {/* White space separator */}
@@ -119,11 +119,11 @@ const HomePage = () => {
                 {/* Three image asymmetric grid */}
                 <div className="grid-row-three">
                     <div className="grid-left">
-                        <img src="https://images.unsplash.com/photo-1495121605193-b116b5b9c5fe" alt="Fashion 3" />
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+3+left+.png" alt="Fashion 3" />
                     </div>
                     <div className="grid-right">
-                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8" alt="Fashion 4" />
-                        <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc" alt="Fashion 5" />
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+3+right+up+.png" alt="Fashion 4" />
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/grid+3+right+down+.png" alt="Fashion 5" />
                     </div>
                 </div>
             </section>
@@ -155,19 +155,19 @@ const HomePage = () => {
                 <h2>Popular Brands</h2>
                 <div className="brands-grid">
                     <div className="brand-card">
-                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/Zara.jpeg" alt="Zara" />
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/Zara.jpg" alt="Zara" />
                         <h3>Zara</h3>
                     </div>
                     <div className="brand-card">
-                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/HM.jpeg" alt="H&M" />
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/hm.jpg" alt="H&M" />
                         <h3>H&M</h3>
                     </div>
                     <div className="brand-card">
-                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/Uniqlo.jpeg" alt="Uniqlo" />
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/uniqlo.jpg" alt="Uniqlo" />
                         <h3>Uniqlo</h3>
                     </div>
                     <div className="brand-card">
-                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/Levis.jpeg" alt="Levi's" />
+                        <img src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/levis.jpg" alt="Levi's" />
                         <h3>Levi's</h3>
                     </div>
                 </div>
