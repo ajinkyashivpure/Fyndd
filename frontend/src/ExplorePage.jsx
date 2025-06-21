@@ -45,7 +45,7 @@ const ExplorePage = () => {
                                 </div>
                                 <div className="section-image">
                                     <img
-                                        src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop"
+                                        src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/gender2.jpeg"
                                         alt="Shop by Gender"
                                         loading="lazy"
                                     />
@@ -90,39 +90,38 @@ const ExplorePage = () => {
                         </div>
 
                         {/* Footer */}
-                        <div className="explore-footer">
-                            <div className="footer-brand">
-                                <h3>Site name</h3>
-                            </div>
-                            <div className="footer-links-grid">
-                                <div className="footer-column">
-                                    <h4>Topic</h4>
-                                    <a href="#">Page</a>
-                                    <a href="#">Page</a>
-                                    <a href="#">Page</a>
+                        <footer className="footer">
+                            <div className="footer-content">
+                                <div className="footer-brand">
+                                    <h2>FYNDD</h2>
+                                    <p>Your Ultimate Fashion Destination</p>
                                 </div>
-                                <div className="footer-column">
-                                    <h4>Topic</h4>
-                                    <a href="#">Page</a>
-                                    <a href="#">Page</a>
-                                    <a href="#">Page</a>
+
+                                <div className="social-links">
+                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                                        <i className="fab fa-instagram"></i>
+                                    </a>
+                                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                                        <i className="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                                        <i className="fab fa-facebook"></i>
+                                    </a>
                                 </div>
-                                <div className="footer-column">
-                                    <h4>Topic</h4>
-                                    <a href="#">Page</a>
-                                    <a href="#">Page</a>
-                                    <a href="#">Page</a>
+
+                                <div className="footer-links">
+                                    <a href="/about">About Us</a>
+                                    <a href="/contact">Contact</a>
+                                    <a href="/terms">Terms & Conditions</a>
+                                    <a href="/privacy">Privacy Policy</a>
                                 </div>
-                            </div>
-                            <div className="footer-social">
-                                <div className="social-icons">
-                                    <span>📘</span>
-                                    <span>📷</span>
-                                    <span>🐦</span>
-                                    <span>📧</span>
+
+                                <div className="footer-bottom">
+                                    <p>&copy; 2024 FYNDD. All rights reserved.</p>
                                 </div>
                             </div>
-                        </div>
+                        </footer>
+
                     </div>
                 </div>
             </div>
