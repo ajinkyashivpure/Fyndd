@@ -1,3 +1,20 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
+.container {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+
+
 .homepage-container {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -518,7 +535,7 @@
 
     .hero-carousel {
         margin: 0;
-        width: 100vw;
+        width: 100%;
     }
 
     .hero-images img {
@@ -529,6 +546,7 @@
 
     /* Image grid mobile styles */
     .image-grid {
+        width: 100%;
         padding: 0;
         /*gap: 16px;*/
         margin: 0;
@@ -542,7 +560,7 @@
 
     .grid-row-three {
         display: flex;
-        width: 100vw;
+        width: 100%;
         height: 100vw; /* Square container for the grid */
         margin: 0;
     }
@@ -550,7 +568,7 @@
 
     .grid-row-two {
         display: flex;
-        width: 100vw;
+        width: 100%;
         height: 100vw; /* This will maintain aspect ratio */
         margin: 0;
     }
@@ -563,7 +581,7 @@
         border-radius: 0;
     }
     .grid-spacing {
-        height: 10px;
+        height: 5px;
         background: #fff;
     }
 
@@ -753,8 +771,8 @@
 @media screen and (min-width: 769px) {
     /* Hero/Carousel section */
     .hero-carousel {
-        margin: 32px auto;
-        max-width: 1200px;
+        margin: 0 auto 24px;
+        /*max-width: 1200px;*/
         width: 100%;
     }
 
@@ -766,112 +784,129 @@
 
     /* Image Grids */
     .image-grid {
-        max-width: 1200px;
+        width: 100%;
+        /*max-width: 1200px;*/
         margin: 0 auto;
     }
 
     .grid-row-two {
-        height: 400px;
+        height: 500px;
+        width: 100%;
         display: flex;
-        gap: 24px;
-        margin: 32px auto;
+        gap: 20px;
+        margin: 0;
     }
 
     .grid-row-two img {
         width: calc(50% - 12px);
-        height: 400px;
+        height: 100%;
+        object-fit: cover;
     }
 
     .grid-row-three {
-        height: 600px;
+        height: 500px;
         display: flex;
         gap: 24px;
-        margin: 32px auto;
+        margin: 0;
     }
 
     .grid-left {
-        width: calc(50% - 12px);
+        width: 50%;
+        height: 100%;
     }
+    .grid-left img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
 
     .grid-right {
-        width: calc(50% - 12px);
-        gap: 24px;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
-    .grid-right img {
-        height: calc(50% - 12px);
+    .grid-spacing {
+        height: 20px;
     }
+
+
+    .grid-right img {
+        width: 100%;
+        height: calc(50% - 10px);
+        object-fit: cover;
+    }
+
 
     /* Popular Brands Section */
     .popular-brands {
-        max-width: 1200px;
-        margin: 64px auto;
-        padding: 0 32px;
+        width: 100%;
+        margin: 40px auto;
     }
 
     .popular-brands h2 {
-        font-size: 2rem;
-        margin-bottom: 40px;
         text-align: center;
+        margin-bottom: 32px;
+        font-size: 28px;
     }
 
     .brands-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 32px;
+        gap: 24px;
+        margin: 0 auto;
     }
 
     .brand-card {
+        width: 100%;
+        aspect-ratio: 1;
         background: #fff;
-        padding: 24px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-    }
-
-    .brand-card:hover {
-        transform: translateY(-5px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .brand-card img {
         width: 100%;
-        height: 200px;
+        height: calc(100% - 60px);
         object-fit: cover;
-        border-radius: 8px;
     }
 
     .brand-card h3 {
-        margin-top: 16px;
-        font-size: 1.2rem;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
         text-align: center;
-        color: #333;
     }
 
     /* Trending Aesthetics Section */
     .trending-aesthetics {
-        max-width: 1200px;
-        margin: 64px auto;
-        padding: 0 32px;
+        width: 100%;
+        margin: 40px auto;
     }
 
     .trending-aesthetics h2 {
-        font-size: 2rem;
-        margin-bottom: 40px;
         text-align: center;
+        margin-bottom: 32px;
+        font-size: 28px;
     }
 
     .aesthetics-cards {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 32px;
+        gap: 24px;
     }
 
+
     .card {
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
+        width: 100%;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+
 
     .card:hover {
         transform: translateY(-5px);
@@ -879,15 +914,21 @@
 
     .card img {
         width: 100%;
-        height: 300px;
+        aspect-ratio: 4/3;
         object-fit: cover;
     }
+
 
     .card h3 {
         padding: 16px;
         margin: 0;
         font-size: 1.2rem;
     }
+
+    .card-content {
+        padding: 16px;
+    }
+
 
     .card p {
         padding: 0 16px 16px;
@@ -897,16 +938,17 @@
 
     /* Footer adjustments for desktop */
     .footer {
-        padding: 64px 32px 32px;
+        width: 100%;
+        padding: 40px 0;
+        background: #f8f8f8;
     }
 
     .footer-content {
-        max-width: 1200px;
-        margin: 0 auto;
         display: grid;
         grid-template-columns: 2fr 1fr 1fr;
-        gap: 64px;
+        gap: 40px;
     }
+
 
     .footer-brand {
         grid-column: 1;
