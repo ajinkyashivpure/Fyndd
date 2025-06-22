@@ -1,7 +1,18 @@
 import React from 'react';
 import './ExplorePage.css';
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 const ExplorePage = () => {
+    const navigate = useNavigate();
+
+
+    const handleGenderClick = (gender) => {
+        navigate(`/categories/${gender}`);
+    };
+
     return (
         <div className="container">
             <div className="wrapper">
@@ -39,8 +50,8 @@ const ExplorePage = () => {
                                     <h2>Shop Gender</h2>
                                     <p>Something for everyone</p>
                                     <div className="gender-buttons">
-                                        <button className="gender-btn men-btn">Men</button>
-                                        <button className="gender-btn women-btn">Women</button>
+                                        <button className="gender-btn men-btn" onClick={() => handleGenderClick('men')}>Men</button>
+                                        <button className="gender-btn women-btn" onClick={() => handleGenderClick('women')}>Women</button>
                                     </div>
                                 </div>
                                 <div className="section-image">
