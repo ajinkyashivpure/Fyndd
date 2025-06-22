@@ -1,8 +1,8 @@
 // src/pages/AestheticsPage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
 import './AestheticsPage.css';
+import Header from "./Header.jsx";
 
 const AestheticsPage = () => {
     const navigate = useNavigate();
@@ -69,36 +69,43 @@ const AestheticsPage = () => {
     };
 
     return (
-        <div className="aesthetics-page">
-            <Header />
-            <div className="aesthetics-container">
-                <div className="aesthetics-header">
-                    <h1>Shop by Aesthetics</h1>
-                    <p>Find your perfect style</p>
-                </div>
-                <div className="aesthetics-grid">
-                    {aesthetics.map((aesthetic) => (
-                        <div
-                            key={aesthetic.id}
-                            className="aesthetic-card"
-                            onClick={() => handleAestheticClick(aesthetic.id)}
-                        >
-                            <div className="aesthetic-image">
-                                <img
-                                    src={aesthetic.image}
-                                    alt={aesthetic.name}
-                                    loading="lazy"
-                                />
-                            </div>
-                            <div className="aesthetic-info">
-                                <h3>{aesthetic.name}</h3>
-                                <p>{aesthetic.description}</p>
-                            </div>
+        <div className="container">
+            <div className="wrapper">
+                <div className="aesthetics-page">
+                    <Header />{
+
+                }
+                    <div className="aesthetics-container">
+                        <div className="aesthetics-header">
+                            <h1>Shop by Aesthetics</h1>
+                            <p>Find your perfect style</p>
                         </div>
-                    ))}
+                        <div className="aesthetics-grid">
+                            {aesthetics.map((aesthetic) => (
+                                <div
+                                    key={aesthetic.id}
+                                    className="aesthetic-card"
+                                    onClick={() => handleAestheticClick(aesthetic.id)}
+                                >
+                                    <div className="aesthetic-image">
+                                        <img
+                                            src={aesthetic.image}
+                                            alt={aesthetic.name}
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    <div className="aesthetic-info">
+                                        <h3>{aesthetic.name}</h3>
+                                        <p>{aesthetic.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     );
 };
 

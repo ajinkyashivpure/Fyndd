@@ -1,4 +1,19 @@
 /* src/pages/AestheticsPage.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
+.container {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 .aesthetics-page {
     padding-top: 60px; /* Account for fixed header */
     min-height: 100vh;
