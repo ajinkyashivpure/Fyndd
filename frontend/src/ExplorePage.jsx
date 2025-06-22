@@ -35,7 +35,7 @@ const ExplorePage = () => {
                                 </div>
                                 <div className="section-image">
                                     <img
-                                        src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/gender2.jpeg"
+                                        src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/mw.jpg"
                                         alt="Shop by Gender"
                                         loading="lazy"
                                     />
