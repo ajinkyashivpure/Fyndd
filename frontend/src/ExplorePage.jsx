@@ -56,7 +56,7 @@ const ExplorePage = () => {
                                 <div className="section-text">
                                     <h2>Shop Aesthetics</h2>
                                     <p>What era are you looking for</p>
-                                    <button className="explore-btn-2">Explore</button>
+                                    <button className="explore-btn-2" onClick={() => navigate('/aesthetics')}>Explore</button>
                                 </div>
                             </div>
                         </div>

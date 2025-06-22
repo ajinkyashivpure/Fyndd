@@ -92,9 +92,6 @@ const CategoryPage = () => {
                                 </div>
                                 <div className="category-content">
                                     <h2>{category.name}</h2>
-                                    <button className="explore-btn" onClick={() => window.location.href = category.link}>
-                                        Explore
-                                    </button>
                                 </div>
                             </div>
                         ))}
