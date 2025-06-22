@@ -7,7 +7,14 @@ import Header from "./Header.jsx";
 
 const CategoryPage = () => {
 
+    const navigate = useNavigate();
+
     const { gender } = useParams();
+
+    const handleCategoryClick = (link) => {
+        navigate(link);
+    };
+
 
     const menCategories = [
         {
@@ -78,7 +85,7 @@ const CategoryPage = () => {
                     </div>
                     <div className="categories-grid">
                         {categories.map(category => (
-                            <div key={category.id} className="category-card">
+                            <div key={category.id} className="category-card" onClick={() => handleCategoryClick(category.link)}>
                                 <div className="category-image">
                                     <img src={category.image} alt={category.name} loading="lazy" />
                                 </div>

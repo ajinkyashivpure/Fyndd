@@ -18,7 +18,6 @@ body {
     padding: 16px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 80px;
 }
 
 .category-header {
@@ -41,7 +40,7 @@ body {
 .categories-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 24px;
     padding: 0 0 32px 0;
 }
 
@@ -52,7 +51,8 @@ body {
     background: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    aspect-ratio: 3/4;
+    cursor: pointer;
+
 }
 
 .category-card:hover {
@@ -61,7 +61,7 @@ body {
 
 .category-image {
     width: 100%;
-    height: 100%px;
+    height: 200px;
     position: relative;
     overflow: hidden;
 }
@@ -82,65 +82,33 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
+    padding: 20px;
     background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
     color: white;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 24px 20px;
-    flex-direction: column;
-    gap: 12px;
+    justify-content:flex-start;
+    align-items: center;
 }
 
 .category-content h2 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     margin: 0;
-    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-.explore-btn {
-    background: #e61414;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
 
-.explore-btn:hover {
-    background: #cc1212;
-}
 
 /* Tablet Breakpoint */
 @media screen and (max-width: 768px) {
 
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-        padding: 0 8px;
+        gap: 32px;
     }
 
     .category-image {
         height: 280px;
     }
-
-    .category-content {
-        padding: 20px 16px;
-    }
-
-    .category-content h2 {
-        font-size: 1.1rem;
-    }
-
-    .explore-btn {
-        padding: 6px 14px;
-        font-size: 0.85rem;
-    }
-
-
 
     .footer {
         padding: 24px 16px;
@@ -232,8 +200,5 @@ body {
         font-size: 1.75rem;
     }
 
-    .explore-btn {
-        padding: 10px 24px;
-        font-size: 1rem;
-    }
+
 }
