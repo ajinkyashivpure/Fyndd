@@ -40,25 +40,25 @@ const CategoryPage = () => {
         {
             id: 1,
             name: "Tops",
-            image: "https://images.unsplash.com/photo-1551048632-24e444b48a3e?w=800&h=600&fit=crop",
+            image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/tops.jpg",
             link: "/women/tops"
         },
         {
             id: 2,
             name: "Bottoms",
-            image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
+            image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/bottoms.jpg",
             link: "/women/bottoms"
         },
         {
             id: 3,
             name: "Dresses",
-            image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=600&fit=crop",
+            image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/dresses.jpg",
             link: "/women/dresses"
         },
         {
             id: 4,
             name: "Activewear",
-            image: "https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=800&h=600&fit=crop",
+            image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/sportsw.jpg",
             link: "/women/activewear"
         }
     ];
