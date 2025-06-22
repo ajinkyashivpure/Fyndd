@@ -3,6 +3,7 @@ import React from 'react';
 import './CategoryPage.css';
 import { useParams } from 'react-router-dom';
 import Header from "./Header.jsx";
+import { useNavigate } from 'react-router-dom';
 
 
 const CategoryPage = () => {
