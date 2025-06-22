@@ -18,6 +18,7 @@ body {
     padding: 16px;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 80px;
 }
 
 .category-header {
@@ -40,7 +41,7 @@ body {
 .categories-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 16px;
     padding: 0 0 32px 0;
 }
 
@@ -51,6 +52,7 @@ body {
     background: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    aspect-ratio: 3/4;
 }
 
 .category-card:hover {
@@ -59,7 +61,7 @@ body {
 
 .category-image {
     width: 100%;
-    height: 200px;
+    height: 100%px;
     position: relative;
     overflow: hidden;
 }
@@ -80,17 +82,20 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 20px;
     background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
     color: white;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    padding: 24px 20px;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .category-content h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin: 0;
+    font-weight: 600;
 }
 
 .explore-btn {
@@ -114,12 +119,28 @@ body {
 
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 32px;
+        gap: 16px;
+        padding: 0 8px;
     }
 
     .category-image {
         height: 280px;
     }
+
+    .category-content {
+        padding: 20px 16px;
+    }
+
+    .category-content h2 {
+        font-size: 1.1rem;
+    }
+
+    .explore-btn {
+        padding: 6px 14px;
+        font-size: 0.85rem;
+    }
+
+
 
     .footer {
         padding: 24px 16px;
