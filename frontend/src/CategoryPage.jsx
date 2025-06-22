@@ -13,25 +13,25 @@ const CategoryPage = () => {
         {
             id: 1,
             name: "T-Shirts",
-            image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=600&fit=crop",
+            image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/t-shirt.jpg",
             link: "/men/t-shirts"
         },
         {
             id: 2,
             name: "Shirts",
-            image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&h=600&fit=crop",
+            image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/shirt.jpg",
             link: "/men/shirts"
         },
         {
             id: 3,
             name: "Trousers",
-            image: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&h=600&fit=crop",
+            image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/trousers.jpeg",
             link: "/men/trousers"
         },
         {
             id: 4,
             name: "Sports",
-            image: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800&h=600&fit=crop",
+            image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/sports.jpg",
             link: "/men/sports"
         }
     ];
