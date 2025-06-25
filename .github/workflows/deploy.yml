@@ -1,0 +1,39 @@
+name: Deploy Spring Boot Backend to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy to EC2
+      run: |
+        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          cd ${{ secrets.PROJECT_DIR }}
+          git pull origin main
+
+          cd backend
+
+          # Build with Maven (skip tests)
+          mvn clean package -DskipTests
+
+          # Kill old backend process if running
+          pkill -f 'java -jar' || true
+
+          # Run the new JAR (adjust JAR name if needed)
+          nohup java -jar target/backend-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+        EOF
