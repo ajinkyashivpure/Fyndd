@@ -18,7 +18,7 @@ const ProductsPage = () => {
                 }
                 // Add more conditions for other categories as needed
 
-                const response = await fetch(`http://localhost:8080/api/products/type/${encodeURIComponent(type)}`);
+                const response = await fetch(`https://api.fyndd.in/api/products/type/${encodeURIComponent(type)}`);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
