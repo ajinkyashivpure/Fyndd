@@ -1,16 +1,22 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './HomePage';
+import ExplorePage from './ExplorePage';
+import CategoryPage from './CategoryPage';
+import AestheticsPage from "./AestheticsPage.jsx";
+import ProductsPage from './ProductsPage';
 
-import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-     <h1 className="bg-gradient-to-r from-blue-500 to-green-500 text-center font-bold text-white p-4 rounded-lg">hello</h1>
-     
-    </>
-  )
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/explore" element={<ExplorePage />} />
+                <Route path="/categories/:gender" element={<CategoryPage />} />
+                <Route path="/aesthetics" element={<AestheticsPage />} />
+                <Route path="/:gender/:category" element={<ProductsPage />} />
+            </Routes>
+        </Router>
+    );
 }
-
-export default App
+export default App;
