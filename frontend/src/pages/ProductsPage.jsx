@@ -1,6 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import './ProductsPage.css';
 import Header from "./Header.jsx";
 
 const ProductsPage = () => {
@@ -41,9 +41,9 @@ const ProductsPage = () => {
         return (
             <div className="container">
                 <div className="wrapper">
-                    <div className="products-page">
+                    <div className="w-full max-w-6xl mx-auto p-5">
                         <Header />
-                        <div className="loading">Loading products...</div>
+                        <div className="text-center py-12 text-xl text-gray-600">Loading products...</div>
                     </div>
                 </div>
             </div>
@@ -54,9 +54,9 @@ const ProductsPage = () => {
         return (
             <div className="container">
                 <div className="wrapper">
-                    <div className="products-page">
+                    <div className="w-full max-w-6xl mx-auto p-5">
                         <Header />
-                        <div className="error">Error loading products: {error}</div>
+                        <div className="text-center py-12 text-xl text-red-600">Error loading products: {error}</div>
                     </div>
                 </div>
             </div>
@@ -66,26 +66,36 @@ const ProductsPage = () => {
     return (
         <div className="container">
             <div className="wrapper">
-                <div className="products-page">
+                <div className="w-full max-w-6xl mx-auto p-5">
                     <Header />
-                    <div className="products-header">
-                        <h1>{gender === 'men' ? "Men's" : "Women's"} {category.charAt(0).toUpperCase() + category.slice(1)}</h1>
-                        <p>Discover our collection</p>
+                    <div className="text-center mb-10">
+                        <h1 className="text-4xl mb-2.5 text-gray-800 md:text-3xl sm:text-3xl">
+                            {gender === 'men' ? "Men's" : "Women's"} {category.charAt(0).toUpperCase() + category.slice(1)}
+                        </h1>
+                        <p className="text-xl text-gray-600">Discover our collection</p>
                     </div>
                     
                     {products.length === 0 ? (
-                        <div className="no-products">No products found in this category.</div>
+                        <div className="text-center py-12 text-xl text-gray-600">No products found in this category.</div>
                     ) : (
-                        <div className="products-grid">
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 mb-12 md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] md:gap-5 sm:grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:gap-4">
                             {products.map(product => (
-                                <div key={product.id} className="product-card">
-                                    <div className="product-image">
-                                        <img src={product.imageUrl} alt={product.title} loading="lazy" />
+                                <div 
+                                    key={product.id} 
+                                    className="rounded-lg overflow-hidden shadow-lg transition-all duration-300 ease-in-out bg-white cursor-pointer hover:-translate-y-1 hover:shadow-xl group"
+                                >
+                                    <div className="w-full h-72 overflow-hidden md:h-64 sm:h-48">
+                                        <img 
+                                            src={product.imageUrl} 
+                                            alt={product.title} 
+                                            loading="lazy"
+                                            className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                                        />
                                     </div>
-                                    <div className="product-content">
-                                        <h3>{product.title}</h3>
-                                        <p className="product-brand">{product.brand}</p>
-                                        <p className="product-price">${product.price}</p>
+                                    <div className="p-4">
+                                        <h3 className="text-lg mb-2 text-gray-800 sm:text-base">{product.title}</h3>
+                                        <p className="text-sm text-gray-600 mb-2">{product.brand}</p>
+                                        <p className="text-lg font-bold text-gray-900">${product.price}</p>
                                     </div>
                                 </div>
                             ))}

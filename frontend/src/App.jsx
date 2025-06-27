@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './HomePage';
-import ExplorePage from './ExplorePage';
-import CategoryPage from './CategoryPage';
-import AestheticsPage from "./AestheticsPage.jsx";
-import ProductsPage from './ProductsPage';
+import HomePage from './pages/HomePage.jsx';
+import ExplorePage from './pages/ExplorePage.jsx';
+import CategoryPage from './pages/CategoryPage.jsx';
+import AestheticsPage from "./pages/AestheticsPage.jsx";
+import ProductsPage from './pages/ProductsPage.jsx';
 
 
 function App() {

@@ -1,7 +1,5 @@
-// src/pages/AestheticsPage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './AestheticsPage.css';
 import Header from "./Header.jsx";
 
 const AestheticsPage = () => {
@@ -69,34 +67,33 @@ const AestheticsPage = () => {
     };
 
     return (
-        <div className="container">
+        <div className="max-w-full overflow-x-hidden">
             <div className="wrapper">
-                <div className="aesthetics-page">
-                    <Header />{
-
-                }
-                    <div className="aesthetics-container">
-                        <div className="aesthetics-header">
-                            <h1>Shop by Aesthetics</h1>
-                            <p>Find your perfect style</p>
+                <div className="min-h-screen bg-white">
+                    <Header />
+                    <div className="p-4 max-w-6xl mx-auto">
+                        <div className="text-center mb-6 py-4">
+                            <h1 className="text-3xl mb-2 text-gray-800 md:text-4xl">Shop by Aesthetics</h1>
+                            <p className="text-base text-gray-600 lg:text-lg">Find your perfect style</p>
                         </div>
-                        <div className="aesthetics-grid">
+                        <div className="grid grid-cols-1 gap-4 p-2 md:grid-cols-2 md:gap-6 md:p-4 lg:grid-cols-3 lg:gap-8 lg:p-6">
                             {aesthetics.map((aesthetic) => (
                                 <div
                                     key={aesthetic.id}
-                                    className="aesthetic-card"
+                                    className="bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-200 ease-in-out cursor-pointer hover:-translate-y-1 hover:shadow-xl"
                                     onClick={() => handleAestheticClick(aesthetic.id)}
                                 >
-                                    <div className="aesthetic-image">
+                                    <div className="relative pt-[75%] overflow-hidden">
                                         <img
                                             src={aesthetic.image}
                                             alt={aesthetic.name}
                                             loading="lazy"
+                                            className="absolute top-0 left-0 w-full h-full object-cover"
                                         />
                                     </div>
-                                    <div className="aesthetic-info">
-                                        <h3>{aesthetic.name}</h3>
-                                        <p>{aesthetic.description}</p>
+                                    <div className="p-4">
+                                        <h3 className="text-xl mb-1 text-gray-800 lg:text-2xl">{aesthetic.name}</h3>
+                                        <p className="text-sm text-gray-600 m-0 lg:text-base">{aesthetic.description}</p>
                                     </div>
                                 </div>
                             ))}
@@ -105,7 +102,6 @@ const AestheticsPage = () => {
                 </div>
             </div>
         </div>
-
     );
 };
 
