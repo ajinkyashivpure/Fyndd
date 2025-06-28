@@ -32,10 +32,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for testing purposes
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/products/hybrid-search").permitAll()
-                        .requestMatchers("api/products/type/").permitAll()
-                        .requestMatchers("auth/user/signup").permitAll()
-                        .requestMatchers("auth/user/verify-otp").permitAll()
-                        .requestMatchers("auth/user/login").permitAll()
+                        .requestMatchers("/api/products/type/**").permitAll()
+                        .requestMatchers("/auth/user/signup").permitAll()
+                        .requestMatchers("/auth/user/verify-otp").permitAll()
+                        .requestMatchers("/auth/user/login").permitAll()
+                        .requestMatchers("/api/products/getId/**").permitAll()
 
                         .anyRequest().authenticated() // Protect other endpoints
                 )

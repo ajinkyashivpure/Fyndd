@@ -1,6 +1,7 @@
 package com.fyndd.backend.controller;
 
 import com.fyndd.backend.model.Product;
+import com.fyndd.backend.model.ProductDTO;
 import com.fyndd.backend.repository.ProductRepository;
 import com.fyndd.backend.service.ProductService;
 import org.bson.Document;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
@@ -47,6 +49,29 @@ public class ProductController {
         return productRepository.findByType(type);
     }
 
+
+
+    @GetMapping("/getId/{id}")
+    public ResponseEntity<?> getProductById(@PathVariable String id) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+
+        if (optionalProduct.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with id: " + id);
+        }
+
+        Product product = optionalProduct.get();
+
+        ProductDTO dto = new ProductDTO(
+                product.getTitle(),
+                product.getPrice(),
+                product.getUrl(),
+                product.getImageUrl(),
+                product.getDescription()
+        );
+
+        return ResponseEntity.ok(dto);
+    }
+
 //    @GetMapping("/image")
 //    public ResponseEntity<List<Document>> imageSearch(
 //            @RequestParam("image") MultipartFile imageFile,
@@ -67,11 +92,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable String id) {
-        return ResponseEntity.ok(productService.getProductById(id));
-    }
-//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Product> getProductById(@PathVariable String id) {
+//        return ResponseEntity.ok(productService.getProductById(id));
+//    }
+////
 //    @PutMapping("/{id}")
 //    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product) {
 //        return ResponseEntity.ok(productService.updateProduct(id, product));
