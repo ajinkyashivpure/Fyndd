@@ -13,7 +13,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")  // apply to all paths
-                        .allowedOrigins("https://www.fyndd.in", "https://fyndd.in")  // frontend origin
+                        .allowedOrigins("https://www.fyndd.in", "https://fyndd.in", "http://localhost:5173")  // frontend origin
                         .allowedMethods("*")  // GET, POST, PUT, DELETE, etc.
                         .allowedHeaders("*")
                         .allowCredentials(true);  // if sending cookies/auth headers
