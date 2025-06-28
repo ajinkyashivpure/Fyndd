@@ -43,8 +43,9 @@ const ExplorePage = () => {
     };
 
     const handleProductClick = (product) => {
-        navigate('/product', { state: { product } });
-    };
+    // Navigate to individual product page
+    navigate(`/product/${product.id}`, { state: { product } });
+};
 
     return (
         <div className="max-w-7xl mx-auto p-4">
