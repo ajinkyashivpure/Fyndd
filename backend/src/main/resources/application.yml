@@ -9,3 +9,6 @@ together-ai:
   api-key: ${TOGETHER_AI_API_KEY}
   base-url: ${TOGETHER_AI_BASE_URL}
   embedding-model: ${TOGETHER_AI_EMBEDDING_MODEL}
+
+
+#testing for vercel deployement
