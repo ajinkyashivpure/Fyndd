@@ -1,5 +1,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 // Mock Header component for demonstration
 const Header = ({ selectedGender, setSelectedGender }) => (
@@ -45,34 +47,31 @@ const Header = ({ selectedGender, setSelectedGender }) => (
     </header>
 );
 
-// Sample images - replace with your actual URLs
+
 const carouselImages = {
     women: [
-        
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/athlesiureWomen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/casualsWomen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/corporateWomen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/EthnicWomen.jpeg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/formalWomen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/partyWearWomen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/streetWearWomen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/vacationWomen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/y2kWomen.jpg",
-
-        // Add more women's images here
+        { type: "wathleisure", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/athlesiureWomen.jpg" },
+        { type: "wcasuals", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/casualsWomen.jpg" },
+        { type: "wcorporate", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/corporateWomen.jpg" },
+        { type: "wethnic", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/EthnicWomen.jpeg" },
+        { type: "wformal", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/formalWomen.jpg" },
+        { type: "wparty", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/partyWearWomen.jpg" },
+        { type: "wstreetwear", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/streetWearWomen.jpg" },
+        { type: "wvacation", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/vacationWomen.jpg" },
+        { type: "wy2k", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/y2kWomen.jpg" }
     ],
     men: [
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/casualsMen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/corporateMen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/ethnicMen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/formalsMen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/OldMoneyMen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/partyMen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/sportsMen.jpg",
-        "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/vacationMen.jpg",
-        // Add more men's images here
+        { type: "casuals", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/casualsMen.jpg" },
+        { type: "corporate", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/corporateMen.jpg" },
+        { type: "ethnic", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/ethnicMen.jpg" },
+        { type: "formals", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/formalsMen.jpg" },
+        { type: "oldmoney", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/OldMoneyMen.jpg" },
+        { type: "party", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/partyMen.jpg" },
+        { type: "sports", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/sportsMen.jpg" },
+        { type: "vacation", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/vacationMen.jpg" }
     ]
 };
+
 
 const categories = {
     women: [
@@ -100,7 +99,7 @@ const HomePage = () => {
     const [selectedGender, setSelectedGender] = useState('women');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-
+    const navigate = useNavigate();
     // Reset carousel when gender changes
     useEffect(() => {
         setCurrentImageIndex(0);
@@ -168,14 +167,19 @@ const HomePage = () => {
                             >
                                 &#8249;
                             </button>
-                            <div className="w-full">
-                                <img
-                                    src={carouselImages[selectedGender][currentImageIndex]}
-                                    alt={`${selectedGender} fashion item ${currentImageIndex + 1}`}
-                                    onLoad={handleImageLoad}
-                                    className={`w-full h-96 md:h-96 lg:h-96 object-cover block transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}
-                                />
-                            </div>
+                            <div className="w-full cursor-pointer" onClick={() =>
+    navigate(`/explore/${carouselImages[selectedGender][currentImageIndex].type}`)
+  }
+>
+  <img
+    src={carouselImages[selectedGender][currentImageIndex].image}
+    alt={`${selectedGender} fashion item ${currentImageIndex + 1}`}
+    onLoad={handleImageLoad}
+    className={`w-full h-96 md:h-96 lg:h-96 object-cover block transition-opacity duration-300 ${
+      isLoading ? 'opacity-50' : 'opacity-100'
+    }`}
+  />
+</div>
                             <button 
                                 className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-80 border-none rounded-full w-9 h-9 text-2xl cursor-pointer flex items-center justify-center z-10 hover:bg-opacity-90 transition-colors"
                                 onClick={nextImage}
@@ -205,6 +209,7 @@ const HomePage = () => {
                             {categories[selectedGender].map((category, index) => (
                                 <div 
                                     key={index}
+                                    onClick={() => navigate(`/explore/${category.name.toLowerCase()}`)} 
                                     className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer transform transition-all duration-300 ease-out hover:scale-110 hover:shadow-2xl hover:-translate-y-2 hover:z-10"
                                 >
                                     <img 
