@@ -13,6 +13,7 @@ public class BackendApplication {
         System.setProperty("MONGODB_ATLAS_URI", dotenv.get("MONGODB_ATLAS_URI"));
         System.setProperty("TOGETHER_AI_EMBEDDING_MODEL", dotenv.get("TOGETHER_AI_EMBEDDING_MODEL"));
         System.setProperty("TOGETHER_AI_BASE_URL", dotenv.get("TOGETHER_AI_BASE_URL"));
+        System.setProperty("brevo.api-key", dotenv.get("BREVO_API_KEY"));
 
         SpringApplication.run(BackendApplication.class, args);
     }

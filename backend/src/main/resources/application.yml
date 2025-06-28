@@ -11,4 +11,12 @@ together-ai:
   embedding-model: ${TOGETHER_AI_EMBEDDING_MODEL}
 
 
+brevo:
+  api-key: ${BREVO_API_KEY}
+  sender:
+    email: noreply@noreply.fyndd.in
+    name: Fyndd
+
+
+
 #testing for vercel deployement
