@@ -4,6 +4,7 @@ import ExplorePage from './pages/ExplorePage.jsx';
 import CategoryPage from './pages/CategoryPage.jsx';
 import AestheticsPage from "./pages/AestheticsPage.jsx";
 import ProductsPage from './pages/ProductsPage.jsx';
+import SearchPage from './pages/SearchPage.jsx';
 
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
                 <Route path="/explore/:type" element={<ExplorePage />} />
                 <Route path="/categories/:gender" element={<CategoryPage />} />
                 <Route path="/aesthetics" element={<AestheticsPage />} />
-                <Route path="/:gender/:category" element={<ProductsPage />} />
+                <Route path="/products" element={<ProductsPage />} />
+                <Route path="/search" element={<SearchPage />} />
             </Routes>
         </Router>
     );
