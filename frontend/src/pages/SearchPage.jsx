@@ -35,7 +35,7 @@ const SearchPage = () => {
         localStorage.setItem('recentSearches', JSON.stringify(updated));
     };
 
-    // Text search function
+    // Text search function - Fixed to use query parameters
     const handleTextSearch = async (query = searchQuery) => {
         if (!query.trim()) return;
 
@@ -44,13 +44,33 @@ const SearchPage = () => {
         saveRecentSearch(query);
 
         try {
-            const response = await api.post('https://api.fyndd.in/api/products/hybrid-search', {
-                query: query.trim(),
-                searchType: 'text'
+            // Option 1: Using query parameters (most likely what your API expects)
+            const response = await api.get(`/products/hybrid-search`, {
+                params: {
+                    query: query.trim(),
+                    searchType: 'text'
+                }
             });
 
+            // Option 2: If the above doesn't work, try this POST approach
+            // const response = await api.post('https://api.fyndd.in/api/products/hybrid-search', {
+            //     query: query.trim(),
+            //     searchType: 'text'
+            // });
+
             console.log('Search results:', response.data);
-            setSearchResults(response.data.products || response.data || []);
+            
+            // Handle different possible response structures
+            let products = [];
+            if (response.data.products) {
+                products = response.data.products;
+            } else if (Array.isArray(response.data)) {
+                products = response.data;
+            } else if (response.data.data) {
+                products = response.data.data;
+            }
+            
+            setSearchResults(products);
         } catch (err) {
             console.error('Search failed:', err);
             setError(err.response?.data?.message || 'Search failed. Please try again.');
@@ -71,14 +91,25 @@ const SearchPage = () => {
             formData.append('image', imageData);
             formData.append('searchType', 'image');
 
-            const response = await api.post('https://api.fyndd.in/api/products/hybrid-search', formData, {
+            const response = await api.post('/products/hybrid-search', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
             console.log('Image search results:', response.data);
-            setSearchResults(response.data.products || response.data || []);
+            
+            // Handle different possible response structures
+            let products = [];
+            if (response.data.products) {
+                products = response.data.products;
+            } else if (Array.isArray(response.data)) {
+                products = response.data;
+            } else if (response.data.data) {
+                products = response.data.data;
+            }
+            
+            setSearchResults(products);
         } catch (err) {
             console.error('Image search failed:', err);
             setError(err.response?.data?.message || 'Image search failed. Please try again.');
@@ -150,10 +181,10 @@ const SearchPage = () => {
             state: { 
                 product: {
                     id: product.id,
-                    title: product.title,
+                    title: product.title || product.name,
                     description: product.description,
                     price: product.price,
-                    imageUrl: product.imageUrl,
+                    imageUrl: product.imageUrl || product.image || product.thumbnail,
                     brand: product.brand,
                     category: product.category,
                     rating: product.rating,
@@ -222,6 +253,15 @@ const SearchPage = () => {
                                 )}
                             </div>
                         </div>
+
+                        {/* Search Button */}
+                        <button
+                            onClick={() => handleTextSearch()}
+                            disabled={!searchQuery.trim() || loading}
+                            className="px-6 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Search
+                        </button>
 
                         {/* Camera Button */}
                         <button
@@ -354,47 +394,84 @@ const SearchPage = () => {
                 {/* Error State */}
                 {error && (
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                        <p className="text-red-700">{error}</p>
+                        <div className="flex items-center">
+                            <svg className="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p className="text-red-700">{error}</p>
+                        </div>
+                        <button
+                            onClick={() => setError(null)}
+                            className="mt-2 text-red-600 underline hover:text-red-800"
+                        >
+                            Dismiss
+                        </button>
                     </div>
                 )}
 
                 {/* Search Results */}
                 {!loading && searchResults.length > 0 && (
                     <div>
-                        <h3 className="text-lg font-semibold mb-4">
-                            Search Results ({searchResults.length})
+                        <h3 className="text-xl font-bold mb-6 text-gray-800">
+                            Search Results ({searchResults.length} {searchResults.length === 1 ? 'product' : 'products'} found)
                         </h3>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                             {searchResults.map((product, index) => (
                                 <div
-                                    key={product.id || index}
-                                    className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                                    key={product.id || product._id || index}
+                                    className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 border border-gray-100"
                                     onClick={() => handleProductClick(product)}
                                 >
-                                    <div className="relative overflow-hidden">
+                                    <div className="relative overflow-hidden bg-gray-50">
                                         <img
-                                            src={product.imageUrl}
-                                            alt={product.title}
-                                            className="w-full h-72 object-cover hover:scale-105 transition-transform duration-300"
+                                            src={product.imageUrl || product.image || product.thumbnail || '/api/placeholder/300/300'}
+                                            alt={product.title || product.name || 'Product'}
+                                            className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                                            onError={(e) => {
+                                                e.target.src = '/api/placeholder/300/300';
+                                            }}
                                         />
+                                        {product.discount && (
+                                            <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-semibold">
+                                                {product.discount}% OFF
+                                            </div>
+                                        )}
                                     </div>
                                     
-                                    <div className="p-3">
-                                        <h3 className="text-sm font-semibold mb-1 line-clamp-2 text-gray-800">
-                                            {product.title}
+                                    <div className="p-4">
+                                        <h3 className="text-sm font-semibold mb-2 line-clamp-2 text-gray-800 min-h-[2.5rem]">
+                                            {product.title || product.name || 'Untitled Product'}
                                         </h3>
                                         
-                                        <div className="flex items-center justify-between mt-2">
-                                            <p className="text-lg font-bold text-black">₹{product.price}</p>
+                                        {product.brand && (
+                                            <p className="text-xs text-gray-500 mb-2">{product.brand}</p>
+                                        )}
+                                        
+                                        <div className="flex items-center justify-between mt-3">
+                                            <div className="flex flex-col">
+                                                <p className="text-lg font-bold text-black">
+                                                    ₹{product.price || 'N/A'}
+                                                </p>
+                                                {product.originalPrice && product.originalPrice > product.price && (
+                                                    <p className="text-sm text-gray-500 line-through">
+                                                        ₹{product.originalPrice}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            
                                             {product.rating && (
-                                                <div className="flex items-center">
-                                                    <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <div className="flex items-center bg-green-100 px-2 py-1 rounded-md">
+                                                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                                                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                                     </svg>
-                                                    <span className="text-sm text-gray-600 ml-1">{product.rating}</span>
+                                                    <span className="text-xs text-green-700 ml-1 font-medium">{product.rating}</span>
                                                 </div>
                                             )}
                                         </div>
+                                        
+                                        {product.category && (
+                                            <p className="text-xs text-gray-400 mt-2">{product.category}</p>
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -403,13 +480,30 @@ const SearchPage = () => {
                 )}
 
                 {/* No Results */}
-                {!loading && searchResults.length === 0 && (searchQuery || selectedImage) && (
-                    <div className="text-center py-12">
-                        <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                {!loading && searchResults.length === 0 && (searchQuery || selectedImage) && !error && (
+                    <div className="text-center py-16">
+                        <svg className="w-20 h-20 text-gray-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                        <p className="text-xl text-gray-600 mb-2">No products found</p>
-                        <p className="text-gray-500">Try different keywords or upload a different image</p>
+                        <h3 className="text-2xl font-semibold text-gray-600 mb-3">No products found</h3>
+                        <p className="text-gray-500 mb-6">We couldn't find any products matching your search criteria.</p>
+                        <div className="space-y-2 text-sm text-gray-400">
+                            <p>• Try different keywords</p>
+                            <p>• Check your spelling</p>
+                            <p>• Use more general terms</p>
+                            {selectedImage && <p>• Try uploading a different image</p>}
+                        </div>
+                    </div>
+                )}
+
+                {/* Default State - Show when no search has been performed */}
+                {!loading && searchResults.length === 0 && !searchQuery && !selectedImage && !error && (
+                    <div className="text-center py-16">
+                        <svg className="w-24 h-24 text-gray-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <h3 className="text-2xl font-semibold text-gray-600 mb-3">Start your search</h3>
+                        <p className="text-gray-500 mb-6">Enter keywords or upload an image to find products</p>
                     </div>
                 )}
             </div>
