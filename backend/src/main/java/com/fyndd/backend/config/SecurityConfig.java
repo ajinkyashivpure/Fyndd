@@ -36,6 +36,9 @@ public class SecurityConfig {
                         .requestMatchers("/auth/user/signup").permitAll()
                         .requestMatchers("/auth/user/verify-otp").permitAll()
                         .requestMatchers("/auth/user/login").permitAll()
+                        .requestMatchers("auth/user/forgot-password").permitAll()
+                        .requestMatchers("auth/user/verify-reset-otp").permitAll()
+                        .requestMatchers("/auth/user/reset-password").permitAll()
                         .requestMatchers("/api/products/getId/**").permitAll()
 
                         .anyRequest().authenticated() // Protect other endpoints
