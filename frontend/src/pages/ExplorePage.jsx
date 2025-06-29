@@ -64,7 +64,7 @@ const ExplorePage = () => {
         }
         
         // Navigate to individual product page
-        navigate(`/products/getId/${productId}`, { state: { product } });
+        navigate(`/products/${productId}`, { state: { product } });
     };
 
     if (loading) {

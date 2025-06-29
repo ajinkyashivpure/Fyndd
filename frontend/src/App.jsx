@@ -14,7 +14,7 @@ function App() {
                 <Route path="/explore/:type" element={<ExplorePage />} />
                 <Route path="/categories/:gender" element={<CategoryPage />} />
                 <Route path="/aesthetics" element={<AestheticsPage />} />
-                 <Route path="/product:id/" element={<ProductsPage />} />
+                 <Route path="/products/:id" element={<ProductsPage />} />
                 <Route path="/search" element={<SearchPage />} />
                 {/* Catch-all route - must be last */}
                 {/*<Route path="*" element={<Navigate to="/" replace />} />*/}

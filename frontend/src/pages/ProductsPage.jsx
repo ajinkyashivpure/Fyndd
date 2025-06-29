@@ -91,9 +91,9 @@ const ProductPage = () => {
 
     if (loading) {
         return (
-            <div className="max-w-7xl mx-auto p-4">
+            <div className="max-w-7xl mx-auto p-4 px-4 sm:px-6 lg:px-8">
                 <div className="text-center py-20">
-                    <p className="text-xl">Loading product details...</p>
+                    <p className="text-lg sm:text-xl">Loading product details...</p>
                 </div>
             </div>
         );
@@ -101,12 +101,12 @@ const ProductPage = () => {
 
     if (error || !product) {
         return (
-            <div className="max-w-7xl mx-auto p-4">
+            <div className="max-w-7xl mx-auto p-4 px-4 sm:px-6 lg:px-8">
                 <div className="text-center py-20">
-                    <p className="text-red-500 text-xl">{error || 'Product not found'}</p>
+                    <p className="text-red-500 text-lg sm:text-xl">{error || 'Product not found'}</p>
                     <button 
                         onClick={() => navigate(-1)}
-                        className="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800"
+                        className="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition-colors"
                     >
                         Go Back
                     </button>
@@ -116,20 +116,20 @@ const ProductPage = () => {
     }
 
     return (
-        <div className="max-w-7xl mx-auto p-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             {/* Breadcrumb */}
-            <nav className="mb-6">
+            <nav className="mb-4 sm:mb-6">
                 <button 
                     onClick={() => navigate(-1)}
-                    className="text-blue-600 hover:text-blue-800 mb-4"
+                    className="text-blue-600 hover:text-blue-800 mb-4 flex items-center text-sm sm:text-base transition-colors"
                 >
                     ← Back
                 </button>
             </nav>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Product Image - Left Side */}
-                <div className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                {/* Product Image - Top on mobile, Left on desktop */}
+                <div className="space-y-3 sm:space-y-4">
                     <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                         <img
                             src={product.imageUrl}
@@ -140,13 +140,13 @@ const ProductPage = () => {
                     
                     {/* Additional product images if available */}
                     {product.additionalImages && product.additionalImages.length > 0 && (
-                        <div className="grid grid-cols-4 gap-2">
+                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                             {product.additionalImages.map((img, index) => (
                                 <div key={index} className="aspect-square bg-gray-100 rounded overflow-hidden">
                                     <img
                                         src={img}
                                         alt={`${product.title} ${index + 1}`}
-                                        className="w-full h-full object-cover cursor-pointer hover:opacity-80"
+                                        className="w-full h-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
                                     />
                                 </div>
                             ))}
@@ -154,35 +154,35 @@ const ProductPage = () => {
                     )}
                 </div>
 
-                {/* Product Details - Right Side */}
-                <div className="space-y-6">
+                {/* Product Details - Bottom on mobile, Right on desktop */}
+                <div className="space-y-4 sm:space-y-6">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.title}</h1>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 leading-tight">{product.title}</h1>
                         {product.brand && (
-                            <p className="text-gray-600 text-lg">by {product.brand}</p>
+                            <p className="text-gray-600 text-base sm:text-lg">by {product.brand}</p>
                         )}
                     </div>
 
                     {/* Price */}
                     <div className="space-y-2">
-                        <div className="flex items-center space-x-4">
-                            <span className="text-3xl font-bold text-black">₹{product.price}</span>
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                            <span className="text-2xl sm:text-3xl font-bold text-black">₹{product.price}</span>
                             {product.originalPrice && product.originalPrice > product.price && (
                                 <>
-                                    <span className="text-xl text-gray-500 line-through">₹{product.originalPrice}</span>
-                                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-medium">
+                                    <span className="text-lg sm:text-xl text-gray-500 line-through">₹{product.originalPrice}</span>
+                                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs sm:text-sm font-medium">
                                         {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
                                     </span>
                                 </>
                             )}
                         </div>
-                        <p className="text-sm text-gray-600">Inclusive of all taxes</p>
+                        <p className="text-xs sm:text-sm text-gray-600">Inclusive of all taxes</p>
                     </div>
 
                     {/* Product Description */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-2">Description</h3>
-                        <p className="text-gray-700 leading-relaxed">
+                        <h3 className="text-base sm:text-lg font-semibold mb-2">Description</h3>
+                        <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
                             {product.description || 'No description available for this product.'}
                         </p>
                     </div>
@@ -190,8 +190,8 @@ const ProductPage = () => {
                     {/* Product Details */}
                     {(product.category || product.material || product.size) && (
                         <div>
-                            <h3 className="text-lg font-semibold mb-2">Product Details</h3>
-                            <ul className="space-y-1 text-gray-700">
+                            <h3 className="text-base sm:text-lg font-semibold mb-2">Product Details</h3>
+                            <ul className="space-y-1 text-sm sm:text-base text-gray-700">
                                 {product.category && <li><strong>Category:</strong> {product.category}</li>}
                                 {product.material && <li><strong>Material:</strong> {product.material}</li>}
                                 {product.size && <li><strong>Size:</strong> {product.size}</li>}
@@ -202,20 +202,20 @@ const ProductPage = () => {
 
                     {/* Quantity Selector */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-2">Quantity</h3>
+                        <h3 className="text-base sm:text-lg font-semibold mb-2">Quantity</h3>
                         <div className="flex items-center space-x-3">
                             <button
                                 onClick={() => handleQuantityChange(-1)}
                                 disabled={quantity <= 1}
-                                className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-lg sm:text-xl"
                             >
                                 -
                             </button>
-                            <span className="text-xl font-semibold w-12 text-center">{quantity}</span>
+                            <span className="text-lg sm:text-xl font-semibold w-12 text-center">{quantity}</span>
                             <button
                                 onClick={() => handleQuantityChange(1)}
                                 disabled={quantity >= 10}
-                                className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-lg sm:text-xl"
                             >
                                 +
                             </button>
@@ -223,18 +223,18 @@ const ProductPage = () => {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                         <button
                             onClick={handleAddToCart}
                             disabled={addingToCart}
-                            className="w-full bg-yellow-500 text-black py-3 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-yellow-500 text-black py-3 sm:py-4 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                         >
                             {addingToCart ? 'Adding to Cart...' : `Add to Cart - ₹${product.price * quantity}`}
                         </button>
                         
                         <button
                             onClick={handleBuyNow}
-                            className="w-full bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition"
+                            className="w-full bg-black text-white py-3 sm:py-4 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm sm:text-base"
                         >
                             Buy Now - ₹{product.price * quantity}
                         </button>
@@ -242,8 +242,8 @@ const ProductPage = () => {
 
                     {/* Additional Info */}
                     <div className="bg-gray-50 p-4 rounded-lg">
-                        <h3 className="font-semibold mb-2">Delivery & Returns</h3>
-                        <ul className="text-sm text-gray-600 space-y-1">
+                        <h3 className="font-semibold mb-2 text-sm sm:text-base">Delivery & Returns</h3>
+                        <ul className="text-xs sm:text-sm text-gray-600 space-y-1">
                             <li>• Free delivery on orders above ₹500</li>
                             <li>• Easy 30-day returns</li>
                             <li>• Cash on delivery available</li>
@@ -251,6 +251,29 @@ const ProductPage = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Mobile Sticky Bottom Bar for Actions (visible only on mobile) */}
+            <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
+                <div className="flex space-x-3">
+                    <button
+                        onClick={handleAddToCart}
+                        disabled={addingToCart}
+                        className="flex-1 bg-yellow-500 text-black py-3 px-4 rounded-lg font-semibold hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    >
+                        {addingToCart ? 'Adding...' : 'Add to Cart'}
+                    </button>
+                    
+                    <button
+                        onClick={handleBuyNow}
+                        className="flex-1 bg-black text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm"
+                    >
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            {/* Add bottom padding to prevent content from being hidden behind sticky bar on mobile */}
+            <div className="lg:hidden h-20"></div>
         </div>
     );
 };
