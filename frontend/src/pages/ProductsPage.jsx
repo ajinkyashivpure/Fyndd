@@ -31,7 +31,7 @@ const ProductPage = () => {
         setLoading(true);
         setError(null);
 
-        api.get(`api/products/getId/${id}`)
+        api.get(`/products/getId/${id}`)
             .then(res => {
                 console.log("Product API Response:", res.data);
                 setProduct(res.data);
