@@ -54,6 +54,7 @@ public class ProductController {
     @GetMapping("/getId/{id}")
     public ResponseEntity<?> getProductById(@PathVariable String id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
+        System.out.println("i am in the getId method");
 
         if (optionalProduct.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with id: " + id);
