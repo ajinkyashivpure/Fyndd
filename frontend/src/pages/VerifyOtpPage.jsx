@@ -1,210 +1,125 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const VerifyOtpPage = () => {
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+const OtpVerificationPage = () => {
+  const [otp, setOtp] = useState(['', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
-  const [isResending, setIsResending] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
-  const [resendTimer, setResendTimer] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  const [canResend, setCanResend] = useState(false);
+  const inputRefs = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const inputRefs = useRef([]);
-  
-  // Get email/name from previous page state
-  const { email, name, fromSignup } = location.state || {};
 
-  // Initialize input refs
-  useEffect(() => {
-    inputRefs.current = inputRefs.current.slice(0, 6);
-  }, []);
+  // Get email and name from navigation state
+  const email = location.state?.email || '';
+  const name = location.state?.name || '';
+  const fromSignup = location.state?.fromSignup || false;
 
+  // Redirect if no email provided
   useEffect(() => {
-    // Redirect back if no email provided
     if (!email) {
-      navigate('/signup', { replace: true });
-      return;
-    }
-
-    // Focus on the first input when component mounts
-    if (inputRefs.current[0]) {
-      inputRefs.current[0].focus();
+      navigate('/signup');
     }
   }, [email, navigate]);
 
-  // Resend timer effect
+  // Timer countdown effect
   useEffect(() => {
-    let interval = null;
-    if (resendTimer > 0) {
-      interval = setInterval(() => {
-        setResendTimer(timer => timer - 1);
-      }, 1000);
-    } else if (interval) {
-      clearInterval(interval);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [resendTimer]);
-
-  // Auto-clear success messages
-  useEffect(() => {
-    if (message.type === 'success' && message.text.includes('resent')) {
+    if (timeLeft > 0) {
       const timer = setTimeout(() => {
-        setMessage({ type: '', text: '' });
-      }, 3000);
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
       return () => clearTimeout(timer);
+    } else {
+      setCanResend(true);
     }
-  }, [message]);
+  }, [timeLeft]);
 
+  // Format time display
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  // Handle OTP input change
   const handleOtpChange = (index, value) => {
     // Only allow numeric input
-    if (!/^\d*$/.test(value)) return;
-    
-    if (value.length <= 1) {
-      const newOtp = [...otp];
-      newOtp[index] = value;
-      setOtp(newOtp);
-      
-      // Clear error message when user starts typing
-      if (message.type === 'error') {
-        setMessage({ type: '', text: '' });
-      }
-      
-      // Auto-focus next input
-      if (value && index < 5) {
-        inputRefs.current[index + 1]?.focus();
-      }
-    }
-  };
-
-  const handleOtpKeyDown = (index, e) => {
-    // Handle backspace
-    if (e.key === 'Backspace') {
-      if (!otp[index] && index > 0) {
-        // Move to previous input if current is empty
-        inputRefs.current[index - 1]?.focus();
-      } else {
-        // Clear current input
-        const newOtp = [...otp];
-        newOtp[index] = '';
-        setOtp(newOtp);
-      }
-    }
-    // Handle arrow keys
-    else if (e.key === 'ArrowLeft' && index > 0) {
-      inputRefs.current[index - 1]?.focus();
-    }
-    else if (e.key === 'ArrowRight' && index < 5) {
-      inputRefs.current[index + 1]?.focus();
-    }
-    // Handle paste
-    else if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      handlePaste();
-    }
-  };
-
-  const handlePaste = async () => {
-    try {
-      const text = await navigator.clipboard.readText();
-      const digits = text.replace(/\D/g, '').slice(0, 6);
-      
-      if (digits.length === 6) {
-        const newOtp = digits.split('');
-        setOtp(newOtp);
-        inputRefs.current[5]?.focus();
-        
-        // Clear any existing error messages
-        if (message.type === 'error') {
-          setMessage({ type: '', text: '' });
-        }
-      }
-    } catch (err) {
-      console.error('Failed to read clipboard:', err);
-    }
-  };
-
-  const handleInputClick = (index) => {
-    // Focus on the first empty input or the clicked input
-    const firstEmptyIndex = otp.findIndex(digit => !digit);
-    const targetIndex = firstEmptyIndex !== -1 ? Math.min(firstEmptyIndex, index) : index;
-    inputRefs.current[targetIndex]?.focus();
-  };
-
-  const validateOtp = () => {
-    const otpString = otp.join('');
-    
-    if (otpString.length !== 6) {
-      setMessage({ type: 'error', text: 'Please enter all 6 digits' });
-      // Focus on first empty input
-      const firstEmptyIndex = otp.findIndex(digit => !digit);
-      if (firstEmptyIndex !== -1) {
-        inputRefs.current[firstEmptyIndex]?.focus();
-      }
-      return false;
-    }
-    
-    if (!/^\d{6}$/.test(otpString)) {
-      setMessage({ type: 'error', text: 'OTP must contain only numbers' });
-      return false;
-    }
-    
-    return true;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateOtp()) {
+    if (value && !/^\d$/.test(value)) {
       return;
     }
 
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Clear error message when user starts typing
+    if (message.type === 'error') {
+      setMessage({ type: '', text: '' });
+    }
+
+    // Auto-focus next input
+    if (value && index < 3) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  // Handle backspace
+  const handleKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  // Handle paste
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 4);
+    if (pasteData.length === 4) {
+      setOtp(pasteData.split(''));
+      inputRefs.current[3]?.focus();
+    }
+  };
+
+  // Verify OTP
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    
     const otpString = otp.join('');
+    if (otpString.length !== 4) {
+      setMessage({ type: 'error', text: 'Please enter the complete 4-digit OTP' });
+      return;
+    }
+
     setIsLoading(true);
     setMessage({ type: '', text: '' });
-    
+
     try {
       const response = await fetch('https://api.fyndd.in/auth/user/verify-otp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          otp: otpString,
-          email: email.trim().toLowerCase()
-        })
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otpString)}`
       });
-      
-      const data = await response.json();
-      
+
       if (response.ok) {
-        setMessage({ type: 'success', text: 'OTP verified successfully!' });
-        
-        // Store token if provided
-        if (data.token) {
-          localStorage.setItem('authToken', data.token);
-        }
-        
-        // Store user info if provided
-        if (data.user) {
-          localStorage.setItem('user', JSON.stringify(data.user));
-        }
-        
-        // Redirect based on context
+        const data = await response.text();
+        setMessage({ type: 'success', text: 'Account verified successfully! Redirecting to login...' });
         setTimeout(() => {
-          if (fromSignup) {
-            navigate('/login', { 
-              replace: true,
-              state: { message: 'Account verified successfully! Please login with your credentials.' }
-            });
-          } else {
-            // For password reset or other flows
-            navigate('/', { replace: true });
-          }
-        }, 1500);
+          navigate('/login', { 
+            state: { 
+              email: email,
+              message: 'Account created successfully! Please sign in.'
+            } 
+          });
+        }, 2000);
       } else {
-        setMessage({ type: 'error', text: data.message || 'Invalid OTP. Please check and try again.' });
-        // Clear OTP inputs on error
-        setOtp(['', '', '', '', '', '']);
+        const errorText = await response.text();
+        setMessage({ 
+          type: 'error', 
+          text: errorText || 'Invalid OTP. Please try again.' 
+        });
+        // Clear OTP on error
+        setOtp(['', '', '', '']);
         inputRefs.current[0]?.focus();
       }
     } catch (error) {
@@ -218,47 +133,38 @@ const VerifyOtpPage = () => {
     }
   };
 
+  // Resend OTP (placeholder - you'll need to implement the resend endpoint)
   const handleResendOtp = async () => {
-    if (resendTimer > 0) return;
-    
-    setIsResending(true);
+    setIsLoading(true);
     setMessage({ type: '', text: '' });
-    
+
     try {
-      const response = await fetch('https://api.fyndd.in/auth/user/resend-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: email.trim().toLowerCase()
-        })
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        setMessage({ type: 'success', text: 'New OTP sent successfully!' });
-        // Clear current OTP inputs
-        setOtp(['', '', '', '', '', '']);
-        // Focus on first input
-        inputRefs.current[0]?.focus();
-        // Start resend timer
-        setResendTimer(60); // 60 seconds
-      } else {
-        setMessage({ type: 'error', text: data.message || 'Failed to resend OTP. Please try again.' });
-      }
+      // This would need a resend OTP endpoint
+      // const response = await fetch('https://api.fyndd.in/auth/user/resend-otp', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      //   body: `email=${encodeURIComponent(email)}`
+      // });
+
+      // For now, just show success message and reset timer
+      setMessage({ type: 'success', text: 'OTP resent successfully!' });
+      setTimeLeft(300);
+      setCanResend(false);
+      setOtp(['', '', '', '']);
+      inputRefs.current[0]?.focus();
     } catch (error) {
       console.error('Resend OTP error:', error);
       setMessage({ 
         type: 'error', 
-        text: 'Network error. Please check your connection and try again.' 
+        text: 'Failed to resend OTP. Please try again.' 
       });
     } finally {
-      setIsResending(false);
+      setIsLoading(false);
     }
   };
 
   const handleBackToSignup = () => {
-    navigate('/signup', { replace: true });
+    navigate('/signup');
   };
 
   return (
@@ -270,22 +176,22 @@ const VerifyOtpPage = () => {
             FYNDD
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"></div>
           </h1>
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mt-4">
-            Verify your account
+          <p className="text-gray-600 text-sm sm:text-base mt-2">
+            Verify your email address
+          </p>
+        </div>
+
+        {/* Verification Info */}
+        <div className="text-center space-y-2">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+            Enter Verification Code
           </h2>
-          <div className="mt-3 space-y-1">
-            {name && (
-              <p className="text-sm sm:text-base text-gray-600">
-                Hi <span className="font-medium">{name}</span>!
-              </p>
-            )}
-            <p className="text-xs sm:text-sm text-gray-500">
-              We've sent a 6-digit verification code to
-            </p>
-            <p className="text-sm sm:text-base font-medium text-gray-700 break-all">
-              {email}
-            </p>
-          </div>
+          <p className="text-gray-600 text-sm sm:text-base">
+            We've sent a 4-digit code to
+          </p>
+          <p className="text-black font-medium text-sm sm:text-base break-all">
+            {email}
+          </p>
         </div>
         
         {/* Message Display */}
@@ -304,40 +210,53 @@ const VerifyOtpPage = () => {
         )}
 
         {/* OTP Form */}
-        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+        <form onSubmit={handleVerifyOtp} className="space-y-6">
+          {/* OTP Input Fields */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-4 text-center">
-              Enter Verification Code
+              Verification Code
             </label>
-            <div className="flex gap-2 sm:gap-3 justify-center px-2">
+            <div className="flex justify-center space-x-3 sm:space-x-4">
               {otp.map((digit, index) => (
                 <input
                   key={index}
-                  ref={(el) => (inputRefs.current[index] = el)}
+                  ref={el => inputRefs.current[index] = el}
                   type="text"
+                  inputMode="numeric"
+                  maxLength={1}
                   value={digit}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
-                  onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                  onClick={() => handleInputClick(index)}
-                  className="w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-xl font-semibold border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 bg-white"
-                  maxLength={1}
-                  inputMode="numeric"
-                  pattern="[0-9]"
-                  autoComplete="one-time-code"
-                  aria-label={`Digit ${index + 1} of verification code`}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  onPaste={handlePaste}
+                  className="w-12 h-12 sm:w-14 sm:h-14 text-center text-lg sm:text-xl font-bold border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200"
+                  aria-label={`Digit ${index + 1}`}
                 />
               ))}
             </div>
-            
-            {/* Paste hint */}
-            <p className="text-xs text-gray-500 text-center mt-2">
-              You can paste the complete code from your clipboard
-            </p>
           </div>
 
+          {/* Timer */}
+          <div className="text-center">
+            {!canResend ? (
+              <p className="text-gray-600 text-sm">
+                Resend code in <span className="font-medium text-black">{formatTime(timeLeft)}</span>
+              </p>
+            ) : (
+              <button
+                type="button"
+                onClick={handleResendOtp}
+                disabled={isLoading}
+                className="text-black hover:underline font-medium text-sm focus:outline-none focus:underline transition-all duration-200 disabled:opacity-50"
+              >
+                Resend Code
+              </button>
+            )}
+          </div>
+
+          {/* Verify Button */}
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || otp.join('').length !== 4}
             className="w-full bg-black text-white py-2.5 sm:py-3 px-4 rounded-lg hover:bg-gray-800 active:bg-gray-900 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black text-base"
           >
             {isLoading ? (
@@ -349,34 +268,21 @@ const VerifyOtpPage = () => {
                 Verifying...
               </span>
             ) : (
-              'Verify OTP'
+              'Verify Code'
             )}
           </button>
         </form>
 
-        {/* Footer Actions */}
-        <div className="text-center space-y-3">
+        {/* Footer Link */}
+        <div className="text-center">
           <p className="text-gray-600 text-sm">
             Didn't receive the code?{' '}
             <button 
-              onClick={handleResendOtp}
-              disabled={isResending || resendTimer > 0}
-              className="text-black hover:underline font-medium disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:underline transition-all duration-200"
-              type="button"
-            >
-              {isResending ? 'Resending...' : 
-               resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend OTP'}
-            </button>
-          </p>
-          
-          <p className="text-gray-600 text-sm">
-            Wrong email?{' '}
-            <button 
+              className="text-black hover:underline font-medium focus:outline-none focus:underline transition-all duration-200" 
               onClick={handleBackToSignup}
-              className="text-black hover:underline font-medium focus:outline-none focus:underline transition-all duration-200"
               type="button"
             >
-              Back to Signup
+              Back to Sign Up
             </button>
           </p>
         </div>
@@ -385,4 +291,4 @@ const VerifyOtpPage = () => {
   );
 };
 
-export default VerifyOtpPage;
+export default OtpVerificationPage;

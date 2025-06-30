@@ -133,9 +133,20 @@ const SignupPage = () => {
         })
       });
       
-      const data = await response.json();
-      
+      // Check if response is successful first
       if (response.ok) {
+        // Try to parse as JSON, but handle cases where it might be plain text
+        let data;
+        const contentType = response.headers.get('content-type');
+        
+        if (contentType && contentType.includes('application/json')) {
+          data = await response.json();
+        } else {
+          // If it's plain text response, create a data object
+          const textResponse = await response.text();
+          data = { message: textResponse };
+        }
+        
         setMessage({ type: 'success', text: 'Account created successfully! Redirecting to OTP verification...' });
         setTimeout(() => {
           // Pass the email and name to the OTP verification page
@@ -148,7 +159,21 @@ const SignupPage = () => {
           });
         }, 1500);
       } else {
-        setMessage({ type: 'error', text: data.message || 'Registration failed. Please try again.' });
+        // Handle error responses
+        let errorData;
+        const contentType = response.headers.get('content-type');
+        
+        if (contentType && contentType.includes('application/json')) {
+          errorData = await response.json();
+        } else {
+          const textResponse = await response.text();
+          errorData = { message: textResponse };
+        }
+        
+        setMessage({ 
+          type: 'error', 
+          text: errorData.message || 'Registration failed. Please try again.' 
+        });
       }
     } catch (error) {
       console.error('Signup error:', error);
