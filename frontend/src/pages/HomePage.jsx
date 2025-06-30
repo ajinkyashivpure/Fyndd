@@ -50,23 +50,23 @@ const Header = ({ selectedGender, setSelectedGender }) => (
 
 const carouselImages = {
     women: [
+         { type: "wparty", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/partyWearWomen.jpg" },
         { type: "wathleisure", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/athlesiureWomen.jpg" },
         { type: "wcasuals", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/casualsWomen.jpg" },
         { type: "wcorporate", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/corporateWomen.jpg" },
         { type: "wethnic", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/EthnicWomen.jpeg" },
         { type: "wformal", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/formalWomen.jpg" },
-        { type: "wparty", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/partyWearWomen.jpg" },
         { type: "wstreetwear", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/streetWearWomen.jpg" },
         { type: "wvacation", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/vacationWomen.jpg" },
         { type: "wy2k", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/y2kWomen.jpg" }
     ],
     men: [
+        { type: "party", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/partyMen.jpg" },
         { type: "casuals", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/casualsMen.jpg" },
         { type: "corporate", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/corporateMen.jpg" },
         { type: "ethnic", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/ethnicMen.jpg" },
         { type: "formals", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/formalsMen.jpg" },
         { type: "oldmoney", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/OldMoneyMen.jpg" },
-        { type: "party", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/partyMen.jpg" },
         { type: "sports", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/sportsMen.jpg" },
         { type: "vacation", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/vacationMen.jpg" }
     ]
