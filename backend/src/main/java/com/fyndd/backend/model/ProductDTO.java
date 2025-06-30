@@ -3,6 +3,7 @@ package com.fyndd.backend.model;
 import java.math.BigDecimal;
 
 public class ProductDTO {
+    private String id;
     private String title;
     private BigDecimal price;
     private String url;
@@ -10,8 +11,9 @@ public class ProductDTO {
     private String description;
 
     // Constructor
-    public ProductDTO(String title, BigDecimal price, String url, String imageUrl, String description) {
+    public ProductDTO(String id,String title, BigDecimal price, String url, String imageUrl, String description) {
         this.title = title;
+        this.id = id;
         this.price = price;
         this.url = url;
         this.imageUrl = imageUrl;
@@ -58,5 +60,13 @@ public class ProductDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

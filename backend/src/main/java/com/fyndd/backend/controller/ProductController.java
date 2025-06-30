@@ -70,6 +70,7 @@ public class ProductController {
         Product product = optionalProduct.get();
 
         ProductDTO dto = new ProductDTO(
+                product.getId(),
                 product.getTitle(),
                 product.getPrice(),
                 product.getUrl(),
