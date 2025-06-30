@@ -50,6 +50,7 @@ public class ProductController {
     public List<ProductPreviewDTO> getProductsByType(@PathVariable String type) {
         return productRepository.findByType(type).stream()
                 .map(p -> new ProductPreviewDTO(
+                        p.getId(),
                         p.getTitle(), p.getPrice(), p.getDescription(), p.getImageUrl(), p.getUrl()
                 ))
                 .collect(Collectors.toList());
