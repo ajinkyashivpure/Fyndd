@@ -2,6 +2,7 @@ package com.fyndd.backend.controller;
 
 import com.fyndd.backend.model.Product;
 import com.fyndd.backend.model.ProductDTO;
+import com.fyndd.backend.model.ProductPreviewDTO;
 import com.fyndd.backend.repository.ProductRepository;
 import com.fyndd.backend.service.ProductService;
 import org.bson.Document;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products")
@@ -45,9 +47,14 @@ public class ProductController {
 
 
     @GetMapping("/type/{type}")
-    public List<Product> getProductsByType(@PathVariable String type) {
-        return productRepository.findByType(type);
+    public List<ProductPreviewDTO> getProductsByType(@PathVariable String type) {
+        return productRepository.findByType(type).stream()
+                .map(p -> new ProductPreviewDTO(
+                        p.getTitle(), p.getPrice(), p.getDescription(), p.getImageUrl(), p.getUrl()
+                ))
+                .collect(Collectors.toList());
     }
+
 
 
 
