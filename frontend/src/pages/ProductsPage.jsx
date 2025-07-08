@@ -228,7 +228,7 @@ const ProductPage = () => {
                     {/* Action Buttons */}
                     <div className="space-y-3 sm:space-y-4">
                         <button
-                            onClick={handleAddToCart}
+                           onClick={() => handleAddToCart(product)}
                             disabled={addingToCart}
                             className="w-full bg-yellow-500 text-black py-3 sm:py-4 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                         >
@@ -259,7 +259,7 @@ const ProductPage = () => {
             <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
                 <div className="flex space-x-3">
                     <button
-                        onClick={handleAddToCart}
+                        onClick={() => handleAddToCart(product)}
                         disabled={addingToCart}
                         className="flex-1 bg-yellow-500 text-black py-3 px-4 rounded-lg font-semibold hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                     >
