@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an axios instance with the base URL of your Spring Boot backend
 const api = axios.create({
-    baseURL: 'https://api.fyndd.in/api',
+    baseURL: 'https://api.fyndd.in',
 });
 
 // Add a request interceptor to include the auth token for authenticated requests

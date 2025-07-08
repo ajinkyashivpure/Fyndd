@@ -9,6 +9,7 @@ import VerifyOtpPage from './pages/VerifyOtpPage.jsx';
 import VerifyResetOtpPage from './pages/VerifyResetOtpPage.jsx';
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
+import Cart from './pages/Cart.jsx';
 
 function App() {
     return (
@@ -24,7 +25,8 @@ function App() {
                 <Route path="/verify-otp" element={<VerifyOtpPage />} />
                 <Route path="/verify-reset-otp" element={<VerifyResetOtpPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
-                
+                 <Route path="/cart" element={<Cart />} />
+
                 {/* Catch-all route - must be last */}
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

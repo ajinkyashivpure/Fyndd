@@ -9,6 +9,7 @@ const ExplorePage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [addingToCart, setAddingToCart] = useState(null); // Track which product is being added
     const { type } = useParams();
 
     useEffect(() => {
@@ -21,7 +22,7 @@ const ExplorePage = () => {
         setLoading(true);
         setError(null);
         
-        api.get(`/products/type/${type}`)
+        api.get(`/api/products/type/${type}`)
             .then(res => {
                 console.log("API Response:", res.data);
                 setProducts(res.data || []);
@@ -33,55 +34,53 @@ const ExplorePage = () => {
             .finally(() => setLoading(false));
     }, [type]);
 
-    console.log("Selected Type:", type);
 
-    const handleAddToCart = (product) => {
-        // Check for authentication token
-        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-        
-        if (!token) {
-            // Save the current page and action for after login
-            navigate('/login', { 
-                state: { 
-                    from: location.pathname,
-                    action: 'addToCart',
-                    product: product
-                }
-            });
-            return;
+    const handleAddToCart = async (product) => {
+  const productId = product.id || product._id || product.productId || product.product_id;
+  if (!productId) return alert('Product ID is missing!');
+
+  const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+  if (!token) {
+    return navigate('/login', {
+      state: { from: location.pathname, action: 'addToCart', product }
+    });
+  }
+
+  try {
+    console.log("Adding to cart:", productId);
+    console.log("Auth token:", token);
+
+    setAddingToCart(productId);
+
+    await api.post(`/cart/add/${productId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    
+    alert('Added to cart successfully!');
+  } catch (err) {
+    console.error(err);
+    const status = err.response?.status;
+    if (status === 401) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
+      return navigate('/login', {
+        state: {
+          from: location.pathname,
+          message: 'Session expired. Please login again.',
+          action: 'addToCart',
+          product
         }
+      });
+    }
+    if (status === 404) return alert('Product not found. Please refresh.');
+    if (status === 400) return alert('Invalid request.');
+    alert('Failed to add to cart. Please try again.');
+  } finally {
+    setAddingToCart(null);
+  }
+};
 
-        // Get product ID
-        const productId = product.id || product._id || product.productId || product.product_id;
-        
-        if (!productId) {
-            alert('Product ID is missing!');
-            return;
-        }
-
-        api.post('/cart', { productId })
-            .then(() => {
-                alert('Added to cart successfully!');
-            })
-            .catch(err => {
-                console.error('Add to cart failed:', err);
-                if (err.response?.status === 401) {
-                    // Token expired or invalid
-                    localStorage.removeItem('authToken');
-                    localStorage.removeItem('token');
-                    navigate('/login', { 
-                        state: { 
-                            from: location.pathname,
-                            message: 'Session expired. Please login again.',
-                            action: 'addToCart',
-                            product: product
-                        }
-                    });
-                } else {
-                    alert('Failed to add to cart. Please try again.');
-                }
-            });
-    };
 
     const handleProductClick = (product) => {
         console.log("Product being clicked:", product);
@@ -154,6 +153,8 @@ const ExplorePage = () => {
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {products.map((product, index) => {
                         const productId = product.id || product._id || product.productId || product.product_id;
+                        const isAddingToCart = addingToCart === productId;
+                        
                         return (
                             <div key={productId || index} className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                                 <div className="relative">
@@ -178,9 +179,21 @@ const ExplorePage = () => {
                                     <p className="text-black font-bold mb-4">₹{product.price}</p>
                                     <button
                                         onClick={() => handleAddToCart(product)}
-                                        className="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors duration-200"
+                                        disabled={isAddingToCart}
+                                        className={`w-full px-4 py-2 rounded transition-colors duration-200 ${
+                                            isAddingToCart 
+                                                ? 'bg-gray-400 text-white cursor-not-allowed' 
+                                                : 'bg-black text-white hover:bg-gray-800'
+                                        }`}
                                     >
-                                        Add to Cart
+                                        {isAddingToCart ? (
+                                            <div className="flex items-center justify-center">
+                                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                                Adding...
+                                            </div>
+                                        ) : (
+                                            'Add to Cart'
+                                        )}
                                     </button>
                                 </div>
                             </div>

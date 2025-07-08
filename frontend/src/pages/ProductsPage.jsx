@@ -10,7 +10,6 @@ const ProductPage = () => {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [quantity, setQuantity] = useState(1);
     const [addingToCart, setAddingToCart] = useState(false);
 
     useEffect(() => {
@@ -43,51 +42,66 @@ const ProductPage = () => {
             .finally(() => setLoading(false));
     }, [id, location.state]);
 
-    const handleAddToCart = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login');
-            return;
-        }
+   const handleAddToCart = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        navigate('/login', {
+            state: { from: location.pathname, action: 'addToCart', product }
+        });
+        return;
+    }
 
-        setAddingToCart(true);
-        
-        try {
-            await api.post('/cart', { 
-                productId: product.id, 
-                quantity: quantity 
+    setAddingToCart(true);
+
+    try {
+        await api.post(`/cart/add/${product.id}`);
+        alert(`Added ${product.title} to cart!`);
+    } catch (err) {
+        console.error('Add to cart failed:', err);
+        if (err.response?.status === 401) {
+            // Token expired
+            localStorage.removeItem('authToken');
+
+            navigate('/login', {
+                state: {
+                    from: location.pathname,
+                    message: 'Session expired. Please login again.',
+                    action: 'addToCart',
+                    product
+                }
             });
-            alert(`Added ${quantity} ${product.title}(s) to cart!`);
-        } catch (err) {
-            console.error('Add to cart failed:', err);
+        } else {
             alert('Failed to add to cart. Please try again.');
-        } finally {
-            setAddingToCart(false);
         }
-    };
+    } finally {
+        setAddingToCart(false);
+    }
+};
 
     const handleBuyNow = () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login');
-            return;
-        }
-        
-        // Navigate to checkout with product details
-        navigate('/checkout', { 
-            state: { 
-                items: [{ ...product, quantity }],
-                total: product.price * quantity
-            } 
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        navigate('/login', {
+            state: {
+                from: location.pathname,
+                action: 'buyNow',
+                product
+            }
         });
-    };
+        return;
+    }
 
-    const handleQuantityChange = (change) => {
-        const newQuantity = quantity + change;
-        if (newQuantity >= 1 && newQuantity <= 10) {
-            setQuantity(newQuantity);
-        }
-    };
+    // Redirect to the external product URL
+    if (product?.url) {
+        window.location.href = product.url;  // full redirect to external payment/product page
+    } else {
+        alert("Buy URL not available for this product.");
+    }
+};
+
+
+
+    
 
     if (loading) {
         return (
@@ -200,27 +214,7 @@ const ProductPage = () => {
                         </div>
                     )}
 
-                    {/* Quantity Selector */}
-                    <div>
-                        <h3 className="text-base sm:text-lg font-semibold mb-2">Quantity</h3>
-                        <div className="flex items-center space-x-3">
-                            <button
-                                onClick={() => handleQuantityChange(-1)}
-                                disabled={quantity <= 1}
-                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-lg sm:text-xl"
-                            >
-                                -
-                            </button>
-                            <span className="text-lg sm:text-xl font-semibold w-12 text-center">{quantity}</span>
-                            <button
-                                onClick={() => handleQuantityChange(1)}
-                                disabled={quantity >= 10}
-                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-lg sm:text-xl"
-                            >
-                                +
-                            </button>
-                        </div>
-                    </div>
+                    
 
                     {/* Action Buttons */}
                     <div className="space-y-3 sm:space-y-4">
@@ -229,14 +223,14 @@ const ProductPage = () => {
                             disabled={addingToCart}
                             className="w-full bg-yellow-500 text-black py-3 sm:py-4 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                         >
-                            {addingToCart ? 'Adding to Cart...' : `Add to Cart - ₹${product.price * quantity}`}
+                            {addingToCart ? 'Adding to Cart...' : `Add to Cart - ₹${product.price}`}
                         </button>
                         
                         <button
                             onClick={handleBuyNow}
                             className="w-full bg-black text-white py-3 sm:py-4 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm sm:text-base"
                         >
-                            Buy Now - ₹{product.price * quantity}
+                            Buy Now - ₹{product.price }
                         </button>
                     </div>
 
