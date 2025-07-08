@@ -14,7 +14,7 @@ const SearchPage = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const [recentSearches, setRecentSearches] = useState([]);
     const [isMobile, setIsMobile] = useState(false);
-    const [addingToCart, setAddingToCart] = useState(null); // Track which product is being added
+    const [addingToCart, setAddingToCart] = useState(null);
     
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
@@ -33,9 +33,8 @@ const SearchPage = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    // Load recent searches from memory instead of localStorage
+    // Load recent searches from memory
     useEffect(() => {
-        // Initialize with empty array - no localStorage usage
         setRecentSearches([]);
     }, []);
 
@@ -46,55 +45,8 @@ const SearchPage = () => {
         try {
             const updated = [query, ...recentSearches.filter(item => item !== query)].slice(0, 5);
             setRecentSearches(updated);
-            // Note: Not using localStorage as per artifact restrictions
         } catch (error) {
             console.error('Error saving recent searches:', error);
-        }
-    };
-
-    // Add to cart function (similar to ExplorePage)
-    const handleAddToCart = async (product) => {
-        const productId = product.id || product._id || product.productId || product.product_id;
-        if (!productId) return alert('Product ID is missing!');
-
-        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-        if (!token) {
-            return navigate('/login', {
-                state: { from: location.pathname, action: 'addToCart', product }
-            });
-        }
-
-        try {
-            console.log("Adding to cart:", productId);
-            console.log("Auth token:", token);
-
-            setAddingToCart(productId);
-
-            await api.post(`/cart/add/${productId}`, {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-
-            alert('Added to cart successfully!');
-        } catch (err) {
-            console.error(err);
-            const status = err.response?.status;
-            if (status === 401) {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('token');
-                return navigate('/login', {
-                    state: {
-                        from: location.pathname,
-                        message: 'Session expired. Please login again.',
-                        action: 'addToCart',
-                        product
-                    }
-                });
-            }
-            if (status === 404) return alert('Product not found. Please refresh.');
-            if (status === 400) return alert('Invalid request.');
-            alert('Failed to add to cart. Please try again.');
-        } finally {
-            setAddingToCart(null);
         }
     };
 
@@ -125,7 +77,20 @@ const SearchPage = () => {
                 products = response.data.data;
             }
             
-            setSearchResults(products);
+            // Normalize product data to ensure consistent ID field
+            const normalizedProducts = products.map(product => ({
+                ...product,
+                // Ensure we have a consistent ID field
+                id: product.id || product._id || product.productId || product.product_id,
+                // Ensure we have consistent image field
+                imageUrl: product.imageUrl || product.image || product.thumbnail,
+                // Ensure we have consistent title field
+                title: product.title || product.name,
+                // Ensure we have consistent price field
+                price: product.price || product.currentPrice || product.salePrice
+            }));
+            
+            setSearchResults(normalizedProducts);
         } catch (err) {
             console.error('Search failed:', err);
             setError(err.response?.data?.message || 'Search failed. Please try again.');
@@ -163,7 +128,20 @@ const SearchPage = () => {
                 products = response.data.data;
             }
             
-            setSearchResults(products);
+            // Normalize product data to ensure consistent ID field
+            const normalizedProducts = products.map(product => ({
+                ...product,
+                // Ensure we have a consistent ID field
+                id: product.id || product._id || product.productId || product.product_id,
+                // Ensure we have consistent image field
+                imageUrl: product.imageUrl || product.image || product.thumbnail,
+                // Ensure we have consistent title field
+                title: product.title || product.name,
+                // Ensure we have consistent price field
+                price: product.price || product.currentPrice || product.salePrice
+            }));
+            
+            setSearchResults(normalizedProducts);
         } catch (err) {
             console.error('Image search failed:', err);
             setError(err.response?.data?.message || 'Image search failed. Please try again.');
@@ -250,21 +228,95 @@ const SearchPage = () => {
         event.target.value = '';
     };
 
-    // Navigate to product page
+    // Navigate to product page - FIXED VERSION
     const handleProductClick = (product) => {
-        console.log("Product being clicked:", product);
-        
+        // Get the product ID with multiple fallbacks
         const productId = product.id || product._id || product.productId || product.product_id;
-        console.log("Product ID:", productId);
+        
+        console.log("Navigating to product:", {
+            productId,
+            product,
+            allFields: Object.keys(product)
+        });
         
         if (!productId) {
             console.error("Product has no ID field:", product);
-            alert("Product ID is missing!");
+            console.error("Available fields:", Object.keys(product));
+            alert("Product ID is missing! Cannot navigate to product page.");
             return;
         }
         
-        navigate(`/products/${productId}`, { state: { product } });
-    };              
+        // Ensure the product object has all necessary fields for the ProductPage component
+        const normalizedProduct = {
+            ...product,
+            id: productId, // Ensure consistent ID field
+            imageUrl: product.imageUrl || product.image || product.thumbnail || '',
+            title: product.title || product.name || 'Untitled Product',
+            price: product.price || product.currentPrice || product.salePrice || 0,
+            originalPrice: product.originalPrice || product.mrp || product.listPrice,
+            description: product.description || product.desc || '',
+            brand: product.brand || product.manufacturer || '',
+            category: product.category || product.categoryName || '',
+            url: product.url || product.productUrl || product.buyUrl || ''
+        };
+        
+        console.log("Normalized product for navigation:", normalizedProduct);
+        
+        // Navigate to individual product page with enhanced data
+        navigate(`/products/${productId}`, { 
+            state: { 
+                product: normalizedProduct,
+                fromSearch: true 
+            } 
+        });
+    };
+
+    // Add to cart function for search results
+    const handleAddToCart = async (product) => {
+        const productId = product.id || product._id || product.productId || product.product_id;
+        if (!productId) {
+            alert('Product ID is missing!');
+            return;
+        }
+
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        if (!token) {
+            return navigate('/login', {
+                state: { from: location.pathname, action: 'addToCart', product }
+            });
+        }
+
+        try {
+            console.log("Adding to cart from search:", productId);
+            setAddingToCart(productId);
+
+            await api.post(`/cart/add/${productId}`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            alert('Added to cart successfully!');
+        } catch (err) {
+            console.error(err);
+            const status = err.response?.status;
+            if (status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('token');
+                return navigate('/login', {
+                    state: {
+                        from: location.pathname,
+                        message: 'Session expired. Please login again.',
+                        action: 'addToCart',
+                        product
+                    }
+                });
+            }
+            if (status === 404) return alert('Product not found. Please refresh.');
+            if (status === 400) return alert('Invalid request.');
+            alert('Failed to add to cart. Please try again.');
+        } finally {
+            setAddingToCart(null);
+        }
+    };
 
     // Clear search
     const clearSearch = () => {
@@ -287,6 +339,7 @@ const SearchPage = () => {
             stopCamera();
         };
     }, [imagePreview]);
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header - Mobile Optimized */}
@@ -594,14 +647,14 @@ const SearchPage = () => {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
                             {searchResults.map((product, index) => (
                                 <div
-                                    key={product.id || product._id || index}
+                                    key={product.id || index}
                                     className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 border border-gray-100 touch-manipulation active:scale-95"
                                     onClick={() => handleProductClick(product)}
                                 >
                                     <div className="relative overflow-hidden bg-gray-50">
                                         <img
-                                            src={product.imageUrl || product.image || product.thumbnail || '/api/placeholder/300/300'}
-                                            alt={product.title || product.name || 'Product'}
+                                            src={product.imageUrl || '/api/placeholder/300/300'}
+                                            alt={product.title || 'Product'}
                                             className="w-full h-32 sm:h-40 lg:h-48 object-cover hover:scale-105 transition-transform duration-300"
                                             onError={(e) => {
                                                 e.target.src = '/api/placeholder/300/300';
