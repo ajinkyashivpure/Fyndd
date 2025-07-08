@@ -65,7 +65,7 @@ const SearchPage = () => {
         saveRecentSearch(query);
 
         try {
-            const response = await api.get(`/products/hybrid-search`, {
+            const response = await api.get(`api/products/hybrid-search`, {
                 params: {
                     query: query.trim(),
                     searchType: 'text'
@@ -104,7 +104,7 @@ const SearchPage = () => {
             formData.append('image', imageData);
             formData.append('searchType', 'image');
 
-            const response = await api.post('/products/hybrid-search', formData, {
+            const response = await api.post('api/products/hybrid-search', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

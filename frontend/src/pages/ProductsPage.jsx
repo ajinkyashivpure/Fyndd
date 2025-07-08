@@ -54,7 +54,9 @@ const ProductPage = () => {
     setAddingToCart(true);
 
     try {
-        await api.post(`/cart/add/${product.id}`);
+        await api.post(`/cart/add/${productId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
         alert(`Added ${product.title} to cart!`);
     } catch (err) {
         console.error('Add to cart failed:', err);
