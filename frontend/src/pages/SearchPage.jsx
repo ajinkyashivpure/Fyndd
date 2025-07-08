@@ -33,6 +33,28 @@ const SearchPage = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+    useEffect(() => {
+        if (!type) {
+            setError('No product type specified');
+            setLoading(false);
+            return;
+        }
+
+        setLoading(true);
+        setError(null);
+        
+        api.get(`/api/products/type/${type}`)
+            .then(res => {
+                console.log("API Response:", res.data);
+                setProducts(res.data || []);
+            })
+            .catch(err => {
+                console.error('Failed to fetch products:', err);
+                setError(`Failed to load ${type} products. Please try again later.`);
+            })
+            .finally(() => setLoading(false));
+    }, [type]);
+
     // Load recent searches from memory
     useEffect(() => {
         setRecentSearches([]);
@@ -258,30 +280,20 @@ const SearchPage = () => {
 
     // Enhanced product navigation with better error handling
     const handleProductClick = (product) => {
-        const normalizedProduct = normalizeProduct(product);
-        const productId = normalizedProduct.id;
+        console.log("Product being clicked:", product);
         
-        console.log("Navigating to product:", {
-            productId,
-            normalizedProduct,
-            originalProduct: product
-        });
+        // Check for different possible ID field names
+        const productId = product.id || product._id || product.productId || product.product_id;
+        console.log("Product ID:", productId);
         
         if (!productId) {
             console.error("Product has no ID field:", product);
-            console.error("Available fields:", Object.keys(product));
-            setError("Product ID is missing! Cannot open product details.");
+            alert("Product ID is missing!");
             return;
         }
         
-        // Navigate to individual product page with enhanced data
-        navigate(`/products/${productId}`, { 
-            state: { 
-                product: normalizedProduct,
-                fromSearch: true,
-                searchQuery: searchQuery || 'image search'
-            } 
-        });
+        // Navigate to individual product page
+        navigate(`/products/${productId}`, { state: { product } });
     };
 
     // Enhanced add to cart function with better error handling
