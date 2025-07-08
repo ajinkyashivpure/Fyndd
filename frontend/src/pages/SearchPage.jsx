@@ -50,6 +50,52 @@ const SearchPage = () => {
         }
     };
 
+    // Enhanced product normalization function
+    const normalizeProduct = (product) => {
+        const productId = product.id || product._id || product.productId || product.product_id;
+        
+        return {
+            // Core identifiers
+            id: productId,
+            _id: productId, // Keep both for compatibility
+            productId: productId,
+            
+            // Basic product info
+            title: product.title || product.name || product.productName || 'Untitled Product',
+            description: product.description || product.desc || product.summary || '',
+            
+            // Images
+            imageUrl: product.imageUrl || product.image || product.thumbnail || product.images?.[0] || '',
+            images: product.images || (product.imageUrl ? [product.imageUrl] : []),
+            
+            // Pricing
+            price: product.price || product.currentPrice || product.salePrice || product.finalPrice || 0,
+            originalPrice: product.originalPrice || product.mrp || product.listPrice || product.regularPrice,
+            discount: product.discount || product.discountPercentage,
+            
+            // Product details
+            brand: product.brand || product.manufacturer || product.brandName || '',
+            category: product.category || product.categoryName || product.productCategory || '',
+            rating: product.rating || product.averageRating || product.stars,
+            reviewCount: product.reviewCount || product.totalReviews || product.reviews,
+            
+            // Availability and stock
+            inStock: product.inStock !== undefined ? product.inStock : product.available !== undefined ? product.available : true,
+            stockCount: product.stockCount || product.quantity || product.availableQuantity,
+            
+            // URLs and external links
+            url: product.url || product.productUrl || product.buyUrl || product.link || '',
+            affiliateUrl: product.affiliateUrl || product.affiliate_url,
+            
+            // Additional metadata
+            source: product.source || product.platform || 'search',
+            searchRelevance: product.searchRelevance || product.relevance || product.score,
+            
+            // Keep any other fields that might be useful
+            ...product
+        };
+    };
+
     // Text search function
     const handleTextSearch = async (query = searchQuery) => {
         if (!query.trim()) return;
@@ -77,19 +123,10 @@ const SearchPage = () => {
                 products = response.data.data;
             }
             
-            // Normalize product data to ensure consistent ID field
-            const normalizedProducts = products.map(product => ({
-                ...product,
-                // Ensure we have a consistent ID field
-                id: product.id || product._id || product.productId || product.product_id,
-                // Ensure we have consistent image field
-                imageUrl: product.imageUrl || product.image || product.thumbnail,
-                // Ensure we have consistent title field
-                title: product.title || product.name,
-                // Ensure we have consistent price field
-                price: product.price || product.currentPrice || product.salePrice
-            }));
+            // Normalize all products
+            const normalizedProducts = products.map(normalizeProduct);
             
+            console.log('Normalized products:', normalizedProducts);
             setSearchResults(normalizedProducts);
         } catch (err) {
             console.error('Search failed:', err);
@@ -128,19 +165,10 @@ const SearchPage = () => {
                 products = response.data.data;
             }
             
-            // Normalize product data to ensure consistent ID field
-            const normalizedProducts = products.map(product => ({
-                ...product,
-                // Ensure we have a consistent ID field
-                id: product.id || product._id || product.productId || product.product_id,
-                // Ensure we have consistent image field
-                imageUrl: product.imageUrl || product.image || product.thumbnail,
-                // Ensure we have consistent title field
-                title: product.title || product.name,
-                // Ensure we have consistent price field
-                price: product.price || product.currentPrice || product.salePrice
-            }));
+            // Normalize all products
+            const normalizedProducts = products.map(normalizeProduct);
             
+            console.log('Normalized image search products:', normalizedProducts);
             setSearchResults(normalizedProducts);
         } catch (err) {
             console.error('Image search failed:', err);
@@ -228,76 +256,105 @@ const SearchPage = () => {
         event.target.value = '';
     };
 
-    // Navigate to product page - FIXED VERSION
+    // Enhanced product navigation with better error handling
     const handleProductClick = (product) => {
-        // Get the product ID with multiple fallbacks
-        const productId = product.id || product._id || product.productId || product.product_id;
+        const normalizedProduct = normalizeProduct(product);
+        const productId = normalizedProduct.id;
         
         console.log("Navigating to product:", {
             productId,
-            product,
-            allFields: Object.keys(product)
+            normalizedProduct,
+            originalProduct: product
         });
         
         if (!productId) {
             console.error("Product has no ID field:", product);
             console.error("Available fields:", Object.keys(product));
-            alert("Product ID is missing! Cannot navigate to product page.");
+            setError("Product ID is missing! Cannot open product details.");
             return;
         }
-        
-        // Ensure the product object has all necessary fields for the ProductPage component
-        const normalizedProduct = {
-            ...product,
-            id: productId, // Ensure consistent ID field
-            imageUrl: product.imageUrl || product.image || product.thumbnail || '',
-            title: product.title || product.name || 'Untitled Product',
-            price: product.price || product.currentPrice || product.salePrice || 0,
-            originalPrice: product.originalPrice || product.mrp || product.listPrice,
-            description: product.description || product.desc || '',
-            brand: product.brand || product.manufacturer || '',
-            category: product.category || product.categoryName || '',
-            url: product.url || product.productUrl || product.buyUrl || ''
-        };
-        
-        console.log("Normalized product for navigation:", normalizedProduct);
         
         // Navigate to individual product page with enhanced data
         navigate(`/products/${productId}`, { 
             state: { 
                 product: normalizedProduct,
-                fromSearch: true 
+                fromSearch: true,
+                searchQuery: searchQuery || 'image search'
             } 
         });
     };
 
-    // Add to cart function for search results
-    const handleAddToCart = async (product) => {
-        const productId = product.id || product._id || product.productId || product.product_id;
+    // Enhanced add to cart function with better error handling
+    const handleAddToCart = async (product, event) => {
+        // Prevent navigation to product page
+        event.stopPropagation();
+        
+        const normalizedProduct = normalizeProduct(product);
+        const productId = normalizedProduct.id;
+        
         if (!productId) {
-            alert('Product ID is missing!');
+            setError('Product ID is missing! Cannot add to cart.');
             return;
         }
 
         const token = localStorage.getItem('authToken') || localStorage.getItem('token');
         if (!token) {
             return navigate('/login', {
-                state: { from: location.pathname, action: 'addToCart', product }
+                state: { 
+                    from: location.pathname, 
+                    action: 'addToCart', 
+                    product: normalizedProduct,
+                    message: 'Please login to add items to cart'
+                }
             });
         }
 
         try {
-            console.log("Adding to cart from search:", productId);
+            console.log("Adding to cart from search:", {
+                productId,
+                product: normalizedProduct
+            });
+            
             setAddingToCart(productId);
 
-            await api.post(`/cart/add/${productId}`, {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            // Try different API endpoints based on common patterns
+            let response;
+            try {
+                response = await api.post(`/api/cart/add/${productId}`, {
+                    quantity: 1,
+                    product: normalizedProduct
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } catch (err) {
+                if (err.response?.status === 404) {
+                    // Try alternative endpoint
+                    response = await api.post(`/cart/add/${productId}`, {
+                        quantity: 1,
+                        product: normalizedProduct
+                    }, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                } else {
+                    throw err;
+                }
+            }
 
-            alert('Added to cart successfully!');
+            console.log('Cart response:', response.data);
+            
+            // Show success message
+            setError(null);
+            
+            // You might want to show a success toast instead of alert
+            if (window.confirm('Added to cart successfully! View cart?')) {
+                navigate('/cart');
+            }
+            
         } catch (err) {
-            console.error(err);
+            console.error('Add to cart error:', err);
             const status = err.response?.status;
+            const errorMessage = err.response?.data?.message || err.message;
+            
             if (status === 401) {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('token');
@@ -306,13 +363,22 @@ const SearchPage = () => {
                         from: location.pathname,
                         message: 'Session expired. Please login again.',
                         action: 'addToCart',
-                        product
+                        product: normalizedProduct
                     }
                 });
             }
-            if (status === 404) return alert('Product not found. Please refresh.');
-            if (status === 400) return alert('Invalid request.');
-            alert('Failed to add to cart. Please try again.');
+            
+            if (status === 404) {
+                setError('Product not found or cart service unavailable. Please try again.');
+                return;
+            }
+            
+            if (status === 400) {
+                setError(errorMessage || 'Invalid request. Please try again.');
+                return;
+            }
+            
+            setError(errorMessage || 'Failed to add to cart. Please try again.');
         } finally {
             setAddingToCart(null);
         }
