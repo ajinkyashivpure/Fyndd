@@ -213,22 +213,20 @@ const SearchPage = () => {
 
     // Navigate to product page
     const handleProductClick = (product) => {
-        navigate('/products', { 
-            state: { 
-                product: {
-                    id: product.id,
-                    title: product.title || product.name,
-                    description: product.description,
-                    price: product.price,
-                    imageUrl: product.imageUrl || product.image || product.thumbnail,
-                    brand: product.brand,
-                    category: product.category,
-                    rating: product.rating,
-                    originalPrice: product.originalPrice,
-                    ...product
-                }
-            } 
-        });
+        console.log("Product being clicked:", product);
+        
+        // Check for different possible ID field names
+        const productId = product.id || product._id || product.productId || product.product_id;
+        console.log("Product ID:", productId);
+        
+        if (!productId) {
+            console.error("Product has no ID field:", product);
+            alert("Product ID is missing!");
+            return;
+        }
+        
+        // Navigate to individual product page
+        navigate(`/products/${productId}`, { state: { product } });
     };
 
     // Clear search
