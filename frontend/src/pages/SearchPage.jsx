@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../api/axios';
 
 const SearchPage = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -13,6 +14,7 @@ const SearchPage = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const [recentSearches, setRecentSearches] = useState([]);
     const [isMobile, setIsMobile] = useState(false);
+    const [addingToCart, setAddingToCart] = useState(null); // Track which product is being added
     
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
@@ -31,28 +33,68 @@ const SearchPage = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    // Load recent searches from localStorage on component mount
+    // Load recent searches from memory instead of localStorage
     useEffect(() => {
-        try {
-            const saved = localStorage.getItem('recentSearches');
-            if (saved) {
-                setRecentSearches(JSON.parse(saved));
-            }
-        } catch (error) {
-            console.error('Error loading recent searches:', error);
-        }
+        // Initialize with empty array - no localStorage usage
+        setRecentSearches([]);
     }, []);
 
-    // Save recent searches to localStorage
+    // Save recent searches to memory only
     const saveRecentSearch = (query) => {
         if (!query.trim()) return;
         
         try {
             const updated = [query, ...recentSearches.filter(item => item !== query)].slice(0, 5);
             setRecentSearches(updated);
-            localStorage.setItem('recentSearches', JSON.stringify(updated));
+            // Note: Not using localStorage as per artifact restrictions
         } catch (error) {
             console.error('Error saving recent searches:', error);
+        }
+    };
+
+    // Add to cart function (similar to ExplorePage)
+    const handleAddToCart = async (product) => {
+        const productId = product.id || product._id || product.productId || product.product_id;
+        if (!productId) return alert('Product ID is missing!');
+
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        if (!token) {
+            return navigate('/login', {
+                state: { from: location.pathname, action: 'addToCart', product }
+            });
+        }
+
+        try {
+            console.log("Adding to cart:", productId);
+            console.log("Auth token:", token);
+
+            setAddingToCart(productId);
+
+            await api.post(`/cart/add/${productId}`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            alert('Added to cart successfully!');
+        } catch (err) {
+            console.error(err);
+            const status = err.response?.status;
+            if (status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('token');
+                return navigate('/login', {
+                    state: {
+                        from: location.pathname,
+                        message: 'Session expired. Please login again.',
+                        action: 'addToCart',
+                        product
+                    }
+                });
+            }
+            if (status === 404) return alert('Product not found. Please refresh.');
+            if (status === 400) return alert('Invalid request.');
+            alert('Failed to add to cart. Please try again.');
+        } finally {
+            setAddingToCart(null);
         }
     };
 
@@ -146,7 +188,6 @@ const SearchPage = () => {
             
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
-                // Ensure video plays on mobile
                 videoRef.current.setAttribute('playsinline', true);
                 videoRef.current.setAttribute('webkit-playsinline', true);
             }
@@ -193,7 +234,6 @@ const SearchPage = () => {
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
         if (file && file.type.startsWith('image/')) {
-            // Check file size (limit to 10MB)
             if (file.size > 10 * 1024 * 1024) {
                 setError('Image file too large. Please select an image under 10MB.');
                 return;
@@ -207,7 +247,6 @@ const SearchPage = () => {
             setError('Please select a valid image file.');
         }
         
-        // Clear the input
         event.target.value = '';
     };
 
@@ -215,7 +254,6 @@ const SearchPage = () => {
     const handleProductClick = (product) => {
         console.log("Product being clicked:", product);
         
-        // Check for different possible ID field names
         const productId = product.id || product._id || product.productId || product.product_id;
         console.log("Product ID:", productId);
         
@@ -225,9 +263,8 @@ const SearchPage = () => {
             return;
         }
         
-        // Navigate to individual product page
         navigate(`/products/${productId}`, { state: { product } });
-    };
+    };              
 
     // Clear search
     const clearSearch = () => {
@@ -250,7 +287,6 @@ const SearchPage = () => {
             stopCamera();
         };
     }, [imagePreview]);
-
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header - Mobile Optimized */}
