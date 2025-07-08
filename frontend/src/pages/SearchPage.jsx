@@ -33,27 +33,6 @@ const SearchPage = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    useEffect(() => {
-        if (!type) {
-            setError('No product type specified');
-            setLoading(false);
-            return;
-        }
-
-        setLoading(true);
-        setError(null);
-        
-        api.get(`/api/products/type/${type}`)
-            .then(res => {
-                console.log("API Response:", res.data);
-                setProducts(res.data || []);
-            })
-            .catch(err => {
-                console.error('Failed to fetch products:', err);
-                setError(`Failed to load ${type} products. Please try again later.`);
-            })
-            .finally(() => setLoading(false));
-    }, [type]);
 
     // Load recent searches from memory
     useEffect(() => {
