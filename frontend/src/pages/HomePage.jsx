@@ -13,6 +13,7 @@ const Header = ({ selectedGender, setSelectedGender }) => (
                     FYNDD
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"></div>
                 </h1>
+                
                 <nav className="flex gap-6 flex-1 justify-end">
 
                 </nav>
@@ -148,6 +149,12 @@ const HomePage = () => {
     const handleImageLoad = () => {
         setIsLoading(false);
     };
+    const handleLogout = () => {
+    localStorage.removeItem('authToken'); 
+    alert("You have been logged out.");
+    navigate('/login'); 
+  };
+
 
     return (
         <div className="w-full overflow-x-hidden">
@@ -284,6 +291,12 @@ const HomePage = () => {
                                 <a href="/contact" className="text-gray-600 text-sm hover:text-gray-800">Contact</a>
                                 <a href="/terms" className="text-gray-600 text-sm hover:text-gray-800">Terms & Conditions</a>
                                 <a href="/privacy" className="text-gray-600 text-sm hover:text-gray-800">Privacy Policy</a>
+                                <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+        >
+          Logout
+        </button>
                             </div>
                         </div>
                         
@@ -331,6 +344,7 @@ const HomePage = () => {
                         </div>
                         <span className="text-xs font-medium">Profile</span>
                     </button>
+                    
                 </div>
             </div>
             
