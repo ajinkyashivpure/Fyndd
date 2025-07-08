@@ -42,29 +42,35 @@ const ProductPage = () => {
             .finally(() => setLoading(false));
     }, [id, location.state]);
 
-   const handleAddToCart = async () => {
-    const token = localStorage.getItem('authToken');
+  const handleAddToCart = async (product) => {
+    const productId = product.id || product._id || product.productId || product.product_id;
+    if (!productId) return alert('Product ID is missing!');
+
+    const token = localStorage.getItem('authToken') || localStorage.getItem('token');
     if (!token) {
-        navigate('/login', {
+        return navigate('/login', {
             state: { from: location.pathname, action: 'addToCart', product }
         });
-        return;
     }
 
-    setAddingToCart(true);
-
     try {
-        await api.post(`/cart/add/${productId}`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-        alert(`Added ${product.title} to cart!`);
-    } catch (err) {
-        console.error('Add to cart failed:', err);
-        if (err.response?.status === 401) {
-            // Token expired
-            localStorage.removeItem('authToken');
+        console.log("Adding to cart:", productId);
+        console.log("Auth token:", token);
 
-            navigate('/login', {
+        setAddingToCart(productId);
+
+        await api.post(`/cart/add/${productId}`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        alert('Added to cart successfully!');
+    } catch (err) {
+        console.error(err);
+        const status = err.response?.status;
+        if (status === 401) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('token');
+            return navigate('/login', {
                 state: {
                     from: location.pathname,
                     message: 'Session expired. Please login again.',
@@ -72,11 +78,12 @@ const ProductPage = () => {
                     product
                 }
             });
-        } else {
-            alert('Failed to add to cart. Please try again.');
         }
+        if (status === 404) return alert('Product not found. Please refresh.');
+        if (status === 400) return alert('Invalid request.');
+        alert('Failed to add to cart. Please try again.');
     } finally {
-        setAddingToCart(false);
+        setAddingToCart(null);
     }
 };
 
