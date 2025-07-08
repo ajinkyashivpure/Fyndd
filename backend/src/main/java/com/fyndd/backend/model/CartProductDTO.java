@@ -3,16 +3,26 @@ package com.fyndd.backend.model;
 import java.math.BigDecimal;
 
 public class CartProductDTO {
+    private String id;
     private String title;
     private BigDecimal price;
     private String imageUrl;
     private String url;
 
-    public CartProductDTO(String title, BigDecimal price, String imageUrl, String url) {
+    public CartProductDTO(String id, String title, BigDecimal price, String imageUrl, String url) {
         this.title = title;
+        this.id = id;
         this.price = price;
         this.imageUrl = imageUrl;
         this.url = url;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {

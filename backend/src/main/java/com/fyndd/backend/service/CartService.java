@@ -54,6 +54,7 @@ public class CartService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(product -> new CartProductDTO(
+                        product.getId(),
                         product.getTitle(),
                         product.getPrice(),
                         product.getImageUrl(),
