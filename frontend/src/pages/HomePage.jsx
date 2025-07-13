@@ -1,46 +1,48 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-// Mock Header component for demonstration
+// Enhanced Header component with better styling
 const Header = ({ selectedGender, setSelectedGender }) => (
-    <header className="bg-white shadow-sm p-4">
+    <header className="bg-white shadow-md p-6 border-b border-gray-100">
         <div className="max-w-7xl mx-auto flex flex-col items-center">
-            <div className="flex items-center justify-between w-full mb-4">
+            <div className="flex items-center justify-between w-full mb-6">
                 <div className="flex-1"></div>
-                <h1 className="text-2xl font-bold text-black relative">
+                <h1 className="text-4xl font-black text-black relative tracking-wider">
                     FYNDD
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-black via-gray-800 to-black rounded-full"></div>
                 </h1>
                 
                 <nav className="flex gap-6 flex-1 justify-end">
-
                 </nav>
             </div>
             
-            {/* Gender Selection */}
-            <div className="flex gap-8">
+            {/* Enhanced Gender Selection */}
+            <div className="flex gap-12">
                 <button
                     onClick={() => setSelectedGender('women')}
-                    className={`text-lg font-medium relative pb-2 ${
-                        selectedGender === 'women' ? 'text-black' : 'text-gray-500'
+                    className={`text-xl font-bold relative pb-3 px-4 transition-all duration-300 ease-out ${
+                        selectedGender === 'women' 
+                            ? 'text-black scale-105' 
+                            : 'text-gray-500 hover:text-gray-700 hover:scale-102'
                     }`}
                 >
                     WOMEN
                     {selectedGender === 'women' && (
-                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"></div>
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-full shadow-md"></div>
                     )}
                 </button>
                 <button
                     onClick={() => setSelectedGender('men')}
-                    className={`text-lg font-medium relative pb-2 ${
-                        selectedGender === 'men' ? 'text-black' : 'text-gray-500'
+                    className={`text-xl font-bold relative pb-3 px-4 transition-all duration-300 ease-out ${
+                        selectedGender === 'men' 
+                            ? 'text-black scale-105' 
+                            : 'text-gray-500 hover:text-gray-700 hover:scale-102'
                     }`}
                 >
                     MEN
                     {selectedGender === 'men' && (
-                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"></div>
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 rounded-full shadow-md"></div>
                     )}
                 </button>
             </div>
@@ -101,6 +103,7 @@ const HomePage = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    
     // Reset carousel when gender changes
     useEffect(() => {
         setCurrentImageIndex(0);
@@ -149,12 +152,12 @@ const HomePage = () => {
     const handleImageLoad = () => {
         setIsLoading(false);
     };
+    
     const handleLogout = () => {
-    localStorage.removeItem('authToken'); 
-    alert("You have been logged out.");
-    navigate('/login'); 
-  };
-
+        localStorage.removeItem('authToken'); 
+        alert("You have been logged out.");
+        navigate('/login'); 
+    };
 
     return (
         <div className="w-full overflow-x-hidden">
@@ -165,45 +168,40 @@ const HomePage = () => {
                     {/* Hero Section */}
                     <section className="flex flex-col items-start mx-auto max-w-7xl bg-white w-full box-border p-0 md:p-0">
                         
-                        
-                        {/* Dynamic Carousel */}
+                        {/* Enhanced Carousel */}
                         <div className="relative w-full mb-8" {...handlers}>
+                            {/* Enhanced Left Arrow */}
                             <button 
-                                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-80 border-none rounded-full w-9 h-9 text-2xl cursor-pointer flex items-center justify-center z-10 hover:bg-opacity-90 transition-colors"
+                                className="absolute top-1/2 left-6 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-12 h-12 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
                                 onClick={previousImage}
                             >
-                                &#8249;
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
                             </button>
+                            
                             <div className="w-full cursor-pointer" onClick={() =>
-    navigate(`/explore/${carouselImages[selectedGender][currentImageIndex].type}`)
-  }
->
-  <img
-    src={carouselImages[selectedGender][currentImageIndex].image}
-    alt={`${selectedGender} fashion item ${currentImageIndex + 1}`}
-    onLoad={handleImageLoad}
-    className={`w-full h-96 md:h-96 lg:h-96 object-cover block transition-opacity duration-300 ${
-      isLoading ? 'opacity-50' : 'opacity-100'
-    }`}
-  />
-</div>
+                                navigate(`/explore/${carouselImages[selectedGender][currentImageIndex].type}`)
+                            }>
+                                <img
+                                    src={carouselImages[selectedGender][currentImageIndex].image}
+                                    alt={`${selectedGender} fashion item ${currentImageIndex + 1}`}
+                                    onLoad={handleImageLoad}
+                                    className={`w-full h-96 md:h-96 lg:h-96 object-cover block transition-opacity duration-300 ${
+                                        isLoading ? 'opacity-50' : 'opacity-100'
+                                    }`}
+                                />
+                            </div>
+                            
+                            {/* Enhanced Right Arrow */}
                             <button 
-                                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-80 border-none rounded-full w-9 h-9 text-2xl cursor-pointer flex items-center justify-center z-10 hover:bg-opacity-90 transition-colors"
+                                className="absolute top-1/2 right-6 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-12 h-12 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
                                 onClick={nextImage}
                             >
-                                &#8250;
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
                             </button>
-                            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-                                {carouselImages[selectedGender].map((_, index) => (
-                                    <span
-                                        key={index}
-                                        className={`w-2 h-2 mx-1 rounded-full cursor-pointer transition-colors ${
-                                            index === currentImageIndex ? 'bg-white' : 'bg-white bg-opacity-50'
-                                        }`}
-                                        onClick={() => setCurrentImageIndex(index)}
-                                    />
-                                ))}
-                            </div>
                         </div>
                     </section>
 
@@ -222,7 +220,7 @@ const HomePage = () => {
                                     <img 
                                         src={category.image}
                                         alt={category.name}
-                                        className="w-full h-64 md:h-80 object-cover transition-transform duration-300 hover:scale-105"
+                                        className="w-full h-48 md:h-56 object-cover transition-transform duration-300 hover:scale-105"
                                     />
                                     <div className="absolute inset-0 bg-opacity-40 flex items-center justify-center transition-all duration-300 hover:bg-opacity-30">
                                         <h3 className="text-white text-lg md:text-xl font-bold text-center transform transition-all duration-300 hover:scale-110">
@@ -292,11 +290,11 @@ const HomePage = () => {
                                 <a href="/terms" className="text-gray-600 text-sm hover:text-gray-800">Terms & Conditions</a>
                                 <a href="/privacy" className="text-gray-600 text-sm hover:text-gray-800">Privacy Policy</a>
                                 <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-        >
-          Logout
-        </button>
+                                    onClick={handleLogout}
+                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                                >
+                                    Logout
+                                </button>
                             </div>
                         </div>
                         
@@ -306,6 +304,7 @@ const HomePage = () => {
                     </footer>
                 </div>
             </div>
+            
             {/* Bottom Navigation Bar */}
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
                 <div className="flex justify-around items-center py-2 px-4 max-w-md mx-auto">
@@ -324,7 +323,7 @@ const HomePage = () => {
                                 <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
                             </svg>
                         </div>
-                        <span className="text-xs font-medium"  >Search</span>
+                        <span className="text-xs font-medium">Search</span>
                     </button>
                     
                     <button className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-green-500 transition-colors" onClick={() => navigate(`/cart`)}>
@@ -344,7 +343,6 @@ const HomePage = () => {
                         </div>
                         <span className="text-xs font-medium">Profile</span>
                     </button>
-                    
                 </div>
             </div>
             
@@ -367,7 +365,6 @@ const HomePage = () => {
                 }
             `}</style>
         </div>
-        
     );
 };
 
