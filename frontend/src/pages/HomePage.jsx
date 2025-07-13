@@ -1,144 +1,41 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Enhanced Header component with reduced spacing
+const Header = ({ selectedGender, setSelectedGender }) => (
+  <header className="bg-white border-b border-gray-100">
+    <div className="max-w-6xl mx-auto px-4 py-3">
+      {/* Logo */}
+      <div className="text-center mb-2">
+        <h1 className="text-2xl sm:text-3xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h1>
+      </div>
 
-// Enhanced Header component with better styling
-const Header = ({ selectedGender, setSelectedGender }) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+      {/* Gender Toggle */}
+      <div className="flex justify-center">
+        <div className="flex bg-gray-50 rounded-full p-1">
+          {["women", "men"].map((gender) => {
+            const isSelected = selectedGender === gender;
+            const label = gender.charAt(0).toUpperCase() + gender.slice(1);
 
-  return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        {/* Desktop Layout */}
-        <div className="hidden md:flex items-center justify-between gap-8">
-          {/* Logo - Left */}
-          <div className="flex-shrink-0">
-            <h1 className="text-xl lg:text-2xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h1>
-          </div>
-
-          {/* Search Bar - Center */}
-          <div className="flex-1 max-w-md mx-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search products..."
-                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400 transition-all duration-200"
-              />
-              <svg
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            return (
+              <button
+                key={gender}
+                onClick={() => setSelectedGender(gender)}
+                className={`px-6 py-2 text-sm font-medium rounded-full transition-all duration-200 ease-in-out ${
+                  isSelected
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-          </div>
-
-          {/* Gender Toggle - Right */}
-          <div className="flex-shrink-0">
-            <div className="flex bg-gray-50 rounded-full p-1">
-              {["women", "men"].map((gender) => {
-                const isSelected = selectedGender === gender
-                const label = gender.charAt(0).toUpperCase() + gender.slice(1)
-
-                return (
-                  <button
-                    key={gender}
-                    onClick={() => setSelectedGender(gender)}
-                    className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-200 ease-in-out
-                      ${isSelected ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"}`}
-                  >
-                    {label}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Layout */}
-        <div className="md:hidden">
-          {/* Mobile Header Row */}
-          <div className="flex items-center justify-between">
-            <h1 className="text-lg font-light text-gray-900 tracking-[0.2em]">FYNDD</h1>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
-              aria-label="Toggle menu"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <div className="mt-4 space-y-4 pb-4 border-t border-gray-100 pt-4">
-              {/* Mobile Search */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-full px-4 py-3 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400 transition-all duration-200"
-                />
-                <svg
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </div>
-
-              {/* Mobile Gender Toggle */}
-              <div className="flex justify-center">
-                <div className="flex bg-gray-50 rounded-full p-1 w-full max-w-xs">
-                  {["women", "men"].map((gender) => {
-                    const isSelected = selectedGender === gender
-                    const label = gender.charAt(0).toUpperCase() + gender.slice(1)
-
-                    return (
-                      <button
-                        key={gender}
-                        onClick={() => {
-                          setSelectedGender(gender)
-                          setIsMobileMenuOpen(false)
-                        }}
-                        className={`flex-1 py-2.5 text-sm font-medium rounded-full transition-all duration-200 ease-in-out
-                          ${isSelected ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"}`}
-                      >
-                        {label}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
+                {label}
+              </button>
+            );
+          })}
         </div>
       </div>
-    </header>
-)
-}
-
-
+    </div>
+  </header>
+);
 
 const carouselImages = {
     women: [
@@ -163,7 +60,6 @@ const carouselImages = {
         { type: "vacation", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/vacationMen.jpg" }
     ]
 };
-
 
 const categories = {
     women: [
@@ -243,7 +139,6 @@ const HomePage = () => {
     };
     
     const handleLogout = () => {
-        localStorage.removeItem('authToken'); 
         alert("You have been logged out.");
         navigate('/login'); 
     };
@@ -254,17 +149,17 @@ const HomePage = () => {
                 <div className="overflow-y-auto font-sans bg-white text-gray-800">
                     <Header selectedGender={selectedGender} setSelectedGender={setSelectedGender} />
                     
-                    {/* Hero Section */}
-                    <section className="flex flex-col items-start mx-auto max-w-7xl bg-white w-full box-border p-0 md:p-0">
+                    {/* Hero Section with reduced spacing */}
+                    <section className="flex flex-col items-start mx-auto max-w-7xl bg-white w-full box-border">
                         
-                        {/* Enhanced Carousel */}
-                        <div className="relative w-full mb-8" {...handlers}>
+                        {/* Enhanced Carousel with reduced top margin */}
+                        <div className="relative w-full mb-6" {...handlers}>
                             {/* Enhanced Left Arrow */}
                             <button 
-                                className="absolute top-1/2 left-6 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-12 h-12 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
+                                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-10 h-10 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
                                 onClick={previousImage}
                             >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                 </svg>
                             </button>
@@ -276,7 +171,7 @@ const HomePage = () => {
                                     src={carouselImages[selectedGender][currentImageIndex].image}
                                     alt={`${selectedGender} fashion item ${currentImageIndex + 1}`}
                                     onLoad={handleImageLoad}
-                                    className={`w-full h-96 md:h-96 lg:h-96 object-cover block transition-opacity duration-300 ${
+                                    className={`w-full h-80 md:h-96 lg:h-96 object-cover block transition-opacity duration-300 ${
                                         isLoading ? 'opacity-50' : 'opacity-100'
                                     }`}
                                 />
@@ -284,19 +179,19 @@ const HomePage = () => {
                             
                             {/* Enhanced Right Arrow */}
                             <button 
-                                className="absolute top-1/2 right-6 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-12 h-12 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
+                                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-10 h-10 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
                                 onClick={nextImage}
                             >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </svg>
                             </button>
                         </div>
                     </section>
 
-                    {/* Dynamic Categories Section */}
-                    <section className="p-4 md:p-8">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+                    {/* Dynamic Categories Section with reduced spacing */}
+                    <section className="p-4 md:p-6">
+                        <h2 className="text-xl md:text-2xl font-bold mb-4 text-center">
                             {selectedGender.toUpperCase()}'S CATEGORIES
                         </h2>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
@@ -304,27 +199,26 @@ const HomePage = () => {
                                 <div 
                                     key={index}
                                     onClick={() => navigate(`/explore/${category.name.toLowerCase()}`)} 
-                                    className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer transform transition-all duration-300 ease-out hover:scale-110 hover:shadow-2xl hover:-translate-y-2 hover:z-10"
+                                    className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl"
                                 >
                                     <img 
                                         src={category.image}
                                         alt={category.name}
-                                        className="w-full h-48 md:h-56 object-cover transition-transform duration-300 hover:scale-105"
+                                        className="w-full h-40 md:h-48 object-cover transition-transform duration-300 hover:scale-105"
                                     />
                                     <div className="absolute inset-0 bg-opacity-40 flex items-center justify-center transition-all duration-300 hover:bg-opacity-30">
                                         <h3 className="text-white text-lg md:text-xl font-bold text-center transform transition-all duration-300 hover:scale-110">
                                             {category.name}
                                         </h3>
                                     </div>
-                                    <div className="absolute inset-0 border-2 border-transparent hover:border-white transition-colors duration-300 rounded-lg"></div>
                                 </div>
                             ))}
                         </div>
                     </section>
 
-                    {/* Rotating Popular Brands Section */}
-                    <section className="w-full py-6 md:py-10 bg-white px-4 md:px-0 overflow-hidden">
-                        <h2 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-center">Popular Brands</h2>
+                    {/* Rotating Popular Brands Section with reduced spacing */}
+                    <section className="w-full py-4 md:py-6 bg-white px-4 md:px-0 overflow-hidden">
+                        <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center">Popular Brands</h2>
                         <div className="relative">
                             <div className="flex animate-scroll space-x-8">
                                 {/* First set of brands */}
@@ -354,8 +248,8 @@ const HomePage = () => {
                     </section>
 
                     {/* Footer */}
-                    <footer className="bg-gray-50 py-6 md:py-10 px-4 border-t border-gray-200">
-                        <div className="flex flex-col md:grid md:grid-cols-3 gap-6 md:gap-10 max-w-6xl mx-auto">
+                    <footer className="bg-gray-50 py-6 md:py-8 px-4 border-t border-gray-200">
+                        <div className="flex flex-col md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
                             <div className="text-center md:text-left">
                                 <h2 className="text-xl md:text-2xl font-semibold text-red-600 mb-2">FYNDD</h2>
                                 <p className="text-gray-600 text-sm">Your Ultimate Fashion Destination</p>
@@ -387,7 +281,7 @@ const HomePage = () => {
                             </div>
                         </div>
                         
-                        <div className="text-center text-gray-500 text-xs mt-8 pt-4 border-t border-gray-200">
+                        <div className="text-center text-gray-500 text-xs mt-6 pt-4 border-t border-gray-200">
                             <p>&copy; 2024 FYNDD. All rights reserved.</p>
                         </div>
                     </footer>
