@@ -3,52 +3,141 @@ import { useNavigate } from 'react-router-dom';
 
 
 // Enhanced Header component with better styling
-const Header = ({ selectedGender, setSelectedGender }) => (
-    <header className="bg-white shadow-md p-6 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex flex-col items-center">
-            <div className="flex items-center justify-between w-full mb-6">
-                <div className="flex-1"></div>
-                <h1 className="text-4xl font-black text-black relative tracking-wider">
-                    FYNDD
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-black via-gray-800 to-black rounded-full"></div>
-                </h1>
-                
-                <nav className="flex gap-6 flex-1 justify-end">
-                </nav>
+const Header = ({ selectedGender, setSelectedGender }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  return (
+    <header className="bg-white border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        {/* Desktop Layout */}
+        <div className="hidden md:flex items-center justify-between gap-8">
+          {/* Logo - Left */}
+          <div className="flex-shrink-0">
+            <h1 className="text-xl lg:text-2xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h1>
+          </div>
+
+          {/* Search Bar - Center */}
+          <div className="flex-1 max-w-md mx-4">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400 transition-all duration-200"
+              />
+              <svg
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
             </div>
-            
-            {/* Enhanced Gender Selection */}
-            <div className="flex gap-12">
-                <button
-                    onClick={() => setSelectedGender('women')}
-                    className={`text-xl font-bold relative pb-3 px-4 transition-all duration-300 ease-out ${
-                        selectedGender === 'women' 
-                            ? 'text-black scale-105' 
-                            : 'text-gray-500 hover:text-gray-700 hover:scale-102'
-                    }`}
-                >
-                    WOMEN
-                    {selectedGender === 'women' && (
-                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-full shadow-md"></div>
-                    )}
-                </button>
-                <button
-                    onClick={() => setSelectedGender('men')}
-                    className={`text-xl font-bold relative pb-3 px-4 transition-all duration-300 ease-out ${
-                        selectedGender === 'men' 
-                            ? 'text-black scale-105' 
-                            : 'text-gray-500 hover:text-gray-700 hover:scale-102'
-                    }`}
-                >
-                    MEN
-                    {selectedGender === 'men' && (
-                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 rounded-full shadow-md"></div>
-                    )}
-                </button>
+          </div>
+
+          {/* Gender Toggle - Right */}
+          <div className="flex-shrink-0">
+            <div className="flex bg-gray-50 rounded-full p-1">
+              {["women", "men"].map((gender) => {
+                const isSelected = selectedGender === gender
+                const label = gender.charAt(0).toUpperCase() + gender.slice(1)
+
+                return (
+                  <button
+                    key={gender}
+                    onClick={() => setSelectedGender(gender)}
+                    className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-200 ease-in-out
+                      ${isSelected ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"}`}
+                  >
+                    {label}
+                  </button>
+                )
+              })}
             </div>
+          </div>
         </div>
+
+        {/* Mobile Layout */}
+        <div className="md:hidden">
+          {/* Mobile Header Row */}
+          <div className="flex items-center justify-between">
+            <h1 className="text-lg font-light text-gray-900 tracking-[0.2em]">FYNDD</h1>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
+              aria-label="Toggle menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="mt-4 space-y-4 pb-4 border-t border-gray-100 pt-4">
+              {/* Mobile Search */}
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full px-4 py-3 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400 transition-all duration-200"
+                />
+                <svg
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+
+              {/* Mobile Gender Toggle */}
+              <div className="flex justify-center">
+                <div className="flex bg-gray-50 rounded-full p-1 w-full max-w-xs">
+                  {["women", "men"].map((gender) => {
+                    const isSelected = selectedGender === gender
+                    const label = gender.charAt(0).toUpperCase() + gender.slice(1)
+
+                    return (
+                      <button
+                        key={gender}
+                        onClick={() => {
+                          setSelectedGender(gender)
+                          setIsMobileMenuOpen(false)
+                        }}
+                        className={`flex-1 py-2.5 text-sm font-medium rounded-full transition-all duration-200 ease-in-out
+                          ${isSelected ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"}`}
+                      >
+                        {label}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </header>
-);
+)
+}
+
 
 
 const carouselImages = {
