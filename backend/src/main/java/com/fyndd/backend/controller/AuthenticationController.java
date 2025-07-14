@@ -40,7 +40,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
         }
 
-        if (userRepository.findByName(signupRequest.getName()) != null) {
+        if (userRepository.findByName(signupRequest.getName()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Name already taken");
         }
 
