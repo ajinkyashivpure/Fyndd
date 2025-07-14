@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/user/forgot-password").permitAll()
                         .requestMatchers("auth/user/verify-reset-otp").permitAll()
                         .requestMatchers("/auth/user/reset-password").permitAll()
+                        .requestMatchers("/auth/user/profile").authenticated()
                         .requestMatchers("/api/products/getId/**").permitAll()
                         .requestMatchers("/cart/**").authenticated()
                         .requestMatchers(("/api/friends/**")).authenticated()

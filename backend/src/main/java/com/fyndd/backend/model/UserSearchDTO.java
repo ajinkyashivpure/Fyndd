@@ -16,6 +16,11 @@ public class UserSearchDTO {
         this.email = email;
     }
 
+    public UserSearchDTO(String name , String email){
+        this.name = name;
+        this.email = email;
+    }
+
     // Getters and setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

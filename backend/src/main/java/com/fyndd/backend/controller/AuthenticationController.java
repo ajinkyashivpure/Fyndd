@@ -1,20 +1,19 @@
 package com.fyndd.backend.controller;
 
 import com.fyndd.backend.config.JwtTokenProvider;
-import com.fyndd.backend.model.LoginRequest;
-import com.fyndd.backend.model.ResetPasswordRequest;
-import com.fyndd.backend.model.SignupRequest;
-import com.fyndd.backend.model.User;
+import com.fyndd.backend.model.*;
 import com.fyndd.backend.repository.UserRepository;
 import com.fyndd.backend.service.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("auth/user")
@@ -243,6 +242,14 @@ public class AuthenticationController {
         otpStore.remove(email + "_reset_token");
 
         return ResponseEntity.ok("Password reset successfully. You can now login with your new password.");
+    }
+
+    @GetMapping("profile")
+    public UserSearchDTO getProfile() {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> user = userRepository.findById(userId);
+        return new UserSearchDTO(user.get().getName(), user.get().getEmail());
+
     }
 
 
