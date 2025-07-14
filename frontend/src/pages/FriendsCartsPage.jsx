@@ -160,7 +160,7 @@ const FriendsCartsPage = () => {
                                         {product.imageUrl && (
                                             <img 
                                                 src={product.imageUrl} 
-                                                alt={product.name || 'Product'} 
+                                                alt={product.title || 'Product'} 
                                                 className="w-full h-32 sm:h-40 object-cover rounded-md mb-3"
                                             />
                                         )}
@@ -168,7 +168,7 @@ const FriendsCartsPage = () => {
                                         {/* Product Details */}
                                         <div className="space-y-2">
                                             <h4 className="font-semibold text-sm sm:text-base text-black line-clamp-2">
-                                                {product.name || 'Product Name'}
+                                                {product.title || 'Product Name'}
                                             </h4>
                                             <p className="text-lg font-bold text-black">
                                                 ₹{product.price || '0'}
