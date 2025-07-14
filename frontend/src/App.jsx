@@ -10,6 +10,12 @@ import VerifyResetOtpPage from './pages/VerifyResetOtpPage.jsx';
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
 import Cart from './pages/Cart.jsx';
+import FriendCartSystem from './pages/ProfilePage.jsx';
+import ProfilePage from './pages/ProfilePage.jsx';
+import SearchFriendsPage from './pages/SeachFriendsPage.jsx';
+import FriendsListPage from './pages/FriendsListPage.jsx';
+import PendingRequestsPage from './pages/PendingRequestsPage.jsx';
+import FriendsCartsPage from './pages/FriendsCartsPage.jsx';
 
 function App() {
     return (
@@ -26,6 +32,11 @@ function App() {
                 <Route path="/verify-reset-otp" element={<VerifyResetOtpPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                  <Route path="/cart" element={<Cart />} />
+                 <Route path="/profile" element={<ProfilePage />} />
+                 <Route path="/profile/search-friends" element={<SearchFriendsPage />} />
+                 <Route path="/profile/friends-list" element={<FriendsListPage />} />
+                 <Route path="/profile/friend-requests" element={<PendingRequestsPage />} />
+                 <Route path="/profile/friends-carts" element={<FriendsCartsPage />} />
 
                 {/* Catch-all route - must be last */}
                 <Route path="*" element={<Navigate to="/" replace />} />

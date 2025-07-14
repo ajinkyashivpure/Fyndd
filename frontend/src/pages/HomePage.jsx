@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
+import logo from '../assets/logo4.jpg';
 // Enhanced Header component with reduced spacing
 const Header = ({ selectedGender, setSelectedGender }) => (
   <header className="bg-white border-b border-gray-100">
@@ -144,6 +146,12 @@ const HomePage = () => {
     };
 
     return (
+        <motion.div
+  initial={{ opacity: 0, filter: "blur(8px)" }}
+  animate={{ opacity: 1, filter: "blur(0px)" }}
+  transition={{ duration: 0.8, ease: "easeOut" }}
+>
+
         <div className="w-full overflow-x-hidden">
             <div className="w-full">
                 <div className="overflow-y-auto font-sans bg-white text-gray-800">
@@ -151,7 +159,10 @@ const HomePage = () => {
                     
                     {/* Hero Section with reduced spacing */}
                     <section className="flex flex-col items-start mx-auto max-w-7xl bg-white w-full box-border">
-                        
+                       
+
+
+
                         {/* Enhanced Carousel with reduced top margin */}
                         <div className="relative w-full mb-6" {...handlers}>
                             {/* Enhanced Left Arrow */}
@@ -167,14 +178,18 @@ const HomePage = () => {
                             <div className="w-full cursor-pointer" onClick={() =>
                                 navigate(`/explore/${carouselImages[selectedGender][currentImageIndex].type}`)
                             }>
-                                <img
-                                    src={carouselImages[selectedGender][currentImageIndex].image}
-                                    alt={`${selectedGender} fashion item ${currentImageIndex + 1}`}
-                                    onLoad={handleImageLoad}
-                                    className={`w-full h-80 md:h-96 lg:h-96 object-cover block transition-opacity duration-300 ${
-                                        isLoading ? 'opacity-50' : 'opacity-100'
-                                    }`}
-                                />
+                                <motion.img
+  key={carouselImages[selectedGender][currentImageIndex].image}
+  initial={{ opacity: 0, scale: 1.05 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 0.7, ease: "easeOut" }}
+  src={carouselImages[selectedGender][currentImageIndex].image}
+  alt={`${selectedGender} fashion item ${currentImageIndex + 1}`}
+  onLoad={handleImageLoad}
+  className="w-full h-80 md:h-96 lg:h-96 object-cover rounded-md shadow-md"
+/>
+
+
                             </div>
                             
                             {/* Enhanced Right Arrow */}
@@ -196,23 +211,27 @@ const HomePage = () => {
                         </h2>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
                             {categories[selectedGender].map((category, index) => (
-                                <div 
-                                    key={index}
-                                    onClick={() => navigate(`/explore/${category.name.toLowerCase()}`)} 
-                                    className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl"
-                                >
-                                    <img 
-                                        src={category.image}
-                                        alt={category.name}
-                                        className="w-full h-40 md:h-48 object-cover transition-transform duration-300 hover:scale-105"
-                                    />
-                                    <div className="absolute inset-0 bg-opacity-40 flex items-center justify-center transition-all duration-300 hover:bg-opacity-30">
-                                        <h3 className="text-white text-lg md:text-xl font-bold text-center transform transition-all duration-300 hover:scale-110">
-                                            {category.name}
-                                        </h3>
-                                    </div>
-                                </div>
-                            ))}
+  <motion.div 
+  key={index}
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.4, delay: index * 0.1 }}
+  whileHover={{ scale: 1.05, rotateX: 3, rotateY: -3 }}
+  className="relative overflow-hidden rounded-xl shadow-lg cursor-pointer bg-white transition-all duration-300 ease-out"
+>
+  <img 
+    src={category.image}
+    alt={category.name}
+    className="w-full h-40 md:h-48 object-cover rounded-t-xl"
+  />
+  <div className="absolute inset-0 bg-opacity-30 flex items-center justify-center">
+    <h3 className="text-white text-xl font-semibold tracking-wide">{category.name}</h3>
+  </div>
+</motion.div>
+
+))}
+
                         </div>
                     </section>
 
@@ -223,14 +242,23 @@ const HomePage = () => {
                             <div className="flex animate-scroll space-x-8">
                                 {/* First set of brands */}
                                 {brands.map((brand, index) => (
-                                    <div key={`first-${index}`} className="flex-shrink-0 w-40 md:w-48 bg-white shadow-sm rounded-lg overflow-hidden">
-                                        <img 
-                                            src={brand.image}
-                                            alt={brand.name}
-                                            className="w-full h-24 md:h-32 object-cover"
-                                        />
-                                        <h3 className="p-2 text-center font-medium text-sm md:text-base">{brand.name}</h3>
-                                    </div>
+                                    <motion.div
+  key={`first-${index}`}
+  initial={{ opacity: 0, scale: 0.9 }}
+  whileInView={{ opacity: 1, scale: 1 }}
+  whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255,0,128,0.3)" }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.4, delay: index * 0.1 }}
+  className="flex-shrink-0 w-40 md:w-48 bg-white shadow-md rounded-lg overflow-hidden transition-transform duration-300"
+>
+  <img 
+    src={brand.image}
+    alt={brand.name}
+    className="w-full h-24 md:h-32 object-cover"
+  />
+  <h3 className="p-2 text-center font-medium text-sm md:text-base">{brand.name}</h3>
+</motion.div>
+
                                 ))}
                                 {/* Duplicate set for seamless loop */}
                                 {brands.map((brand, index) => (
@@ -272,12 +300,6 @@ const HomePage = () => {
                                 <a href="/contact" className="text-gray-600 text-sm hover:text-gray-800">Contact</a>
                                 <a href="/terms" className="text-gray-600 text-sm hover:text-gray-800">Terms & Conditions</a>
                                 <a href="/privacy" className="text-gray-600 text-sm hover:text-gray-800">Privacy Policy</a>
-                                <button
-                                    onClick={handleLogout}
-                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-                                >
-                                    Logout
-                                </button>
                             </div>
                         </div>
                         
@@ -318,7 +340,7 @@ const HomePage = () => {
                         <span className="text-xs font-medium">Cart</span>
                     </button>
                     
-                    <button className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-purple-500 transition-colors">
+                    <button className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-purple-500 transition-colors" onClick={() => navigate(`/profile`)}>
                         <div className="w-6 h-6 mb-1">
                             <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
                                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
@@ -328,6 +350,8 @@ const HomePage = () => {
                     </button>
                 </div>
             </div>
+            
+            
             
             <style jsx>{`
                 @keyframes scroll {
@@ -348,6 +372,7 @@ const HomePage = () => {
                 }
             `}</style>
         </div>
+        </motion.div>
     );
 };
 

@@ -14,7 +14,7 @@ const SearchPage = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const [recentSearches, setRecentSearches] = useState([]);
     const [isMobile, setIsMobile] = useState(false);
-    const [addingToCart, setAddingToCart] = useState(null);
+    const [addingToCart, setAddingToCart] = useState(false);
     
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
@@ -134,6 +134,133 @@ const SearchPage = () => {
             setError(err.response?.data?.message || 'Search failed. Please try again.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    
+    // Updated handleProductClick function for SearchPage.jsx
+const handleProductClick = (product) => {
+    console.log("Product being clicked:", product);
+    
+    // Normalize the product before navigation
+    const normalizedProduct = normalizeProduct(product);
+    const productId = normalizedProduct.id;
+    
+    console.log("Normalized product:", normalizedProduct);
+    console.log("Product ID:", productId);
+    
+    if (!productId) {
+        console.error("Product has no ID field:", product);
+        alert("Product ID is missing!");
+        return;
+    }
+    
+    // Navigate to individual product page with normalized product data
+    navigate(`/products/${productId}`, { 
+        state: { 
+            product: normalizedProduct,
+            fromSearch: true // Add a flag to indicate this came from search
+        } 
+    });
+};
+
+    // Enhanced add to cart function with better error handling
+    const handleAddToCart = async (product, event) => {
+        // Prevent navigation to product page
+        event.stopPropagation();
+        
+        const normalizedProduct = normalizeProduct(product);
+        const productId = normalizedProduct.id;
+        
+        if (!productId) {
+            setError('Product ID is missing! Cannot add to cart.');
+            return;
+        }
+
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        if (!token) {
+            return navigate('/login', {
+                state: { 
+                    from: location.pathname, 
+                    action: 'addToCart', 
+                    product: normalizedProduct,
+                    message: 'Please login to add items to cart'
+                }
+            });
+        }
+
+        try {
+            console.log("Adding to cart from search:", {
+                productId,
+                product: normalizedProduct
+            });
+            
+            setAddingToCart(productId);
+
+            // Try different API endpoints based on common patterns
+            let response;
+            try {
+                response = await api.post(`/api/cart/add/${productId}`, {
+                    quantity: 1,
+                    product: normalizedProduct
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } catch (err) {
+                if (err.response?.status === 404) {
+                    // Try alternative endpoint
+                    response = await api.post(`/cart/add/${productId}`, {
+                        quantity: 1,
+                        product: normalizedProduct
+                    }, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                } else {
+                    throw err;
+                }
+            }
+
+            console.log('Cart response:', response.data);
+            
+            // Show success message
+            setError(null);
+            
+            // You might want to show a success toast instead of alert
+            if (window.confirm('Added to cart successfully! View cart?')) {
+                navigate('/cart');
+            }
+            
+        } catch (err) {
+            console.error('Add to cart error:', err);
+            const status = err.response?.status;
+            const errorMessage = err.response?.data?.message || err.message;
+            
+            if (status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('token');
+                return navigate('/login', {
+                    state: {
+                        from: location.pathname,
+                        message: 'Session expired. Please login again.',
+                        action: 'addToCart',
+                        product: normalizedProduct
+                    }
+                });
+            }
+            
+            if (status === 404) {
+                setError('Product not found or cart service unavailable. Please try again.');
+                return;
+            }
+            
+            if (status === 400) {
+                setError(errorMessage || 'Invalid request. Please try again.');
+                return;
+            }
+            
+            setError(errorMessage || 'Failed to add to cart. Please try again.');
+        } finally {
+            setAddingToCart(null);
         }
     };
 
@@ -257,123 +384,7 @@ const SearchPage = () => {
         event.target.value = '';
     };
 
-    // Enhanced product navigation with better error handling
-    const handleProductClick = (product) => {
-        console.log("Product being clicked:", product);
-        
-        // Check for different possible ID field names
-        const productId = product.id || product._id || product.productId || product.product_id;
-        console.log("Product ID:", productId);
-        
-        if (!productId) {
-            console.error("Product has no ID field:", product);
-            alert("Product ID is missing!");
-            return;
-        }
-        
-        // Navigate to individual product page
-        navigate(`/products/${productId}`, { state: { product } });
-    };
-
-    // Enhanced add to cart function with better error handling
-    const handleAddToCart = async (product, event) => {
-        // Prevent navigation to product page
-        event.stopPropagation();
-        
-        const normalizedProduct = normalizeProduct(product);
-        const productId = normalizedProduct.id;
-        
-        if (!productId) {
-            setError('Product ID is missing! Cannot add to cart.');
-            return;
-        }
-
-        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-        if (!token) {
-            return navigate('/login', {
-                state: { 
-                    from: location.pathname, 
-                    action: 'addToCart', 
-                    product: normalizedProduct,
-                    message: 'Please login to add items to cart'
-                }
-            });
-        }
-
-        try {
-            console.log("Adding to cart from search:", {
-                productId,
-                product: normalizedProduct
-            });
-            
-            setAddingToCart(productId);
-
-            // Try different API endpoints based on common patterns
-            let response;
-            try {
-                response = await api.post(`/api/cart/add/${productId}`, {
-                    quantity: 1,
-                    product: normalizedProduct
-                }, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-            } catch (err) {
-                if (err.response?.status === 404) {
-                    // Try alternative endpoint
-                    response = await api.post(`/cart/add/${productId}`, {
-                        quantity: 1,
-                        product: normalizedProduct
-                    }, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                } else {
-                    throw err;
-                }
-            }
-
-            console.log('Cart response:', response.data);
-            
-            // Show success message
-            setError(null);
-            
-            // You might want to show a success toast instead of alert
-            if (window.confirm('Added to cart successfully! View cart?')) {
-                navigate('/cart');
-            }
-            
-        } catch (err) {
-            console.error('Add to cart error:', err);
-            const status = err.response?.status;
-            const errorMessage = err.response?.data?.message || err.message;
-            
-            if (status === 401) {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('token');
-                return navigate('/login', {
-                    state: {
-                        from: location.pathname,
-                        message: 'Session expired. Please login again.',
-                        action: 'addToCart',
-                        product: normalizedProduct
-                    }
-                });
-            }
-            
-            if (status === 404) {
-                setError('Product not found or cart service unavailable. Please try again.');
-                return;
-            }
-            
-            if (status === 400) {
-                setError(errorMessage || 'Invalid request. Please try again.');
-                return;
-            }
-            
-            setError(errorMessage || 'Failed to add to cart. Please try again.');
-        } finally {
-            setAddingToCart(null);
-        }
-    };
+    
 
     // Clear search
     const clearSearch = () => {

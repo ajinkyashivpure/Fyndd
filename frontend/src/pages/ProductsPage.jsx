@@ -42,9 +42,19 @@ const ProductPage = () => {
             .finally(() => setLoading(false));
     }, [id, location.state]);
 
-  const handleAddToCart = async (product) => {
-    const productId = product.id || product._id || product.productId || product.product_id;
-    if (!productId) return alert('Product ID is missing!');
+  // Updated handleAddToCart function for ProductPage.jsx
+const handleAddToCart = async (product) => {
+    // More robust product ID extraction
+    const productId = product?.id || product?._id || product?.productId || product?.product_id;
+    
+    console.log("Product object:", product);
+    console.log("Extracted productId:", productId);
+    
+    if (!productId) {
+        console.error("Product ID is missing from product object:", product);
+        alert('Product ID is missing! Cannot add to cart.');
+        return;
+    }
 
     const token = localStorage.getItem('authToken') || localStorage.getItem('token');
     if (!token) {
@@ -57,16 +67,39 @@ const ProductPage = () => {
         console.log("Adding to cart:", productId);
         console.log("Auth token:", token);
 
-        setAddingToCart(productId);
+        setAddingToCart(true); // Changed from productId to true since it's a boolean state
 
-        await api.post(`/cart/add/${productId}`, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        // Try multiple API endpoints in case one fails
+        let response;
+        try {
+            response = await api.post(`/cart/add/${productId}`, {
+                quantity: 1,
+                product: product // Send the full product object
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        } catch (err) {
+            if (err.response?.status === 404) {
+                // Try alternative endpoint
+                response = await api.post(`/api/cart/add/${productId}`, {
+                    quantity: 1,
+                    product: product
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } else {
+                throw err;
+            }
+        }
 
+        console.log('Cart response:', response.data);
         alert('Added to cart successfully!');
+        
     } catch (err) {
-        console.error(err);
+        console.error('Add to cart error:', err);
         const status = err.response?.status;
+        const errorMessage = err.response?.data?.message || err.message;
+        
         if (status === 401) {
             localStorage.removeItem('authToken');
             localStorage.removeItem('token');
@@ -79,11 +112,20 @@ const ProductPage = () => {
                 }
             });
         }
-        if (status === 404) return alert('Product not found. Please refresh.');
-        if (status === 400) return alert('Invalid request.');
-        alert('Failed to add to cart. Please try again.');
+        
+        if (status === 404) {
+            alert('Product not found. Please refresh the page.');
+            return;
+        }
+        
+        if (status === 400) {
+            alert(errorMessage || 'Invalid request. Please try again.');
+            return;
+        }
+        
+        alert(errorMessage || 'Failed to add to cart. Please try again.');
     } finally {
-        setAddingToCart(null);
+        setAddingToCart(false); // Changed from null to false
     }
 };
 
@@ -228,12 +270,23 @@ const ProductPage = () => {
                     {/* Action Buttons */}
                     <div className="space-y-3 sm:space-y-4">
                         <button
-                           onClick={() => handleAddToCart(product)}
-                            disabled={addingToCart}
-                            className="w-full bg-yellow-500 text-black py-3 sm:py-4 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
-                        >
-                            {addingToCart ? 'Adding to Cart...' : `Add to Cart - ₹${product.price}`}
-                        </button>
+    onClick={() => handleAddToCart(product)}
+    disabled={addingToCart}
+    className={`w-full px-4 py-2 rounded transition-colors duration-200 ${
+        addingToCart 
+            ? 'bg-gray-400 text-white cursor-not-allowed' 
+            : 'bg-black text-white hover:bg-gray-800'
+    }`}
+>
+    {addingToCart ? (
+        <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+            Adding...
+        </div>
+    ) : (
+        'Add to Cart'
+    )}
+</button>
                         
                         <button
                             onClick={handleBuyNow}
