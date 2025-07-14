@@ -17,7 +17,6 @@ import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.search.FieldSearchPath;
 import com.mongodb.client.model.search.VectorSearchOptions;
-import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
-@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;

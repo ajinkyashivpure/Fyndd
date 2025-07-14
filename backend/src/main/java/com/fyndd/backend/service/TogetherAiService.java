@@ -1,7 +1,6 @@
 package com.fyndd.backend.service;
 
 import com.fyndd.backend.config.TogetherAiConfig;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,11 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class TogetherAiService {
 
     private final TogetherAiConfig config;
     private final RestTemplate restTemplate = new RestTemplate();
+
+    public TogetherAiService(TogetherAiConfig config) {
+        this.config = config;
+    }
 
     public List<Double> generateEmbeddings(String text) {
         String url = config.getBaseUrl() + "/embeddings";

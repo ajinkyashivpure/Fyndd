@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/user/reset-password").permitAll()
                         .requestMatchers("/api/products/getId/**").permitAll()
                         .requestMatchers("/cart/**").authenticated()
+                        .requestMatchers(("/api/friends/**")).authenticated()
 
                         .anyRequest().authenticated() // Protect other endpoints
                 )
