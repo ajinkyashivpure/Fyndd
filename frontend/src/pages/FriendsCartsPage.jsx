@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../api/axios';
 
 const FriendsCartsPage = () => {
     const [friendsCarts, setFriendsCarts] = useState([]);
@@ -40,35 +41,47 @@ const FriendsCartsPage = () => {
     };
 
     const addToMyCart = async (product) => {
-        try {
-            const token = localStorage.getItem('token') || localStorage.getItem('authToken');
-            if (!token) {
-                setError('Not logged in');
-                return;
-            }
+        const productId = product.id || product._id || product.productId || product.product_id;
+  if (!productId) return alert('Product ID is missing!');
 
-            const response = await fetch('https://api.fyndd.in/api/cart/add', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    productId: product.productId,
-                    quantity: 1
-                })
-            });
+  const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+  if (!token) {
+    return navigate('/login', {
+      state: { from: location.pathname, action: 'addToCart', product }
+    });
+  }
 
-            if (!response.ok) {
-                throw new Error('Failed to add item to cart');
-            }
+  try {
+    console.log("Adding to cart:", productId);
+    console.log("Auth token:", token);
 
-            // Show success message (you can customize this)
-            alert('Item added to your cart!');
-        } catch (err) {
-            alert('Error adding item to cart: ' + err.message);
+
+    await api.post(`/cart/add/${productId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    
+    alert('Added to cart successfully!');
+  } catch (err) {
+    console.error(err);
+    const status = err.response?.status;
+    if (status === 401) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
+      return navigate('/login', {
+        state: {
+          from: location.pathname,
+          message: 'Session expired. Please login again.',
+          action: 'addToCart',
+          product
         }
-    };
+      });
+    }
+    if (status === 404) return alert('Product not found. Please refresh.');
+    if (status === 400) return alert('Invalid request.');
+    alert('Failed to add to cart. Please try again.');
+  } 
+};
 
     if (loading) {
         return (

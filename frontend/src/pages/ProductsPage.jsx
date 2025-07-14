@@ -44,14 +44,9 @@ const ProductPage = () => {
 
   // Updated handleAddToCart function for ProductPage.jsx
 const handleAddToCart = async (product) => {
-    // More robust product ID extraction
     const productId = product?.id || product?._id || product?.productId || product?.product_id;
-    
-    console.log("Product object:", product);
-    console.log("Extracted productId:", productId);
-    
+
     if (!productId) {
-        console.error("Product ID is missing from product object:", product);
         alert('Product ID is missing! Cannot add to cart.');
         return;
     }
@@ -64,42 +59,22 @@ const handleAddToCart = async (product) => {
     }
 
     try {
+        setAddingToCart(true);
         console.log("Adding to cart:", productId);
-        console.log("Auth token:", token);
 
-        setAddingToCart(true); // Changed from productId to true since it's a boolean state
+        // Send only quantity (NOT the full product object)
+        await api.post(`/cart/add/${productId}`, {
+            quantity: 1
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-        // Try multiple API endpoints in case one fails
-        let response;
-        try {
-            response = await api.post(`/cart/add/${productId}`, {
-                quantity: 1,
-                product: product // Send the full product object
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-        } catch (err) {
-            if (err.response?.status === 404) {
-                // Try alternative endpoint
-                response = await api.post(`/api/cart/add/${productId}`, {
-                    quantity: 1,
-                    product: product
-                }, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-            } else {
-                throw err;
-            }
-        }
-
-        console.log('Cart response:', response.data);
         alert('Added to cart successfully!');
-        
     } catch (err) {
         console.error('Add to cart error:', err);
         const status = err.response?.status;
         const errorMessage = err.response?.data?.message || err.message;
-        
+
         if (status === 401) {
             localStorage.removeItem('authToken');
             localStorage.removeItem('token');
@@ -112,22 +87,23 @@ const handleAddToCart = async (product) => {
                 }
             });
         }
-        
+
         if (status === 404) {
             alert('Product not found. Please refresh the page.');
             return;
         }
-        
+
         if (status === 400) {
-            alert(errorMessage || 'Invalid request. Please try again.');
+            alert(errorMessage || 'Invalid request.');
             return;
         }
-        
+
         alert(errorMessage || 'Failed to add to cart. Please try again.');
     } finally {
-        setAddingToCart(false); // Changed from null to false
+        setAddingToCart(false);
     }
 };
+
 
     const handleBuyNow = () => {
     const token = localStorage.getItem('authToken');
