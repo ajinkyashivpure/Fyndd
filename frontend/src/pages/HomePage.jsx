@@ -68,21 +68,31 @@ const categories = {
         { name: 'BOTTOM', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/bottoms.jpg' },
         { name: 'DRESSES', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/dresses.jpg' },
         { name: 'TOP', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/tops.jpg' },
-        { name: 'SPORTS', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/sportsw.jpg' }
+        { name: 'SPORTS', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/sportsw.jpg' },
+        { name: 'KURTA', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/kurtaW.jpg' },
+        { name: 'CORSET', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/corsetW.jpg' },
+        { name: 'SHIRTS', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/shirtsW.jpg' },
+        { name: 'SKIRT', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/skirtW.jpg' },
+        { name: 'SUIT', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/suitW.jpg ' },
+         { name: 'HOODIES', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hoodiesW.jpg ' },
     ],
     men: [
         { name: 'SHIRTS', image: ' https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/shirt.jpg' },
         { name: 'SPORTS', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/sports.jpg' },
         { name: 'TSHIRT', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/t-shirt.jpg' },
-        { name: 'TROUSER', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/trousers.jpeg' }
+        { name: 'TROUSER', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/trousers.jpeg' },
+        { name: 'KURTA', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/kurtaMen.jpg' },
+        { name: 'FORMALS', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/formalMen.jpg' },
+        { name: 'PANTS', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/pantsMen.jpg' },
+        { name: 'HOODIES', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hoodiesMen.jpg' },
     ]
 };
 
 const brands = [
-    { name: 'Zara', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/Zara.jpg' },
-    { name: 'H&M', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hm.jpg' },
-    { name: 'Uniqlo', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/uniqlo.jpg' },
-    { name: "Levi's", image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/levis.jpg' },
+    { name: 'Zara', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/Zara.jpg' },
+    { name: 'H&M', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/hm.jpg' },
+    { name: 'Uniqlo', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/uniqlo.jpg' },
+    { name: "Levi's", image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/levis.jpg' },
 ];
 
 const HomePage = () => {
@@ -154,7 +164,8 @@ const HomePage = () => {
 
         <div className="w-full overflow-x-hidden">
             <div className="w-full">
-                <div className="overflow-y-auto font-sans bg-white text-gray-800">
+                <div className="overflow-y-auto font-sans bg-white text-gray-800 pb-20">
+
                     <Header selectedGender={selectedGender} setSelectedGender={setSelectedGender} />
                     
                     {/* Hero Section with reduced spacing */}

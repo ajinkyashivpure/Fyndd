@@ -153,82 +153,87 @@ const PendingRequestsPage = () => {
         );
     }
 
-    return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-                <button 
-                    onClick={() => navigate('/profile')}
-                    className="text-black hover:text-gray-600 flex items-center text-sm sm:text-base"
-                >
-                    ← Back to Profile
-                </button>
-                <h2 className="text-2xl font-bold text-center flex-1">FRIEND REQUESTS</h2>
-                <div className="w-16"></div>
-            </div>
+   return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0 mb-6">
+            <button 
+                onClick={() => navigate('/profile')}
+                className="text-black hover:text-gray-600 flex items-center text-sm sm:text-base"
+            >
+                ← Back to Profile
+            </button>
+            <h2 className="text-2xl font-bold text-center sm:flex-1">FRIEND REQUESTS</h2>
+            <div className="w-16 hidden sm:block"></div>
+        </div>
 
-            {/* Pending Requests Count */}
-            <div className="mb-6">
-                <p className="text-gray-600 text-center">
-                    {pendingRequests.length} pending request{pendingRequests.length !== 1 ? 's' : ''}
+        {/* Pending Requests Count */}
+        <div className="mb-6">
+            <p className="text-gray-600 text-center text-sm sm:text-base">
+                {pendingRequests.length} pending request{pendingRequests.length !== 1 ? 's' : ''}
+            </p>
+        </div>
+
+        {/* Pending Requests List */}
+        {pendingRequests.length === 0 ? (
+            <div className="text-center py-12">
+                <div className="text-5xl sm:text-6xl mb-4">📨</div>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">No Pending Requests</h3>
+                <p className="text-gray-500 text-sm sm:text-base">
+                    You don't have any pending friend requests.
                 </p>
+                <button 
+                    onClick={() => navigate('/profile/search-friends')}
+                    className="mt-4 bg-black text-white px-5 py-2 rounded hover:bg-gray-800 text-sm sm:text-base"
+                >
+                    Search for Friends
+                </button>
             </div>
-
-            {/* Pending Requests List */}
-            {pendingRequests.length === 0 ? (
-                <div className="text-center py-12">
-                    <div className="text-6xl mb-4">📨</div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">No Pending Requests</h3>
-                    <p className="text-gray-500">You don't have any pending friend requests.</p>
-                    <button 
-                        onClick={() => navigate('/profile/search-friends')}
-                        className="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800"
-                    >
-                        Search for Friends
-                    </button>
-                </div>
-            ) : (
-                <div className="space-y-4">
-                    {pendingRequests.map((request) => (
-                        <div key={request.id} className="bg-white shadow-md rounded-lg p-4 sm:p-6">
-                            <div className="flex items-center justify-between">
-                                {/* Request Info */}
-                                <div className="flex items-center flex-1">
-                                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mr-4">
-                                        <span className="text-lg text-gray-600">👤</span>
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className="text-lg font-semibold text-black">{request.senderName}</h3>
-                                        <p className="text-sm text-gray-600">
-                                            Sent {formatDate(request.createdAt)}
-                                        </p>
-                                    </div>
+        ) : (
+            <div className="space-y-4">
+                {pendingRequests.map((request) => (
+                    <div key={request.id} className="bg-white shadow-md rounded-lg p-4 sm:p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
+                            {/* Request Info */}
+                            <div className="flex items-center flex-1">
+                                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mr-4">
+                                    <span className="text-lg text-gray-600">👤</span>
                                 </div>
-
-                                {/* Action Buttons */}
-                                <div className="flex space-x-2 ml-4">
-                                    <button
-                                        onClick={() => handleAcceptRequest(request.id)}
-                                        disabled={processingRequests.has(request.id)}
-                                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold"
-                                    >
-                                        {processingRequests.has(request.id) ? 'Accepting...' : 'Accept'}
-                                    </button>
-                                    <button
-                                        onClick={() => handleRejectRequest(request.id)}
-                                        disabled={processingRequests.has(request.id)}
-                                        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold"
-                                    >
-                                        {processingRequests.has(request.id) ? 'Rejecting...' : 'Reject'}
-                                    </button>
+                                <div>
+                                    <h3 className="text-base sm:text-lg font-semibold text-black">
+                                        {request.senderName}
+                                    </h3>
+                                    <p className="text-sm text-gray-600">
+                                        Sent {formatDate(request.createdAt)}
+                                    </p>
                                 </div>
                             </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex flex-wrap gap-2 sm:ml-4">
+                                <button
+                                    onClick={() => handleAcceptRequest(request.id)}
+                                    disabled={processingRequests.has(request.id)}
+                                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold"
+                                >
+                                    {processingRequests.has(request.id) ? 'Accepting...' : 'Accept'}
+                                </button>
+                                <button
+                                    onClick={() => handleRejectRequest(request.id)}
+                                    disabled={processingRequests.has(request.id)}
+                                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold"
+                                >
+                                    {processingRequests.has(request.id) ? 'Rejecting...' : 'Reject'}
+                                </button>
+                            </div>
                         </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
+                    </div>
+                ))}
+            </div>
+        )}
+    </div>
+);
+
 };
 
 export default PendingRequestsPage;
