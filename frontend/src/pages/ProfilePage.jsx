@@ -106,7 +106,7 @@ return (
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
             <button 
-                onClick={() => window.history.back()}
+                onClick={() => navigate('/')}
                 className="text-black hover:text-gray-600 flex items-center text-sm sm:text-base"
             >
                 ← Back
