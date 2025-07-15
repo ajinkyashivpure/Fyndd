@@ -210,44 +210,56 @@ public class ProductService {
                                 .append("limit", limit * 2)
                 ),
                 Aggregates.project(fields(
-                        Projections.include("_id", "title", "price", "imageUrl", "color", "size", "inStock", "stockQuantity"),
+                        // Use _id as the product identifier and convert to string for easier handling
+                        Projections.computed("id", new Document("$toString", "$_id")),
+                        Projections.include("_id", "title", "price", "imageUrl", "url", "brand", "gender", "type", "description"),
                         Projections.computed("vectorScore", new Document("$meta", "vectorSearchScore"))
                 ))
         );
-
-        // Then run text search with regular text index
-        // Make sure you have created a text index first:
-        // db.products.createIndex({ title: "text", description: "text", categories: "text" })
 
         // Get vector search results
         List<Document> vectorResults = new ArrayList<>();
         collection.aggregate(vectorPipeline).into(vectorResults);
 
-        // Get IDs from vector results
-        Set<Object> ids = vectorResults.stream()
+        // Get IDs from vector results (using the MongoDB _id, not the extracted product id)
+        Set<Object> mongoIds = vectorResults.stream()
                 .map(doc -> doc.get("_id"))
                 .collect(Collectors.toSet());
 
-        // Run text search on those IDs
-        List<Document> finalResults = new ArrayList<>();
-        collection.find(
-                Filters.and(
-                        Filters.in("_id", new ArrayList<>(ids)),
-                        Filters.text(query)
-                )
-        ).sort(
-                Sorts.descending("score")
-        ).limit(limit).into(finalResults);
+        // Run text search on those MongoDB IDs
+        List<Document> textSearchResults = new ArrayList<>();
+        if (!mongoIds.isEmpty()) {
+            List<Bson> textPipeline = Arrays.asList(
+                    Aggregates.match(
+                            Filters.and(
+                                    Filters.in("_id", new ArrayList<>(mongoIds)),
+                                    Filters.text(query)
+                            )
+                    ),
+                    Aggregates.project(fields(
+                            // Use _id as the product identifier and convert to string for easier handling
+                            Projections.computed("id", new Document("$toString", "$_id")),
+                            Projections.include("_id", "title", "price", "imageUrl", "url", "brand", "gender", "type", "description"),
+                            Projections.computed("textScore", new Document("$meta", "textScore"))
+                    )),
+                    Aggregates.sort(Sorts.descending("textScore")),
+                    Aggregates.limit(limit)
+            );
 
-        // If we don't have enough results, add more from vector search
+            collection.aggregate(textPipeline).into(textSearchResults);
+        }
+
+        // If we don't have enough results from text search, add more from vector search
+        List<Document> finalResults = new ArrayList<>(textSearchResults);
+
         if (finalResults.size() < limit) {
-            Set<Object> foundIds = finalResults.stream()
+            Set<Object> foundMongoIds = finalResults.stream()
                     .map(doc -> doc.get("_id"))
                     .collect(Collectors.toSet());
 
             int needed = limit - finalResults.size();
             vectorResults.stream()
-                    .filter(doc -> !foundIds.contains(doc.get("_id")))
+                    .filter(doc -> !foundMongoIds.contains(doc.get("_id")))
                     .limit(needed)
                     .forEach(finalResults::add);
         }
