@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,33 +8,41 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
   const navigate = useNavigate();
   
   const handleMenuClick = (path) => {
-    navigate(path);
-    onToggle(); // Close menu after navigation
-  };
+  const isLoggedIn = localStorage.getItem('authToken') || localStorage.getItem('token');
+
+  // Prevent navigating to login if already logged in
+  if (path === '/login' && isLoggedIn) {
+    alert('Already logged in.');
+    return;
+  }
+
+  navigate(path); 
+};
+
 
   return (
     <>
-      {/* Hamburger Button */}
+      {/* Hamburger Button - Made smaller */}
       <button 
         onClick={onToggle}
-        className="relative z-50 p-2 focus:outline-none"
+        className="relative z-50 p-1 focus:outline-none"
         aria-label="Toggle menu"
       >
-        <div className="w-6 h-6 flex flex-col justify-center items-center">
+        <div className="w-4 h-4 flex flex-col justify-center items-center">
           <motion.div
-            animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+            animate={isOpen ? { rotate: 45, y: 4 } : { rotate: 0, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="w-6 h-0.5 bg-gray-700 mb-1.5"
+            className="w-4 h-0.5 bg-gray-700 mb-1"
           />
           <motion.div
             animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
             transition={{ duration: 0.3 }}
-            className="w-6 h-0.5 bg-gray-700 mb-1.5"
+            className="w-4 h-0.5 bg-gray-700 mb-1"
           />
           <motion.div
-            animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+            animate={isOpen ? { rotate: -45, y: -4 } : { rotate: 0, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="w-6 h-0.5 bg-gray-700"
+            className="w-4 h-0.5 bg-gray-700"
           />
         </div>
       </button>
@@ -148,8 +157,8 @@ const Header = ({ selectedGender, setSelectedGender }) => {
             <h1 className="text-2xl sm:text-3xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h1>
           </div>
           
-          {/* Hamburger Menu */}
-          <div className="absolute right-4 top-3">
+          {/* Hamburger Menu - Adjusted positioning */}
+          <div className="absolute right-4 top-4">
             <HamburgerMenu isOpen={isMenuOpen} onToggle={toggleMenu} />
           </div>
         </div>

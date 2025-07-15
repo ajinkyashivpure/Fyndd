@@ -144,6 +144,12 @@ const LoginPage = () => {
     <div className="min-h-screen bg-white flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-6 sm:space-y-8">
         {/* Header */}
+        <button
+        onClick={() => navigate('/')}
+        className="text-black hover:text-gray-600 flex items-center text-sm sm:text-base"
+      >
+        ← Back
+      </button>
         <div className="text-center">
           <h1 className="text-3xl sm:text-4xl font-bold text-black relative inline-block mb-2">
             FYNDD
