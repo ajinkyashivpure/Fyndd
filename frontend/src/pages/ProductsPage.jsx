@@ -12,35 +12,30 @@ const ProductPage = () => {
     const [error, setError] = useState(null);
     const [addingToCart, setAddingToCart] = useState(false);
 
-    useEffect(() => {
-        // If product data is passed via state, use it
-        if (location.state?.product) {
-            setProduct(location.state.product);
-            setLoading(false);
-            return;
-        }
+    // Inside useEffect in ProductPage.jsx
+useEffect(() => {
+    const productId = location.state?.product?.id || id;
+    
+    if (!productId) {
+        setError('No product ID specified');
+        setLoading(false);
+        return;
+    }
 
-        // Otherwise, fetch product by ID
-        if (!id) {
-            setError('No product ID specified');
-            setLoading(false);
-            return;
-        }
+    setLoading(true);
+    setError(null);
 
-        setLoading(true);
-        setError(null);
+    api.get(`/products/getId/${productId}`)
+        .then(res => {
+            setProduct(res.data);
+        })
+        .catch(err => {
+            console.error('Failed to fetch product:', err);
+            setError('Failed to load product details. Please try again later.');
+        })
+        .finally(() => setLoading(false));
+}, [id, location.state]);
 
-        api.get(`/products/getId/${id}`)
-            .then(res => {
-                console.log("Product API Response:", res.data);
-                setProduct(res.data);
-            })
-            .catch(err => {
-                console.error('Failed to fetch product:', err);
-                setError('Failed to load product details. Please try again later.');
-            })
-            .finally(() => setLoading(false));
-    }, [id, location.state]);
 
   // Updated handleAddToCart function for ProductPage.jsx
 const handleAddToCart = async (product) => {
