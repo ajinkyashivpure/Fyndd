@@ -3,21 +3,30 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Hamburger Menu Component
+
 const HamburgerMenu = ({ isOpen, onToggle }) => {
   const navigate = useNavigate();
-  
+
   const handleMenuClick = (path) => {
-  const isLoggedIn = localStorage.getItem('authToken') || localStorage.getItem('token');
+    const isLoggedIn = localStorage.getItem('authToken') || localStorage.getItem('token');
 
-  // Prevent navigating to login if already logged in
-  if (path === '/login' && isLoggedIn) {
-    alert('Already logged in.');
-    return;
-  }
+    if (path === '/login' && isLoggedIn) {
+      alert('Already logged in.');
+      return;
+    }
 
-  navigate(path); 
-};
+    navigate(path); 
+  };
+
+  const handleLogout = () => {
+    // Clear storage
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
+    localStorage.clear();
+
+    alert("You have been logged out.");
+    navigate('/login');
+  };
 
 
   return (
@@ -114,6 +123,19 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                     </svg>
                   </div>
                   <span className="text-lg f`ont-medium">Login</span>
+                </button>
+
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center px-6 py-4 text-gray-700 hover:bg-gray-50 hover:text-red-500 transition-colors duration-200"
+                >
+                  <div className="w-6 h-6 mr-4">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium">Logout</span>
                 </button>
               </div>
             </div>

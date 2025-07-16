@@ -132,7 +132,15 @@ const Cart = () => {
             setClearing(false);
         }
     };
+    const handleLogout = () => {
+    // Clear storage
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
+    localStorage.clear();
 
+    alert("You have been logged out.");
+    navigate('/login');
+  };
     const handleProductClick = (item) => {
         // Handle different possible ID field names
         const productId = item.productId || item.id || item._id || item.product_id;
@@ -195,10 +203,10 @@ const Cart = () => {
                     <p className="text-red-500 text-lg sm:text-xl mb-4">{error}</p>
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                         <button 
-                            onClick={fetchCartItems}
+                            onClick={handleLogout}
                             className="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition-colors"
                         >
-                            Retry
+                            Logout
                         </button>
                         <button 
                             onClick={() => navigate('/')}
