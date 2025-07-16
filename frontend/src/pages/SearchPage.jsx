@@ -50,6 +50,11 @@ const SearchPage = () => {
         }
     };
 
+    // Under maintenance alert function
+    const showMaintenanceAlert = () => {
+        alert('🔧 Under Maintenance\n\nImage search functionality is currently under maintenance. Please try again later or use text search instead.');
+    };
+
     // Text search function
     const handleTextSearch = async (query = searchQuery) => {
         if (!query.trim()) return;
@@ -143,8 +148,13 @@ const SearchPage = () => {
         }
     };
 
-    // Start camera with mobile optimizations
+    // Start camera with maintenance alert
     const startCamera = async () => {
+        showMaintenanceAlert();
+        return;
+        
+        // Original camera code (commented out for maintenance)
+        /*
         try {
             const constraints = {
                 video: {
@@ -167,6 +177,7 @@ const SearchPage = () => {
             console.error('Camera access failed:', err);
             setError('Camera access denied or not available on this device');
         }
+        */
     };
 
     // Stop camera
@@ -201,8 +212,14 @@ const SearchPage = () => {
         }
     };
 
-    // Handle file upload with validation
+    // Handle file upload with maintenance alert
     const handleFileUpload = (event) => {
+        showMaintenanceAlert();
+        event.target.value = ''; // Clear the file input
+        return;
+        
+        // Original file upload code (commented out for maintenance)
+        /*
         const file = event.target.files[0];
         if (file && file.type.startsWith('image/')) {
             if (file.size > 10 * 1024 * 1024) {
@@ -219,6 +236,13 @@ const SearchPage = () => {
         }
         
         event.target.value = '';
+        */
+    };
+
+    // Handle upload button click with maintenance alert
+    const handleUploadClick = () => {
+        showMaintenanceAlert();
+        // Don't trigger file input during maintenance
     };
 
     // Clear search
@@ -277,7 +301,7 @@ const SearchPage = () => {
 
                                     {/* Upload Button */}
                                     <button
-                                        onClick={() => fileInputRef.current?.click()}
+                                        onClick={handleUploadClick}
                                         className="p-3 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition touch-manipulation active:scale-95"
                                         title="Upload image"
                                     >
@@ -394,7 +418,7 @@ const SearchPage = () => {
                             </button>
 
                             <button
-                                onClick={() => fileInputRef.current?.click()}
+                                onClick={handleUploadClick}
                                 className="p-3 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition"
                                 title="Upload image"
                             >
@@ -652,7 +676,7 @@ const SearchPage = () => {
                             </button>
                             
                             <button
-                                onClick={() => fileInputRef.current?.click()}
+                                onClick={handleUploadClick}
                                 className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition touch-manipulation active:scale-95"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
