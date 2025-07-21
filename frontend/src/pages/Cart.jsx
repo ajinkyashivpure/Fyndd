@@ -308,20 +308,22 @@ const Cart = () => {
                                         <div className="flex flex-row sm:flex-col items-center justify-between sm:justify-center space-x-3 sm:space-x-0 sm:space-y-2 flex-shrink-0">
                                             <button
                                                 onClick={() => handleBuyNow(item)}
-                                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm font-medium flex-1 sm:flex-none"
+                                                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm font-medium flex-1 sm:flex-none"
                                             >
                                                 Buy Now
                                             </button>
                                             <button
                                                 onClick={() => handleRemoveItem(productId)}
                                                 disabled={isRemoving}
-                                                className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 disabled:opacity-50 transition-colors flex-shrink-0"
+                                                className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-500 disabled:opacity-50 transition-colors flex-shrink-0"
                                                 title="Remove item"
                                             >
                                                 {isRemoving ? (
                                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-500"></div>
                                                 ) : (
-                                                    <span className="text-lg">🗑️</span>
+                                                   <span className="text-lg text-red-500 group-hover:text-red-700 transition-colors">✖</span>
+
+
                                                 )}
                                             </button>
                                         </div>
