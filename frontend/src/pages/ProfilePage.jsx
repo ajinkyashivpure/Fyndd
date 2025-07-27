@@ -91,10 +91,10 @@ if (error) {
             <div className="text-center">
                 <p className="text-xl text-red-500">{error}</p>
                 <button 
-                    onClick={() => window.location.href = '/'}
+                    onClick={() => navigate('/login')}
                     className="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800"
                 >
-                    Go Home
+                    Login
                 </button>
             </div>
         </div>

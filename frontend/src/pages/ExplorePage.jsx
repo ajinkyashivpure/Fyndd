@@ -9,8 +9,74 @@ const ExplorePage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [addingToCart, setAddingToCart] = useState(null); // Track which product is being added
+    const [addingToCart, setAddingToCart] = useState(null);
+    const [displayName, setDisplayName] = useState('');
     const { type } = useParams();
+
+    // Define the mapping for carousel images and categories
+    const carouselImages = {
+    women: [
+        { type: "wethnic",name: "TRADITIONAL", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/EthnicWomen.jpeg" },
+        { type: "partyWomen",name: "PARTY WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/partyWearWomen.jpg" },
+        { type: "sportsWomen", name: "ATHLEISURE",image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/athlesiureWomen.jpg" },
+        { type: "casualWomen",name: "CASUAL WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/casualsWomen.jpg" },
+        { type: "formalWomen",name: "FORMAL WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/corporateWomen.jpg" },
+        { type: "beachW", name: "BEACH WEAR",image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/vacationWomen.jpg" }
+    ],
+    men: [
+        { type: "formalMen",name: "FORMALS", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/partyMen.jpg" },
+        { type: "casuals",name: " CASUAL WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/casualsMen.jpg" },
+        { type: "shirtsMen",name: "SHIRTS", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/OldMoneyMen.jpg" },
+        { type: "sportsMen",name: "ATHLEISURE", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/sportsMen.jpg" },
+        { type: "summerMen",name: "SUMMER WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/vacationMen.jpg" }
+    ]
+};
+
+const categories = {
+    women: [
+        { name: 'DRESSES', link:'dressesW' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/dresses.jpg' },
+        { name: 'TOP',link:'topsWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/tops.jpg' },
+        { name: 'SPORTS',link:'sportsWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/sportsw.jpg' },
+        { name: 'KURTA',link:'wethnic' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/kurtaW.jpg' },
+        { name: 'CORSET', link:'cropTopsWomen' ,image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/corsetW.jpg' },
+        { name: 'SHIRTS',link:'formalWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/shirtsW.jpg' },
+        { name: 'SKIRT',link:'skirtsWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/skirtW.jpg' },
+        { name: 'SUIT',link:'formalWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/suitW.jpg ' },
+        { name: 'HOODIES',link:'hoodiesWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hoodiesW.jpg ' },
+        { name: 'BOTTOM', link:'bottomsWomen' ,  image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/bottoms.jpg' },
+
+    ],
+    men: [
+        { name: 'SHIRTS',link:'shirtsMen' , image: ' https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/shirt.jpg' },
+        { name: 'SPORTS', link:'sportsMen' ,image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/sports.jpg' },
+        { name: 'TSHIRT',link:'casuals' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/t-shirt.jpg' },
+        { name: 'TROUSER',link:'' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/trousers.jpeg' },
+        { name: 'KURTA', link:'' ,image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/kurtaMen.jpg' },
+        { name: 'FORMALS',link:'' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/formalMen.jpg' },
+        { name: 'PANTS',link:'' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/pantsMen.jpg' },
+        { name: 'HOODIES',link:'' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hoodiesMen.jpg' },
+    ]
+};
+
+    // Function to get display name from type
+    const getDisplayName = (type) => {
+        // First check in carousel images for both women and men
+        const allCarouselItems = [...carouselImages.women, ...carouselImages.men];
+        const carouselMatch = allCarouselItems.find(item => item.type === type);
+        if (carouselMatch) {
+            return carouselMatch.name;
+        }
+
+        // Then check in categories for both women and men
+        const allCategories = [...categories.women, ...categories.men];
+        const categoryMatch = allCategories.find(item => item.link === type);
+        if (categoryMatch) {
+            return categoryMatch.name;
+        }
+
+        // Fallback to formatted type name
+        return type?.toUpperCase().replace(/([A-Z])/g, ' $1').trim() || 'PRODUCTS';
+    };
 
     useEffect(() => {
         if (!type) {
@@ -18,6 +84,9 @@ const ExplorePage = () => {
             setLoading(false);
             return;
         }
+
+        // Set the display name
+        setDisplayName(getDisplayName(type));
 
         setLoading(true);
         setError(null);
@@ -29,63 +98,59 @@ const ExplorePage = () => {
             })
             .catch(err => {
                 console.error('Failed to fetch products:', err);
-                setError(`Failed to load ${type} products. Please try again later.`);
+                setError(`Failed to load ${getDisplayName(type)} products. Please try again later.`);
             })
             .finally(() => setLoading(false));
     }, [type]);
 
-
     const handleAddToCart = async (product) => {
-  const productId = product.id || product._id || product.productId || product.product_id;
-  if (!productId) return alert('Product ID is missing!');
+        const productId = product.id || product._id || product.productId || product.product_id;
+        if (!productId) return alert('Product ID is missing!');
 
-  const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-  if (!token) {
-    return navigate('/login', {
-      state: { from: location.pathname, action: 'addToCart', product }
-    });
-  }
-
-  try {
-    console.log("Adding to cart:", productId);
-    console.log("Auth token:", token);
-
-    setAddingToCart(productId);
-
-    await api.post(`/cart/add/${productId}`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    
-    alert('Added to cart successfully!');
-  } catch (err) {
-    console.error(err);
-    const status = err.response?.status;
-    if (status === 401) {
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('token');
-      return navigate('/login', {
-        state: {
-          from: location.pathname,
-          message: 'Session expired. Please login again.',
-          action: 'addToCart',
-          product
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        if (!token) {
+            return navigate('/login', {
+                state: { from: location.pathname, action: 'addToCart', product }
+            });
         }
-      });
-    }
-    if (status === 404) return alert('Product not found. Please refresh.');
-    if (status === 400) return alert('Invalid request.');
-    alert('Failed to add to cart. Please try again.');
-  } finally {
-    setAddingToCart(null);
-  }
-};
 
+        try {
+            console.log("Adding to cart:", productId);
+            console.log("Auth token:", token);
+
+            setAddingToCart(productId);
+
+            await api.post(`/cart/add/${productId}`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            alert('Added to cart successfully!');
+        } catch (err) {
+            console.error(err);
+            const status = err.response?.status;
+            if (status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('token');
+                return navigate('/login', {
+                    state: {
+                        from: location.pathname,
+                        message: 'Session expired. Please login again.',
+                        action: 'addToCart',
+                        product
+                    }
+                });
+            }
+            if (status === 404) return alert('Product not found. Please refresh.');
+            if (status === 400) return alert('Invalid request.');
+            alert('Failed to add to cart. Please try again.');
+        } finally {
+            setAddingToCart(null);
+        }
+    };
 
     const handleProductClick = (product) => {
         console.log("Product being clicked:", product);
         
-        // Check for different possible ID field names
         const productId = product.id || product._id || product.productId || product.product_id;
         console.log("Product ID:", productId);
         
@@ -95,7 +160,6 @@ const ExplorePage = () => {
             return;
         }
         
-        // Navigate to individual product page
         navigate(`/products/${productId}`, { state: { product } });
     };
 
@@ -104,7 +168,7 @@ const ExplorePage = () => {
             <div className="max-w-7xl mx-auto p-4">
                 <div className="text-center py-20">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
-                    <p className="text-xl">Loading {type} products...</p>
+                    <p className="text-xl">Loading {displayName} products...</p>
                 </div>
             </div>
         );
@@ -135,13 +199,13 @@ const ExplorePage = () => {
                 >
                     ← Back
                 </button>
-                <h2 className="text-2xl font-bold text-center flex-1">{type?.toUpperCase()}</h2>
+                <h2 className="text-2xl font-bold text-center flex-1">{displayName}</h2>
                 <div className="w-16"></div> {/* Spacer for centering */}
             </div>
 
             {products.length === 0 ? (
                 <div className="text-center py-20">
-                    <p className="text-xl text-gray-500">No {type} products found</p>
+                    <p className="text-xl text-gray-500">No {displayName} products found</p>
                     <button 
                         onClick={() => navigate('/')}
                         className="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800"
@@ -164,7 +228,6 @@ const ExplorePage = () => {
                                         className="w-full h-64 object-cover cursor-pointer hover:opacity-90 transition"
                                         onClick={() => handleProductClick(product)}
                                     />
-                                    {/* Optional: Add wishlist button */}
                                     <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
                                         ♡
                                     </button>
