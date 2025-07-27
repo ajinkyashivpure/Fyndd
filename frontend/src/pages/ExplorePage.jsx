@@ -10,6 +10,7 @@ const ExplorePage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [addingToCart, setAddingToCart] = useState(null);
+    const [addedToCart, setAddedToCart] = useState(new Set()); // Track added products
     const [displayName, setDisplayName] = useState('');
     const { type } = useParams();
 
@@ -78,6 +79,60 @@ const categories = {
         return type?.toUpperCase().replace(/([A-Z])/g, ' $1').trim() || 'PRODUCTS';
     };
 
+    // Function to fetch cart items and update addedToCart state
+    const fetchCartItems = async () => {
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        if (!token) return;
+
+        try {
+            // Try multiple possible cart endpoints
+            let response;
+            try {
+                response = await api.get('/cart', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } catch (err) {
+                // Try alternative endpoint
+                response = await api.get('/api/cart', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            }
+            
+            console.log('Cart response:', response.data);
+            
+            // Handle different possible response structures
+            let cartItems = [];
+            if (response.data.items) {
+                cartItems = response.data.items;
+            } else if (response.data.cart?.items) {
+                cartItems = response.data.cart.items;
+            } else if (Array.isArray(response.data)) {
+                cartItems = response.data;
+            } else if (response.data.data) {
+                cartItems = response.data.data;
+            }
+            
+            // Extract product IDs from cart items with multiple possible field names
+            const cartProductIds = cartItems.map(item => {
+                return item.productId || 
+                       item.product_id || 
+                       item.id || 
+                       item._id ||
+                       item.product?.id ||
+                       item.product?._id ||
+                       item.product?.productId ||
+                       (typeof item === 'string' ? item : null);
+            }).filter(Boolean); // Remove null/undefined values
+            
+            console.log('Extracted cart product IDs:', cartProductIds);
+            setAddedToCart(new Set(cartProductIds));
+        } catch (err) {
+            console.error('Failed to fetch cart items:', err);
+            console.error('Error details:', err.response?.data);
+            // Don't show error to user as this is background operation
+        }
+    };
+
     useEffect(() => {
         if (!type) {
             setError('No product type specified');
@@ -91,10 +146,14 @@ const categories = {
         setLoading(true);
         setError(null);
         
+        // Fetch products first, then cart items
         api.get(`/api/products/type/${type}`)
             .then(res => {
-                console.log("API Response:", res.data);
+                console.log("Products API Response:", res.data);
                 setProducts(res.data || []);
+                
+                // Fetch cart items after products are loaded
+                return fetchCartItems();
             })
             .catch(err => {
                 console.error('Failed to fetch products:', err);
@@ -103,9 +162,22 @@ const categories = {
             .finally(() => setLoading(false));
     }, [type]);
 
+    // Separate useEffect to fetch cart items when user logs in
+    useEffect(() => {
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        if (token) {
+            fetchCartItems();
+        }
+    }, []); // Run once on component mount
+
     const handleAddToCart = async (product) => {
         const productId = product.id || product._id || product.productId || product.product_id;
         if (!productId) return alert('Product ID is missing!');
+
+        // Check if already added
+        if (addedToCart.has(productId)) {
+            return alert('Product is already in your cart!');
+        }
 
         const token = localStorage.getItem('authToken') || localStorage.getItem('token');
         if (!token) {
@@ -124,6 +196,14 @@ const categories = {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
+            // Update the addedToCart state immediately
+            setAddedToCart(prev => new Set([...prev, productId]));
+            
+            // Also store in localStorage as backup
+            const currentAddedItems = JSON.parse(localStorage.getItem('addedToCart') || '[]');
+            currentAddedItems.push(productId);
+            localStorage.setItem('addedToCart', JSON.stringify(currentAddedItems));
+            
             alert('Added to cart successfully!');
         } catch (err) {
             console.error(err);
@@ -218,6 +298,7 @@ const categories = {
                     {products.map((product, index) => {
                         const productId = product.id || product._id || product.productId || product.product_id;
                         const isAddingToCart = addingToCart === productId;
+                        const isAlreadyAdded = addedToCart.has(productId);
                         
                         return (
                             <div key={productId || index} className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
@@ -242,14 +323,21 @@ const categories = {
                                     <p className="text-black font-bold mb-4">₹{product.price}</p>
                                     <button
                                         onClick={() => handleAddToCart(product)}
-                                        disabled={isAddingToCart}
+                                        disabled={isAddingToCart || isAlreadyAdded}
                                         className={`w-full px-4 py-2 rounded transition-colors duration-200 ${
-                                            isAddingToCart 
-                                                ? 'bg-gray-400 text-white cursor-not-allowed' 
-                                                : 'bg-red-600 text-white hover:bg-gray-800'
+                                            isAlreadyAdded
+                                                ? 'bg-green-500 text-white cursor-not-allowed'
+                                                : isAddingToCart 
+                                                    ? 'bg-gray-400 text-white cursor-not-allowed' 
+                                                    : 'bg-red-600 text-white hover:bg-gray-800'
                                         }`}
                                     >
-                                        {isAddingToCart ? (
+                                        {isAlreadyAdded ? (
+                                            <div className="flex items-center justify-center">
+                                                <span className="mr-2">✓</span>
+                                                Already Added
+                                            </div>
+                                        ) : isAddingToCart ? (
                                             <div className="flex items-center justify-center">
                                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                                                 Adding...
