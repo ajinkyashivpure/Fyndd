@@ -1,29 +1,22 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-
 const HamburgerMenu = ({ isOpen, onToggle }) => {
   const navigate = useNavigate();
-
   const handleMenuClick = (path) => {
     const isLoggedIn = localStorage.getItem('authToken') || localStorage.getItem('token');
-
     if (path === '/login' && isLoggedIn) {
       alert('Already logged in.');
       return;
     }
-
     navigate(path); 
   };
 
   const handleLogout = () => {
-    // Clear storage
     localStorage.removeItem('authToken');
     localStorage.removeItem('token');
     localStorage.clear();
-
     alert("You have been logged out.");
     navigate('/login');
   };
@@ -122,7 +115,7 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                       <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
                   </div>
-                  <span className="text-lg f`ont-medium">Login</span>
+                  <span className="text-lg font-medium">Login</span>
                 </button>
 
 
@@ -334,7 +327,7 @@ const HomePage = () => {
             <div className="w-full overflow-x-hidden">
                 <div className="w-full">
                     {/* Main content with bottom padding to account for fixed navigation */}
-                    <div className="overflow-y-auto font-sans bg-white text-gray-800 pb-24">
+                    <div className="overflow-y-auto font-sans bg-white text-gray-800 pb-20">
 
                         <Header selectedGender={selectedGender} setSelectedGender={setSelectedGender} />
                         
@@ -477,16 +470,28 @@ const HomePage = () => {
                             </div>
                             
                             <div className="text-center text-gray-500 text-xs mt-6 pt-4 border-t border-gray-200">
-                                <p>&copy; 2024 FYNDD. All rights reserved.</p>
+                                <p>&copy; 2025 FYNDD. All rights reserved.</p>
                             </div>
                         </footer>
                     </div>
                 </div>
                 
-                {/* Fixed Bottom Navigation Bar */}
-                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+                {/* Fixed Bottom Navigation Bar - Enhanced with better positioning */}
+                <nav 
+                    className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg"
+                    style={{ 
+                        position: 'fixed',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        zIndex: 99999,
+                        backgroundColor: 'white',
+                        borderTop: '1px solid #e5e7eb',
+                        boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    }}
+                >
                     <div className="flex justify-around items-center py-3 px-4 max-w-md mx-auto">
-                        <button className="flex flex-col items-center justify-center p-2 text-red-500 min-w-0">
+                        <button className="flex flex-col items-center justify-center p-2 text-red-500 min-w-0 transition-colors duration-200">
                             <div className="w-6 h-6 mb-1">
                                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
                                     <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
@@ -495,7 +500,10 @@ const HomePage = () => {
                             <span className="text-xs font-medium">Home</span>
                         </button>
                         
-                        <button className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-500 transition-colors min-w-0" onClick={() => navigate(`/search`)}>
+                        <button 
+                            className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-500 transition-colors duration-200 min-w-0" 
+                            onClick={() => navigate('/search')}
+                        >
                             <div className="w-6 h-6 mb-1">
                                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
                                     <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -504,7 +512,10 @@ const HomePage = () => {
                             <span className="text-xs font-medium">Search</span>
                         </button>
                         
-                        <button className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-500 transition-colors min-w-0" onClick={() => navigate(`/cart`)}>
+                        <button 
+                            className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-500 transition-colors duration-200 min-w-0" 
+                            onClick={() => navigate('/cart')}
+                        >
                             <div className="w-6 h-6 mb-1">
                                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
                                     <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
@@ -513,7 +524,10 @@ const HomePage = () => {
                             <span className="text-xs font-medium">Cart</span>
                         </button>
                         
-                        <button className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-500 transition-colors min-w-0" onClick={() => navigate(`/profile`)}>
+                        <button 
+                            className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-500 transition-colors duration-200 min-w-0" 
+                            onClick={() => navigate('/profile')}
+                        >
                             <div className="w-6 h-6 mb-1">
                                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
                                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
@@ -522,7 +536,7 @@ const HomePage = () => {
                             <span className="text-xs font-medium">Profile</span>
                         </button>
                     </div>
-                </div>
+                </nav>
                 
                 <style jsx>{`
                     @keyframes scroll {
@@ -540,6 +554,22 @@ const HomePage = () => {
                     
                     .animate-scroll:hover {
                         animation-play-state: paused;
+                    }
+                    
+                    /* Force fixed positioning for bottom navigation */
+                    nav[style*="position: fixed"] {
+                        position: fixed !important;
+                        bottom: 0 !important;
+                        left: 0 !important;
+                        right: 0 !important;
+                        z-index: 99999 !important;
+                        width: 100% !important;
+                    }
+                    
+                    /* Ensure body doesn't interfere */
+                    html, body {
+                        position: relative;
+                        overflow-x: hidden;
                     }
                 `}</style>
             </div>

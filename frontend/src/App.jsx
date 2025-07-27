@@ -16,6 +16,8 @@ import SearchFriendsPage from './pages/SeachFriendsPage.jsx';
 import FriendsListPage from './pages/FriendsListPage.jsx';
 import PendingRequestsPage from './pages/PendingRequestsPage.jsx';
 import FriendsCartsPage from './pages/FriendsCartsPage.jsx';
+import BetaPrivacy from './pages/BetaPrivacy.jsx';
+import BetaTerms from './pages/BetaTerms.jsx';
 
 function App() {
     return (
@@ -37,6 +39,8 @@ function App() {
                  <Route path="/profile/friends-list" element={<FriendsListPage />} />
                  <Route path="/profile/friend-requests" element={<PendingRequestsPage />} />
                  <Route path="/profile/friends-carts" element={<FriendsCartsPage />} />
+                 <Route path="/terms" element={<BetaTerms />} />
+                 <Route path="/privacy" element={<BetaPrivacy />} />
 
                 {/* Catch-all route - must be last */}
                 <Route path="*" element={<Navigate to="/" replace />} />
