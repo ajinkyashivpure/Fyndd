@@ -1,9 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Hamburger Menu Component (from your original code)
 const HamburgerMenu = ({ isOpen, onToggle }) => {
   const navigate = useNavigate();
+  
   const handleMenuClick = (path) => {
     const isLoggedIn = localStorage.getItem('authToken') || localStorage.getItem('token');
     if (path === '/login' && isLoggedIn) {
@@ -21,10 +23,8 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
     navigate('/login');
   };
 
-
   return (
     <>
-      {/* Hamburger Button - Made smaller */}
       <button 
         onClick={onToggle}
         className="relative z-50 p-1 focus:outline-none"
@@ -49,7 +49,6 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
         </div>
       </button>
 
-      {/* Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -63,7 +62,6 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
         )}
       </AnimatePresence>
 
-      {/* Slide-out Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -73,13 +71,11 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="fixed top-0 right-0 w-80 h-full bg-white shadow-2xl z-50 flex flex-col"
           >
-            {/* Menu Header */}
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-2xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h2>
               <p className="text-sm text-gray-500 mt-1">Your Fashion Destination</p>
             </div>
 
-            {/* Menu Items */}
             <div className="flex-1 py-6">
               <div className="space-y-2">
                 <button
@@ -118,7 +114,6 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                   <span className="text-lg font-medium">Login</span>
                 </button>
 
-
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center px-6 py-4 text-gray-700 hover:bg-gray-50 hover:text-red-500 transition-colors duration-200"
@@ -132,21 +127,6 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                 </button>
               </div>
             </div>
-
-            {/* Menu Footer */}
-            <div className="p-6 border-t border-gray-200">
-              <div className="flex justify-center gap-4 text-gray-400">
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors">
-                  <i className="fab fa-instagram text-xl"></i>
-                </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors">
-                  <i className="fab fa-twitter text-xl"></i>
-                </a>
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors">
-                  <i className="fab fa-facebook text-xl"></i>
-                </a>
-              </div>
-            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -154,10 +134,12 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
   );
 };
 
-// Enhanced Header component with hamburger menu
+
+
+// Header Component (from your original code)
 const Header = ({ selectedGender, setSelectedGender }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -165,20 +147,16 @@ const Header = ({ selectedGender, setSelectedGender }) => {
   return (
     <header className="bg-white border-b border-gray-100 relative">
       <div className="max-w-6xl mx-auto px-4 py-3">
-        {/* Logo and Menu Button Container */}
         <div className="flex items-center justify-between mb-2">
-          {/* Logo */}
           <div className="flex-1 text-center">
             <h1 className="text-2xl sm:text-3xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h1>
           </div>
           
-          {/* Hamburger Menu - Adjusted positioning */}
           <div className="absolute right-4 top-4">
             <HamburgerMenu isOpen={isMenuOpen} onToggle={toggleMenu} />
           </div>
         </div>
 
-        {/* Gender Toggle */}
         <div className="flex justify-center">
           <div className="flex bg-gray-50 rounded-full p-1">
             {["women", "men"].map((gender) => {
@@ -236,7 +214,6 @@ const categories = {
         { name: 'SUIT',link:'formalWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/suitW.jpg ' },
         { name: 'HOODIES',link:'hoodiesWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hoodiesW.jpg ' },
         { name: 'BOTTOM', link:'bottomsWomen' ,  image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/bottoms.jpg' },
-
     ],
     men: [
         { name: 'SHIRTS',link:'shirtsMen' , image: ' https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/shirt.jpg' },
@@ -257,20 +234,55 @@ const brands = [
     { name: "Levi's", image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/levis.jpg' },
 ];
 
+// Main HomePage Component (updated with bottom navbar)
 const HomePage = () => {
     const [selectedGender, setSelectedGender] = useState('women');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [currentPage] = useState('home');
     const navigate = useNavigate();
     
-    // Reset carousel when gender changes
+    const scrollRef = useRef(null);
+    const userInteracted = useRef(false);
+
+    useEffect(() => {
+        const container = scrollRef.current;
+        if (!container) return;
+
+        let frameId;
+        let scrollSpeed = 1000; 
+
+        const animateScroll = () => {
+            if (!userInteracted.current) {
+                container.scrollLeft += scrollSpeed;
+                if (container.scrollLeft >= container.scrollWidth / 2) {
+                    container.scrollLeft = 0;
+                }
+            }
+            frameId = requestAnimationFrame(animateScroll);
+        };
+
+        frameId = requestAnimationFrame(animateScroll);
+
+        const handleUserScroll = () => {
+            userInteracted.current = true;
+            clearTimeout(container._resetTimeout);
+            container._resetTimeout = setTimeout(() => {
+                userInteracted.current = false;
+            }, 3000);
+        };
+
+        container.addEventListener('scroll', handleUserScroll);
+
+        return () => {
+            cancelAnimationFrame(frameId);
+            container.removeEventListener('scroll', handleUserScroll);
+        };
+    }, []);
+
     useEffect(() => {
         setCurrentImageIndex(0);
     }, [selectedGender]);
-
-    const handleExploreClick = () => {
-        console.log('Navigate to explore');
-    };
 
     const nextImage = useCallback(() => {
         setIsLoading(true);
@@ -311,11 +323,6 @@ const HomePage = () => {
     const handleImageLoad = () => {
         setIsLoading(false);
     };
-    
-    const handleLogout = () => {
-        alert("You have been logged out.");
-        navigate('/login'); 
-    };
 
     return (
         <motion.div
@@ -326,16 +333,14 @@ const HomePage = () => {
         >
             <div className="w-full overflow-x-hidden">
                 <div className="w-full">
-                    {/* Main content with bottom padding to account for fixed navigation */}
+                    {/* Main content with bottom padding for the navigation bar */}
                     <div className="overflow-y-auto font-sans bg-white text-gray-800 pb-20">
 
                         <Header selectedGender={selectedGender} setSelectedGender={setSelectedGender} />
                         
-                        {/* Hero Section with reduced spacing */}
+                        {/* Hero Section */}
                         <section className="flex flex-col items-start mx-auto max-w-7xl bg-white w-full box-border">
-                            {/* Enhanced Carousel with reduced top margin */}
                             <div className="relative w-full mb-6" {...handlers}>
-                                {/* Enhanced Left Arrow */}
                                 <button 
                                     className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-10 h-10 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
                                     onClick={previousImage}
@@ -360,7 +365,6 @@ const HomePage = () => {
                                     />
                                 </div>
                                 
-                                {/* Enhanced Right Arrow */}
                                 <button 
                                     className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-10 h-10 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
                                     onClick={nextImage}
@@ -372,7 +376,7 @@ const HomePage = () => {
                             </div>
                         </section>
 
-                        {/* Dynamic Categories Section with reduced spacing */}
+                        {/* Dynamic Categories Section */}
                         <section className="p-4 md:p-6">
                             <h2 className="text-xl md:text-2xl font-bold mb-4 text-center">
                                 {selectedGender.toUpperCase()}'S CATEGORIES
@@ -402,41 +406,30 @@ const HomePage = () => {
                             </div>
                         </section>
 
-                        {/* Rotating Popular Brands Section with reduced spacing */}
-                        <section className="w-full py-4 md:py-6 bg-white px-4 md:px-0 overflow-hidden">
+                        {/* Brands Section */}
+                        <section className="w-full py-4 md:py-6 bg-white px-4 md:px-0">
                             <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center">Popular Brands</h2>
-                            <div className="relative">
-                                <div className="flex animate-scroll space-x-8">
-                                    {/* First set of brands */}
-                                    {brands.map((brand, index) => (
-                                        <motion.div
-                                          key={`first-${index}`}
-                                          initial={{ opacity: 0, scale: 0.9 }}
-                                          whileInView={{ opacity: 1, scale: 1 }}
-                                          whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255,0,128,0.3)" }}
-                                          viewport={{ once: true }}
-                                          transition={{ duration: 0.4, delay: index * 0.1 }}
-                                          className="flex-shrink-0 w-40 md:w-48 bg-white shadow-md rounded-lg overflow-hidden transition-transform duration-300"
-                                        >
-                                          <img 
-                                            src={brand.image}
-                                            alt={brand.name}
-                                            className="w-full h-24 md:h-32 object-cover"
-                                          />
-                                          <h3 className="p-2 text-center font-medium text-sm md:text-base">{brand.name}</h3>
-                                        </motion.div>
-                                    ))}
-                                    {/* Duplicate set for seamless loop */}
-                                    {brands.map((brand, index) => (
-                                        <div key={`second-${index}`} className="flex-shrink-0 w-40 md:w-48 bg-white shadow-sm rounded-lg overflow-hidden">
-                                            <img 
-                                                src={brand.image}
-                                                alt={brand.name}
-                                                className="w-full h-24 md:h-32 object-cover"
-                                            />
-                                            <h3 className="p-2 text-center font-medium text-sm md:text-base">{brand.name}</h3>
-                                        </div>
-                                    ))}
+
+                            <div className="overflow-hidden">
+                                <div
+                                  ref={scrollRef}
+                                  className="flex overflow-x-scroll no-scrollbar space-x-6 px-1"
+                                  style={{ scrollBehavior: 'smooth' }}
+                                >
+                                  {[...brands, ...brands].map((brand, index) => (
+                                    <motion.div
+                                      key={index}
+                                      className="flex-shrink-0 w-40 md:w-48 bg-white shadow-md rounded-lg overflow-hidden"
+                                      whileHover={{ scale: 1.05 }}
+                                    >
+                                      <img
+                                        src={brand.image}
+                                        alt={brand.name}
+                                        className="w-full h-24 md:h-32 object-cover"
+                                      />
+                                      <h3 className="p-2 text-center font-medium text-sm md:text-base">{brand.name}</h3>
+                                    </motion.div>
+                                  ))}
                                 </div>
                             </div>
                         </section>
@@ -447,18 +440,6 @@ const HomePage = () => {
                                 <div className="text-center md:text-left">
                                     <h2 className="text-xl md:text-2xl font-semibold text-red-600 mb-2">FYNDD</h2>
                                     <p className="text-gray-600 text-sm">Your Ultimate Fashion Destination</p>
-                                </div>
-
-                                <div className="flex justify-center md:justify-center gap-5 text-2xl">
-                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800">
-                                        <i className="fab fa-instagram"></i>
-                                    </a>
-                                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800">
-                                        <i className="fab fa-twitter"></i>
-                                    </a>
-                                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800">
-                                        <i className="fab fa-facebook"></i>
-                                    </a>
                                 </div>
 
                                 <div className="flex flex-col gap-3 text-center md:text-right">
@@ -475,8 +456,7 @@ const HomePage = () => {
                         </footer>
                     </div>
                 </div>
-                
-                {/* Fixed Bottom Navigation Bar - Enhanced with better positioning */}
+                 {/* Fixed Bottom Navigation Bar - Enhanced with better positioning */}
                 <nav 
                     className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg"
                     style={{ 
@@ -537,7 +517,7 @@ const HomePage = () => {
                         </button>
                     </div>
                 </nav>
-                
+
                 <style jsx>{`
                     @keyframes scroll {
                         0% {
@@ -556,20 +536,13 @@ const HomePage = () => {
                         animation-play-state: paused;
                     }
                     
-                    /* Force fixed positioning for bottom navigation */
-                    nav[style*="position: fixed"] {
-                        position: fixed !important;
-                        bottom: 0 !important;
-                        left: 0 !important;
-                        right: 0 !important;
-                        z-index: 99999 !important;
-                        width: 100% !important;
+                    .no-scrollbar {
+                        -ms-overflow-style: none;
+                        scrollbar-width: none;
                     }
                     
-                    /* Ensure body doesn't interfere */
-                    html, body {
-                        position: relative;
-                        overflow-x: hidden;
+                    .no-scrollbar::-webkit-scrollbar {
+                        display: none;
                     }
                 `}</style>
             </div>

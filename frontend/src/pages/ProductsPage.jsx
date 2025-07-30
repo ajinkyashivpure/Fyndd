@@ -394,7 +394,7 @@ const ProductPage = () => {
                                 ? 'bg-green-500 text-white cursor-not-allowed'
                                 : addingToCart
                                     ? 'bg-gray-400 text-white cursor-not-allowed'
-                                    : 'bg-yellow-500 text-black hover:bg-yellow-600'
+                                    : 'bg-red-500 text-white hover:bg-yellow-600'
                         }`}
                     >
                         {isAlreadyAdded ? (

@@ -133,7 +133,7 @@ const LoginPage = () => {
       console.error('Login error:', error);
       setMessage({ 
         type: 'error', 
-        text: 'Network error. Please check your connection and try again.' 
+        text: 'Invalid credentials' 
       });
     } finally {
       setIsLoading(false);
