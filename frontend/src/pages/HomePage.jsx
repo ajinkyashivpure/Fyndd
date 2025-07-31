@@ -90,6 +90,8 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                   <span className="text-lg font-medium">Search</span>
                 </button>
 
+                
+
                 <button
                   onClick={() => handleMenuClick('/cart')}
                   className="w-full flex items-center px-6 py-4 text-gray-700 hover:bg-gray-50 hover:text-red-500 transition-colors duration-200"
@@ -101,6 +103,19 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                   </div>
                   <span className="text-lg font-medium">Cart</span>
                 </button>
+                
+
+                <button
+                  onClick={() => handleMenuClick('/profile')}
+                  className="w-full flex items-center px-6 py-4 text-gray-700 hover:bg-gray-50 hover:text-red-500 transition-colors duration-200"
+                >
+                  <div className="w-6 h-6 mr-4">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium">Profile</span>
+                </button>
 
                 <button
                   onClick={() => handleMenuClick('/login')}
@@ -108,7 +123,7 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                 >
                   <div className="w-6 h-6 mr-4">
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                      <path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L13.67 11H3v2h10.67l-3.58 3.59zM19 3H9v2h10v14H9v2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
                     </svg>
                   </div>
                   <span className="text-lg font-medium">Login</span>
@@ -120,7 +135,8 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                 >
                   <div className="w-6 h-6 mr-4">
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                      <path d="M16 13v-2H7.83l2.58-2.59L9 7l-5 5 5 5 1.41-1.41L7.83 13H16zm3-10H5c-1.1 0-2 .9-2 2v6h2V5h14v14H5v-6H3v6c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+
                     </svg>
                   </div>
                   <span className="text-lg font-medium">Logout</span>
