@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface ProductRepository extends MongoRepository<Product, String> {
 
     List<Product> findByType(String type);
+    List<Product> findByCategoriesContainingAndTitleIsNotNull(String category);
+    List<Product> findByBrandAndTitleIsNotNull(String brand);
 }
