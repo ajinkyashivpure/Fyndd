@@ -61,7 +61,7 @@ const ExplorePage = () => {
     // Mapping between type and category names for the new API
     const typeToCategoryMapping = {
         // Women's mappings
-        'wethnic': 'Traditional',
+        'wethnic': 'Religious ceremony',
         'partyWomen': 'Party',
         'sportsWomen': 'Sports',
         'casualWomen': 'Casual',
