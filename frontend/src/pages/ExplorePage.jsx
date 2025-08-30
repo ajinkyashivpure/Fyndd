@@ -10,73 +10,154 @@ const ExplorePage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [addingToCart, setAddingToCart] = useState(null);
-    const [addedToCart, setAddedToCart] = useState(new Set()); // Track added products
+    const [addedToCart, setAddedToCart] = useState(new Set());
     const [displayName, setDisplayName] = useState('');
     const { type } = useParams();
 
     // Define the mapping for carousel images and categories
     const carouselImages = {
-    women: [
-        { type: "wethnic",name: "TRADITIONAL", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/EthnicWomen.jpeg" },
-        { type: "partyWomen",name: "PARTY WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/partyWearWomen.jpg" },
-        { type: "sportsWomen", name: "ATHLEISURE",image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/athlesiureWomen.jpg" },
-        { type: "casualWomen",name: "CASUAL WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/casualsWomen.jpg" },
-        { type: "formalWomen",name: "FORMAL WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/corporateWomen.jpg" },
-        { type: "beachW", name: "BEACH WEAR",image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/vacationWomen.jpg" }
-    ],
-    men: [
-        { type: "formalMen",name: "FORMALS", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/partyMen.jpg" },
-        { type: "casuals",name: " CASUAL WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/casualsMen.jpg" },
-        { type: "shirtsMen",name: "SHIRTS", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/OldMoneyMen.jpg" },
-        { type: "sportsMen",name: "ATHLEISURE", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/sportsMen.jpg" },
-        { type: "summerMen",name: "SUMMER WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/vacationMen.jpg" }
-    ]
-};
+        women: [
+            { type: "wethnic", name: "TRADITIONAL", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/EthnicWomen.jpeg" },
+            { type: "partyWomen", name: "PARTY WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/partyWearWomen.jpg" },
+            { type: "sportsWomen", name: "ATHLEISURE", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/athlesiureWomen.jpg" },
+            { type: "casualWomen", name: "CASUAL WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/casualsWomen.jpg" },
+            { type: "formalWomen", name: "FORMAL WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/corporateWomen.jpg" },
+            { type: "beachW", name: "BEACH WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WomenCarouselimages/vacationWomen.jpg" }
+        ],
+        men: [
+            { type: "formalMen", name: "FORMALS", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/partyMen.jpg" },
+            { type: "casuals", name: " CASUAL WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/casualsMen.jpg" },
+            { type: "shirtsMen", name: "SHIRTS", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/OldMoneyMen.jpg" },
+            { type: "sportsMen", name: "ATHLEISURE", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/sportsMen.jpg" },
+            { type: "summerMen", name: "SUMMER WEAR", image: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/MenCarouselimages/vacationMen.jpg" }
+        ]
+    };
 
-const categories = {
-    women: [
-        { name: 'DRESSES', link:'dressesW' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/dresses.jpg' },
-        { name: 'TOP',link:'topsWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/tops.jpg' },
-        { name: 'SPORTS',link:'sportsWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/sportsw.jpg' },
-        { name: 'KURTA',link:'wethnic' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/kurtaW.jpg' },
-        { name: 'CORSET', link:'cropTopsWomen' ,image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/corsetW.jpg' },
-        { name: 'SHIRTS',link:'formalWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/shirtsW.jpg' },
-        { name: 'SKIRT',link:'skirtsWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/skirtW.jpg' },
-        { name: 'SUIT',link:'formalWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/suitW.jpg ' },
-        { name: 'HOODIES',link:'hoodiesWomen' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hoodiesW.jpg ' },
-        { name: 'BOTTOM', link:'bottomsWomen' ,  image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/bottoms.jpg' },
+    const categories = {
+        women: [
+            { name: 'DRESSES', link: 'dressesW', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/dresses.jpg' },
+            { name: 'TOP', link: 'topsWomen', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/tops.jpg' },
+            { name: 'SPORTS', link: 'sportsWomen', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/sportsw.jpg' },
+            { name: 'KURTA', link: 'wethnic', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/kurtaW.jpg' },
+            { name: 'CORSET', link: 'cropTopsWomen', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/corsetW.jpg' },
+            { name: 'SHIRTS', link: 'formalWomen', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/shirtsW.jpg' },
+            { name: 'SKIRT', link: 'skirtsWomen', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/skirtW.jpg' },
+            { name: 'SUIT', link: 'formalWomen', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/womenCategory/suitW.jpg ' },
+            { name: 'HOODIES', link: 'hoodiesWomen', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hoodiesW.jpg ' },
+            { name: 'BOTTOM', link: 'bottomsWomen', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesWomen/bottoms.jpg' },
+        ],
+        men: [
+            { name: 'SHIRTS', link: 'shirtsMen', image: ' https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/shirt.jpg' },
+            { name: 'SPORTS', link: 'sportsMen', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/sports.jpg' },
+            { name: 'TSHIRT', link: 'casuals', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/t-shirt.jpg' },
+            { name: 'TROUSER', link: '', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/trousers.jpeg' },
+            { name: 'KURTA', link: '', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/kurtaMen.jpg' },
+            { name: 'FORMALS', link: '', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/formalMen.jpg' },
+            { name: 'PANTS', link: '', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/pantsMen.jpg' },
+            { name: 'HOODIES', link: '', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hoodiesMen.jpg' },
+        ]
+    };
 
-    ],
-    men: [
-        { name: 'SHIRTS',link:'shirtsMen' , image: ' https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/shirt.jpg' },
-        { name: 'SPORTS', link:'sportsMen' ,image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/sports.jpg' },
-        { name: 'TSHIRT',link:'casuals' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/t-shirt.jpg' },
-        { name: 'TROUSER',link:'' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/CategoryImagesMen/trousers.jpeg' },
-        { name: 'KURTA', link:'' ,image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/kurtaMen.jpg' },
-        { name: 'FORMALS',link:'' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/formalMen.jpg' },
-        { name: 'PANTS',link:'' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/menCategory/pantsMen.jpg' },
-        { name: 'HOODIES',link:'' , image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/hoodiesMen.jpg' },
-    ]
-};
+    // Mapping between type and category names for the new API
+    const typeToCategoryMapping = {
+        // Women's mappings
+        'wethnic': 'Traditional',
+        'partyWomen': 'Party',
+        'sportsWomen': 'Sports',
+        'casualWomen': 'Casual',
+        'formalWomen': 'Formal',
+        'beachW': 'Beach',
+        'dressesW': 'Party',
+        'topsWomen': 'Tops',
+        'cropTopsWomen': 'Crop Tops',
+        'skirtsWomen': 'Skirts',
+        'hoodiesWomen': 'Hoodies',
+        'bottomsWomen': 'Bottoms',
+        
+        // Men's mappings
+        'formalMen': 'Formal',
+        'casuals': 'Casual',
+        'shirtsMen': 'Shirts',
+        'sportsMen': 'Sports',
+        'summerMen': 'Summer',
+        
+        // Add more mappings as needed based on your category structure
+    };
 
     // Function to get display name from type
     const getDisplayName = (type) => {
-        // First check in carousel images for both women and men
         const allCarouselItems = [...carouselImages.women, ...carouselImages.men];
         const carouselMatch = allCarouselItems.find(item => item.type === type);
         if (carouselMatch) {
             return carouselMatch.name;
         }
 
-        // Then check in categories for both women and men
         const allCategories = [...categories.women, ...categories.men];
         const categoryMatch = allCategories.find(item => item.link === type);
         if (categoryMatch) {
             return categoryMatch.name;
         }
 
-        // Fallback to formatted type name
         return type?.toUpperCase().replace(/([A-Z])/g, ' $1').trim() || 'PRODUCTS';
+    };
+
+    // Function to remove duplicate products based on ID
+    const removeDuplicates = (products) => {
+        const seen = new Set();
+        return products.filter(product => {
+            const id = product.id || product._id || product.productId || product.product_id;
+            if (seen.has(id)) {
+                return false;
+            }
+            seen.add(id);
+            return true;
+        });
+    };
+
+    // Function to fetch products from both APIs
+    const fetchProducts = async (type) => {
+        const promises = [];
+        
+        // First API call - existing endpoint
+        promises.push(
+            api.get(`/api/products/type/${type}`)
+                .then(res => res.data || [])
+                .catch(err => {
+                    console.warn(`Failed to fetch from type API for ${type}:`, err);
+                    return []; // Return empty array on failure
+                })
+        );
+
+        // Second API call - new category-based endpoint
+        const categoryName = typeToCategoryMapping[type];
+        if (categoryName) {
+            promises.push(
+                api.get(`/api/products/by-category/category=${categoryName}`)
+                    .then(res => res.data || [])
+                    .catch(err => {
+                        console.warn(`Failed to fetch from category API for ${categoryName}:`, err);
+                        return []; // Return empty array on failure
+                    })
+            );
+        }
+
+        try {
+            const results = await Promise.all(promises);
+            
+            // Combine all results
+            const allProducts = results.flat();
+            
+            // Remove duplicates
+            const uniqueProducts = removeDuplicates(allProducts);
+            
+            console.log(`Fetched ${uniqueProducts.length} unique products for ${type}`);
+            console.log('Combined products:', uniqueProducts);
+            
+            return uniqueProducts;
+        } catch (err) {
+            console.error('Error in fetchProducts:', err);
+            throw err;
+        }
     };
 
     // Function to fetch cart items and update addedToCart state
@@ -85,14 +166,12 @@ const categories = {
         if (!token) return;
 
         try {
-            // Try multiple possible cart endpoints
             let response;
             try {
                 response = await api.get('/cart', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             } catch (err) {
-                // Try alternative endpoint
                 response = await api.get('/api/cart', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -100,7 +179,6 @@ const categories = {
             
             console.log('Cart response:', response.data);
             
-            // Handle different possible response structures
             let cartItems = [];
             if (response.data.items) {
                 cartItems = response.data.items;
@@ -112,7 +190,6 @@ const categories = {
                 cartItems = response.data.data;
             }
             
-            // Extract product IDs from cart items with multiple possible field names
             const cartProductIds = cartItems.map(item => {
                 return item.productId || 
                        item.product_id || 
@@ -122,14 +199,13 @@ const categories = {
                        item.product?._id ||
                        item.product?.productId ||
                        (typeof item === 'string' ? item : null);
-            }).filter(Boolean); // Remove null/undefined values
+            }).filter(Boolean);
             
             console.log('Extracted cart product IDs:', cartProductIds);
             setAddedToCart(new Set(cartProductIds));
         } catch (err) {
             console.error('Failed to fetch cart items:', err);
             console.error('Error details:', err.response?.data);
-            // Don't show error to user as this is background operation
         }
     };
 
@@ -140,19 +216,15 @@ const categories = {
             return;
         }
 
-        // Set the display name
         setDisplayName(getDisplayName(type));
-
         setLoading(true);
         setError(null);
         
-        // Fetch products first, then cart items
-        api.get(`/api/products/type/${type}`)
-            .then(res => {
-                console.log("Products API Response:", res.data);
-                setProducts(res.data || []);
-                
-                // Fetch cart items after products are loaded
+        // Fetch products from both APIs
+        fetchProducts(type)
+            .then(combinedProducts => {
+                console.log("Combined Products:", combinedProducts);
+                setProducts(combinedProducts);
                 return fetchCartItems();
             })
             .catch(err => {
@@ -162,19 +234,17 @@ const categories = {
             .finally(() => setLoading(false));
     }, [type]);
 
-    // Separate useEffect to fetch cart items when user logs in
     useEffect(() => {
         const token = localStorage.getItem('authToken') || localStorage.getItem('token');
         if (token) {
             fetchCartItems();
         }
-    }, []); // Run once on component mount
+    }, []);
 
     const handleAddToCart = async (product) => {
         const productId = product.id || product._id || product.productId || product.product_id;
         if (!productId) return alert('Product ID is missing!');
 
-        // Check if already added
         if (addedToCart.has(productId)) {
             return alert('Product is already in your cart!');
         }
@@ -196,10 +266,8 @@ const categories = {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            // Update the addedToCart state immediately
             setAddedToCart(prev => new Set([...prev, productId]));
             
-            // Also store in localStorage as backup
             const currentAddedItems = JSON.parse(localStorage.getItem('addedToCart') || '[]');
             currentAddedItems.push(productId);
             localStorage.setItem('addedToCart', JSON.stringify(currentAddedItems));
@@ -280,7 +348,7 @@ const categories = {
                     ← Back
                 </button>
                 <h2 className="text-2xl font-bold text-center flex-1">{displayName}</h2>
-                <div className="w-16"></div> {/* Spacer for centering */}
+                <div className="w-16"></div>
             </div>
 
             {products.length === 0 ? (

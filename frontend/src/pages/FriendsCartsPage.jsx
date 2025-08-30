@@ -7,7 +7,7 @@ const FriendsCartsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [addingToCart, setAddingToCart] = useState(null);
-    const [addedToCart, setAddedToCart] = useState(new Set()); // Track added products
+    const [addedToCart, setAddedToCart] = useState(new Set()); 
     const navigate = useNavigate();
 
     useEffect(() => {

@@ -248,6 +248,7 @@ const brands = [
     { name: 'H&M', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/hm.jpg' },
     { name: 'Uniqlo', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/uniqlo.jpg' },
     { name: "Levi's", image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/levis.jpg' },
+    { name: "Yezwe", image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/yezwe.png' },
 ];
 
 // Main HomePage Component (updated with bottom navbar)
