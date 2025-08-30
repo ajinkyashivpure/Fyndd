@@ -61,19 +61,20 @@ const ExplorePage = () => {
     // Mapping between type and category names for the new API
     const typeToCategoryMapping = {
         // Women's mappings
-        'wethnic': 'Religious ceremony',
-        'partyWomen': 'Party',
+        'PARTY WEAR':'Party',
+         'wethnic': 'Religious ceremony',
+        'partyWomen': ['Party' , 'Birthday','Dance','Wedding'],
         'sportsWomen': 'Sports',
-        'casualWomen': 'Casual',
-        'formalWomen': 'Formal',
-        'beachW': 'Beach',
+        'casualWomen': ['Casual' , 'Everyday', 'Holiday'],
+        'formalWomen': ['Formal','School'],
+        'beachW': ['Beach','Holiday'],
         'dressesW': 'Party',
         'topsWomen': 'Tops',
         'cropTopsWomen': 'Crop Tops',
         'skirtsWomen': 'Skirts',
         'hoodiesWomen': 'Hoodies',
         'bottomsWomen': 'Bottoms',
-        
+
         // Men's mappings
         'formalMen': 'Formal',
         'casuals': 'Casual',
@@ -81,23 +82,51 @@ const ExplorePage = () => {
         'sportsMen': 'Sports',
         'summerMen': 'Summer',
         
+        // Brand mappings - map brand names to category equivalents
+        'Zara': 'Zara',
+        'H&M': 'H&M', 
+        'Uniqlo': 'Uniqlo',
+        "Levi's": "Levi's",
+        'Yezwe':'Yezwe',
+        'MissPrint Jaipur':'MissPrint Jaipur',
+
+        
         // Add more mappings as needed based on your category structure
     };
 
+    // Brand definitions (same as in HomePage)
+    const brands = [
+    { name: 'ZARA', link: 'Zara', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/Zara.jpg' },
+    { name: 'H&M', link: 'H&M', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/hm.jpg' },
+    { name: 'UNIQLO', link: 'Uniqlo', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/uniqlo.jpg' },
+    { name: "LEVI'S", link: "Levi's", image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/levis.jpg' },
+    { name: "YEZWE", link: 'Yezwe', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/image-2.jpg' },
+    { name: "MissPrint", link: 'MissPrint Jaipur', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/missprint.jpg' },
+    ];
+
     // Function to get display name from type
     const getDisplayName = (type) => {
+        // Check carousel images first
         const allCarouselItems = [...carouselImages.women, ...carouselImages.men];
         const carouselMatch = allCarouselItems.find(item => item.type === type);
         if (carouselMatch) {
             return carouselMatch.name;
         }
 
+        // Check categories
         const allCategories = [...categories.women, ...categories.men];
         const categoryMatch = allCategories.find(item => item.link === type);
         if (categoryMatch) {
             return categoryMatch.name;
         }
 
+        // Check brands
+        const brandMatch = brands.find(brand => brand.link === type);
+        if (brandMatch) {
+            return brandMatch.name.toUpperCase();
+        }
+
+        // Fallback to formatted type name
         return type?.toUpperCase().replace(/([A-Z])/g, ' $1').trim() || 'PRODUCTS';
     };
 
@@ -115,50 +144,71 @@ const ExplorePage = () => {
     };
 
     // Function to fetch products from both APIs
-    const fetchProducts = async (type) => {
-        const promises = [];
-        
-        // First API call - existing endpoint
+  // Function to fetch products from both APIs
+const fetchProducts = async (type) => {
+  const promises = [];
+
+  // ✅ Type API (always)
+  promises.push(
+    api.get(`/api/products/type/${type}`)
+      .then(res => res.data || [])
+      .catch(err => {
+        console.warn(`Type API failed for ${type}:`, err);
+        return [];
+      })
+  );
+
+  // ✅ Category/Brand API
+  const categoryOrCategories = typeToCategoryMapping[type];
+  if (categoryOrCategories) {
+    const brandMatch = brands.find(brand => brand.link === type);
+
+    if (brandMatch) {
+      // Brand API (always single string)
+      promises.push(
+        api.get("/api/products/by-brand", { params: { brand: categoryOrCategories } })
+          .then(res => res.data || [])
+          .catch(err => {
+            console.warn(`Brand API failed for ${categoryOrCategories}:`, err);
+            return [];
+          })
+      );
+    } else {
+      // Category API (may be one or many)
+      const categories = Array.isArray(categoryOrCategories)
+        ? categoryOrCategories
+        : [categoryOrCategories];
+
+      categories.forEach((category) => {
         promises.push(
-            api.get(`/api/products/type/${type}`)
-                .then(res => res.data || [])
-                .catch(err => {
-                    console.warn(`Failed to fetch from type API for ${type}:`, err);
-                    return []; // Return empty array on failure
-                })
+          api.get("/api/products/by-category", { params: { category } })
+            .then(res => res.data || [])
+            .catch(err => {
+              console.warn(`Category API failed for ${category}:`, err);
+              return [];
+            })
         );
+      });
+    }
+  } else {
+    console.warn(`⚠️ No mapping found for type: ${type}`);
+  }
 
-        // Second API call - new category-based endpoint
-        const categoryName = typeToCategoryMapping[type];
-        if (categoryName) {
-            promises.push(
-                api.get(`/api/products/by-category/category=${categoryName}`)
-                    .then(res => res.data || [])
-                    .catch(err => {
-                        console.warn(`Failed to fetch from category API for ${categoryName}:`, err);
-                        return []; // Return empty array on failure
-                    })
-            );
-        }
+  // ✅ Collect results
+  try {
+    const results = await Promise.all(promises);
+    const allProducts = results.flat();
+    const uniqueProducts = removeDuplicates(allProducts);
+    console.log(`✅ ${uniqueProducts.length} products loaded for ${type}`);
+    return uniqueProducts;
+  } catch (err) {
+    console.error("Error in fetchProducts:", err);
+    return [];
+  }
+};
 
-        try {
-            const results = await Promise.all(promises);
-            
-            // Combine all results
-            const allProducts = results.flat();
-            
-            // Remove duplicates
-            const uniqueProducts = removeDuplicates(allProducts);
-            
-            console.log(`Fetched ${uniqueProducts.length} unique products for ${type}`);
-            console.log('Combined products:', uniqueProducts);
-            
-            return uniqueProducts;
-        } catch (err) {
-            console.error('Error in fetchProducts:', err);
-            throw err;
-        }
-    };
+
+
 
     // Function to fetch cart items and update addedToCart state
     const fetchCartItems = async () => {
