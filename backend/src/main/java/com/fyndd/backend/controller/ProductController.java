@@ -118,6 +118,16 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/by-category")
+    public List<ProductDTO> getProductsByCategory(@RequestParam String category) {
+        return productService.getProductByCategory(category);
+    }
+    @GetMapping("/by-brand")
+    public List<ProductDTO> getProductsByBrand(@RequestParam String brand) {
+        return productService.getProductByBrand(brand);
+    }
+
+
 
 
 //    @GetMapping("/category/{category}")

@@ -42,6 +42,8 @@ public class SecurityConfig {
                         .requestMatchers("/auth/user/profile").authenticated()
                         .requestMatchers("/api/products/getId/**").permitAll()
                         .requestMatchers("/cart/**").authenticated()
+                        .requestMatchers("/api/products/by-category").permitAll()
+                        .requestMatchers("/api/products/by-brand").permitAll()
                         .requestMatchers(("/api/friends/**")).authenticated()
 
                         .anyRequest().authenticated() // Protect other endpoints

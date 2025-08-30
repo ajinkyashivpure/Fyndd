@@ -8,6 +8,7 @@ import static com.mongodb.client.model.search.SearchPath.fieldPath;
 import static java.util.Arrays.asList;
 
 import com.fyndd.backend.model.Product;
+import com.fyndd.backend.model.ProductDTO;
 import com.fyndd.backend.repository.ProductRepository;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -391,6 +392,33 @@ public class ProductService {
 
     public void deleteProduct(String id) {
         productRepository.deleteById(id);
+    }
+
+    public List<ProductDTO> getProductByCategory(String category) {
+        List<Product> products=productRepository.findByCategoriesContainingAndTitleIsNotNull(category);
+
+        return products.stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
+
+    private ProductDTO convertToDTO(Product product) {
+        return new ProductDTO(
+                product.getId(),
+                product.getTitle(),
+                product.getPrice(),
+                product.getUrl(),
+                product.getImageUrl(),
+                product.getDescription()
+        );
+    }
+
+    public List<ProductDTO> getProductByBrand(String brand) {
+        List<Product> products=productRepository.findByBrandAndTitleIsNotNull(brand);
+        return products.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
     // Additional search options (filtering by category, price, etc.)
