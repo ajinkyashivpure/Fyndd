@@ -74,7 +74,7 @@ const Cart = () => {
                     paddingBottom: 'env(safe-area-inset-bottom)',
                 }}
             >
-                <div className="flex justify-around items-center py-1 px-4 max-w-md mx-auto">
+                <div className="flex justify-around items-center py-2 px-4 max-w-md mx-auto">
                     {navItems.map((item) => (
                         <button 
                             key={item.key}
@@ -326,7 +326,7 @@ const Cart = () => {
             {/* Main Content Container */}
             <div className="w-full">
                 {/* Scrollable Content Area - Same structure as HomePage and ProductPage */}
-                <div className="h-screen overflow-y-auto pb-20" style={{ zIndex: 1 }}>
+                <div className="h-screen overflow-y-auto pb-26" style={{ zIndex: 1 }}>
                     <div className="max-w-6xl mx-auto p-4 px-4 sm:px-6 lg:px-8">
                         {/* Header */}
                         <div className="flex items-center justify-between mb-4 sm:mb-6">

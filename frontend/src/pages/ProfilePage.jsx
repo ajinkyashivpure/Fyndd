@@ -70,7 +70,7 @@ const ProfilePage = () => {
                     paddingBottom: 'env(safe-area-inset-bottom)',
                 }}
             >
-                <div className="flex justify-around items-center py-1 px-4 max-w-md mx-auto">
+                <div className="flex justify-around items-center py-2 px-4 max-w-md mx-auto">
                     {navItems.map((item) => (
                         <button 
                             key={item.key}
@@ -206,7 +206,7 @@ const ProfilePage = () => {
             {/* Main Content Container */}
             <div className="w-full">
                 {/* Scrollable Content Area - Same structure as other pages */}
-                <div className="h-screen overflow-y-auto pb-20" style={{ zIndex: 1 }}>
+                <div className="h-screen overflow-y-auto pb-26" style={{ zIndex: 1 }}>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
                         {/* Header */}
                         <div className="flex items-center justify-between mb-6">

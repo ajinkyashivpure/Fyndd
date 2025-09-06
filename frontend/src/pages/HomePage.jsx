@@ -253,7 +253,7 @@ const BottomNavigation = ({ currentPage }) => {
       className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-[20] pb-[env(safe-area-inset-bottom)]"
       
     >
-      <div className="flex justify-around items-center py-1 px-4 max-w-md mx-auto">
+      <div className="flex justify-around items-center py-2 px-4 max-w-md mx-auto">
         {navItems.map((item) => (
           <button 
             key={item.key}
@@ -426,7 +426,7 @@ const HomePage = () => {
             {/* Main Content Container */}
             <div className="w-full">
                 {/* Scrollable Content Area */}
-                <div className="h-screen overflow-y-auto pb-24" style={{ zIndex: 1 }}>
+                <div className="h-screen overflow-y-auto pb-26" style={{ zIndex: 1 }}>
                     <motion.div
                       initial={{ opacity: 0, filter: "blur(8px)" }}
                       animate={{ opacity: 1, filter: "blur(0px)" }}
