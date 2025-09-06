@@ -354,7 +354,7 @@ const ProductPage = () => {
             {/* Main Content Container */}
             <div className="w-full">
                 {/* Scrollable Content Area - Same structure as HomePage */}
-                <div className="h-screen overflow-y-auto pb-26" style={{ zIndex: 1 }}>
+                <div className="h-screen overflow-y-auto pb-30" style={{ zIndex: 1 }}>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                         {/* Breadcrumb */}
                         <nav className="mb-4 sm:mb-6">
