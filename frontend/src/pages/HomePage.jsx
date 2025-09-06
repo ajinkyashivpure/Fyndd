@@ -426,7 +426,7 @@ const HomePage = () => {
             {/* Main Content Container */}
             <div className="w-full">
                 {/* Scrollable Content Area */}
-                <div className="h-screen overflow-y-auto pb-20" style={{ zIndex: 1 }}>
+                <div className="h-screen overflow-y-auto pb-24" style={{ zIndex: 1 }}>
                     <motion.div
                       initial={{ opacity: 0, filter: "blur(8px)" }}
                       animate={{ opacity: 1, filter: "blur(0px)" }}
