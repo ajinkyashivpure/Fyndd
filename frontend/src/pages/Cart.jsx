@@ -74,7 +74,7 @@ const Cart = () => {
                     paddingBottom: 'env(safe-area-inset-bottom)',
                 }}
             >
-                <div className="flex justify-around items-center py-3 px-4 max-w-md mx-auto">
+                <div className="flex justify-around items-center py-1 px-4 max-w-md mx-auto">
                     {navItems.map((item) => (
                         <button 
                             key={item.key}

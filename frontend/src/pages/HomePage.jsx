@@ -256,7 +256,7 @@ const BottomNavigation = ({ currentPage }) => {
       style={{ 
         zIndex: 9000,
         position: 'fixed',
-        bottom: 0,
+        bottom: 0, 
         left: 0,
         right: 0,
         backgroundColor: 'white',
@@ -265,7 +265,7 @@ const BottomNavigation = ({ currentPage }) => {
         paddingBottom: 'env(safe-area-inset-bottom)',
       }}
     >
-      <div className="flex justify-around items-center py-3 px-4 max-w-md mx-auto">
+      <div className="flex justify-around items-center py-1 px-4 max-w-md mx-auto">
         {navItems.map((item) => (
           <button 
             key={item.key}
