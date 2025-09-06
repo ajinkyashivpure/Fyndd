@@ -66,7 +66,8 @@ const ProfilePage = () => {
                     right: 0,
                     backgroundColor: 'white',
                     borderTop: '1px solid #e5e7eb',
-                    boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    paddingBottom: 'env(safe-area-inset-bottom)',
                 }}
             >
                 <div className="flex justify-around items-center py-3 px-4 max-w-md mx-auto">
@@ -281,6 +282,15 @@ const ProfilePage = () => {
                 .overflow-y-auto::-webkit-scrollbar-track {
                     background: transparent;
                 }
+                
+                :root {
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.bottom-nav {
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+
                 
                 .overflow-y-auto::-webkit-scrollbar-thumb {
                     background: rgba(156, 163, 175, 0.5);

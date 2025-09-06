@@ -72,7 +72,8 @@ const ProductPage = () => {
             right: 0,
             backgroundColor: 'white',
             borderTop: '1px solid #e5e7eb',
-            boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)'
+            boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)',
+            paddingBottom: 'env(safe-area-inset-bottom)',
           }}
         >
           <div className="flex justify-around items-center py-3 px-4 max-w-md mx-auto">
