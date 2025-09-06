@@ -28,8 +28,7 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
       {/* Hamburger Button - High z-index to stay above everything */}
       <button 
         onClick={onToggle}
-        className="relative p-1 focus:outline-none"
-        style={{ zIndex: 9999 }}
+        className="relative p-1 focus:outline-none z-[50]"
         aria-label="Toggle menu"
       >
         <div className="w-4 h-4 flex flex-col justify-center items-center">
@@ -59,8 +58,7 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black bg-opacity-50"
-            style={{ zIndex: 9990 }}
+            className="fixed inset-0 bg-black bg-opacity-50 z-[40]"
             onClick={onToggle}
           />
         )}
@@ -74,8 +72,8 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed top-0 right-0 w-80 h-full bg-white shadow-2xl flex flex-col"
-            style={{ zIndex: 9995 }}
+            className="fixed top-0 right-0 w-80 h-full bg-white shadow-2xl flex flex-col z-[50]"
+            
           >
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-2xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h2>
@@ -162,8 +160,8 @@ const Header = ({ selectedGender, setSelectedGender }) => {
 
   return (
     <header 
-      className="bg-white border-b border-gray-100 sticky top-0 w-full"
-      style={{ zIndex: 100 }}
+      className="bg-white border-b border-gray-100 sticky top-0 w-full z-[30]"
+      
     >
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between mb-2">
@@ -252,18 +250,8 @@ const BottomNavigation = ({ currentPage }) => {
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg"
-      style={{ 
-        zIndex: 9000,
-        position: 'fixed',
-        bottom: 0, 
-        left: 0,
-        right: 0,
-        backgroundColor: 'white',
-        borderTop: '1px solid #e5e7eb',
-        boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)',
-        paddingBottom: 'env(safe-area-inset-bottom)',
-      }}
+      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-[20] pb-[env(safe-area-inset-bottom)]"
+      
     >
       <div className="flex justify-around items-center py-1 px-4 max-w-md mx-auto">
         {navItems.map((item) => (
