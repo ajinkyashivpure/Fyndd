@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Hamburger Menu Component (from your original code)
+// Hamburger Menu Component with proper z-index
 const HamburgerMenu = ({ isOpen, onToggle }) => {
   const navigate = useNavigate();
   
@@ -25,9 +25,11 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
 
   return (
     <>
+      {/* Hamburger Button - High z-index to stay above everything */}
       <button 
         onClick={onToggle}
-        className="relative z-50 p-1 focus:outline-none"
+        className="relative p-1 focus:outline-none"
+        style={{ zIndex: 9999 }}
         aria-label="Toggle menu"
       >
         <div className="w-4 h-4 flex flex-col justify-center items-center">
@@ -49,6 +51,7 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
         </div>
       </button>
 
+      {/* Backdrop Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -56,12 +59,14 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed inset-0 bg-black bg-opacity-50"
+            style={{ zIndex: 9990 }}
             onClick={onToggle}
           />
         )}
       </AnimatePresence>
 
+      {/* Side Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -69,7 +74,8 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed top-0 right-0 w-80 h-full bg-white shadow-2xl z-50 flex flex-col"
+            className="fixed top-0 right-0 w-80 h-full bg-white shadow-2xl flex flex-col"
+            style={{ zIndex: 9995 }}
           >
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-2xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h2>
@@ -90,8 +96,6 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                   <span className="text-lg font-medium">Search</span>
                 </button>
 
-                
-
                 <button
                   onClick={() => handleMenuClick('/cart')}
                   className="w-full flex items-center px-6 py-4 text-gray-700 hover:bg-gray-50 hover:text-red-500 transition-colors duration-200"
@@ -103,7 +107,6 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                   </div>
                   <span className="text-lg font-medium">Cart</span>
                 </button>
-                
 
                 <button
                   onClick={() => handleMenuClick('/profile')}
@@ -136,7 +139,6 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
                   <div className="w-6 h-6 mr-4">
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
                       <path d="M16 13v-2H7.83l2.58-2.59L9 7l-5 5 5 5 1.41-1.41L7.83 13H16zm3-10H5c-1.1 0-2 .9-2 2v6h2V5h14v14H5v-6H3v6c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-
                     </svg>
                   </div>
                   <span className="text-lg font-medium">Logout</span>
@@ -150,9 +152,7 @@ const HamburgerMenu = ({ isOpen, onToggle }) => {
   );
 };
 
-
-
-// Header Component (from your original code)
+// Header Component with proper z-index
 const Header = ({ selectedGender, setSelectedGender }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
@@ -161,7 +161,10 @@ const Header = ({ selectedGender, setSelectedGender }) => {
   };
 
   return (
-    <header className="bg-white border-b border-gray-100 relative">
+    <header 
+      className="bg-white border-b border-gray-100 sticky top-0 w-full"
+      style={{ zIndex: 100 }}
+    >
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between mb-2">
           <div className="flex-1 text-center">
@@ -197,6 +200,89 @@ const Header = ({ selectedGender, setSelectedGender }) => {
         </div>
       </div>
     </header>
+  );
+};
+
+// Bottom Navigation Component
+const BottomNavigation = ({ currentPage }) => {
+  const navigate = useNavigate();
+  
+  const navItems = [
+    {
+      key: 'home',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+      ),
+      label: 'Home',
+      path: '/'
+    },
+    {
+      key: 'search',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+      ),
+      label: 'Search',
+      path: '/search'
+    },
+    {
+      key: 'cart',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+          <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+        </svg>
+      ),
+      label: 'Cart',
+      path: '/cart'
+    },
+    {
+      key: 'profile',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      ),
+      label: 'Profile',
+      path: '/profile'
+    }
+  ];
+
+  return (
+    <nav 
+      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg"
+      style={{ 
+        zIndex: 9000,
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'white',
+        borderTop: '1px solid #e5e7eb',
+        boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)'
+      }}
+    >
+      <div className="flex justify-around items-center py-3 px-4 max-w-md mx-auto">
+        {navItems.map((item) => (
+          <button 
+            key={item.key}
+            className={`flex flex-col items-center justify-center p-2 min-w-0 transition-colors duration-200 ${
+              currentPage === item.key 
+                ? 'text-red-500' 
+                : 'text-gray-400 hover:text-red-500'
+            }`}
+            onClick={() => navigate(item.path)}
+          >
+            <div className="w-6 h-6 mb-1">
+              {item.icon}
+            </div>
+            <span className="text-xs font-medium">{item.label}</span>
+          </button>
+        ))}
+      </div>
+    </nav>
   );
 };
 
@@ -243,7 +329,6 @@ const categories = {
     ]
 };
 
-// Updated brands array with link property for navigation
 const brands = [
     { name: 'ZARA', link: 'Zara', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/Zara.jpg' },
     { name: 'H&M', link: 'H&M', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/hm.jpg' },
@@ -253,7 +338,7 @@ const brands = [
     { name: "MissPrint", link: 'MissPrint Jaipur', image: 'https://fyndd-storage.s3.ap-south-1.amazonaws.com/brands/missprint.jpg' },
 ];
 
-// Main HomePage Component (updated with bottom navbar)
+// Main HomePage Component
 const HomePage = () => {
     const [selectedGender, setSelectedGender] = useState('women');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -269,7 +354,7 @@ const HomePage = () => {
         if (!container) return;
 
         let frameId;
-        let scrollSpeed = 1000; 
+        let scrollSpeed = 1; 
 
         const animateScroll = () => {
             if (!userInteracted.current) {
@@ -343,30 +428,33 @@ const HomePage = () => {
         setIsLoading(false);
     };
 
-    // Handler for brand clicks
     const handleBrandClick = (brand) => {
         navigate(`/explore/${brand.link}`);
     };
 
     return (
-        <motion.div
-          initial={{ opacity: 0, filter: "blur(8px)" }}
-          animate={{ opacity: 1, filter: "blur(0px)" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="min-h-screen"
-        >
-            <div className="w-full overflow-x-hidden">
-                <div className="w-full">
-                    {/* Main content with bottom padding for the navigation bar */}
-                    <div className="overflow-y-auto font-sans bg-white text-gray-800 pb-20">
-
+        <div className="min-h-screen bg-white">
+            {/* Main Content Container */}
+            <div className="w-full">
+                {/* Scrollable Content Area */}
+                <div className="h-screen overflow-y-auto pb-20" style={{ zIndex: 1 }}>
+                    <motion.div
+                      initial={{ opacity: 0, filter: "blur(8px)" }}
+                      animate={{ opacity: 1, filter: "blur(0px)" }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                    >
+                        {/* Header - Sticky positioned */}
                         <Header selectedGender={selectedGender} setSelectedGender={setSelectedGender} />
                         
                         {/* Hero Section */}
-                        <section className="flex flex-col items-start mx-auto max-w-7xl bg-white w-full box-border">
+                        <section 
+                          className="flex flex-col items-start mx-auto max-w-7xl bg-white w-full box-border"
+                          style={{ zIndex: 10 }}
+                        >
                             <div className="relative w-full mb-6" {...handlers}>
                                 <button 
-                                    className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-10 h-10 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
+                                    className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-10 h-10 text-gray-700 cursor-pointer flex items-center justify-center transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
+                                    style={{ zIndex: 20 }}
                                     onClick={previousImage}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -374,9 +462,11 @@ const HomePage = () => {
                                     </svg>
                                 </button>
                                 
-                                <div className="w-full cursor-pointer" onClick={() =>
-                                    navigate(`/explore/${carouselImages[selectedGender][currentImageIndex].type}`)
-                                }>
+                                <div 
+                                  className="w-full cursor-pointer" 
+                                  onClick={() => navigate(`/explore/${carouselImages[selectedGender][currentImageIndex].type}`)}
+                                  style={{ zIndex: 15 }}
+                                >
                                     <motion.img
                                       key={carouselImages[selectedGender][currentImageIndex].image}
                                       initial={{ opacity: 0, scale: 1.05 }}
@@ -390,7 +480,8 @@ const HomePage = () => {
                                 </div>
                                 
                                 <button 
-                                    className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-10 h-10 text-gray-700 cursor-pointer flex items-center justify-center z-20 transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
+                                    className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 border border-gray-200 rounded-full w-10 h-10 text-gray-700 cursor-pointer flex items-center justify-center transition-all duration-300 ease-out hover:shadow-lg hover:scale-110 active:scale-95"
+                                    style={{ zIndex: 20 }}
                                     onClick={nextImage}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -401,7 +492,7 @@ const HomePage = () => {
                         </section>
 
                         {/* Dynamic Categories Section */}
-                        <section className="p-4 md:p-6">
+                        <section className="p-4 md:p-6" style={{ zIndex: 10 }}>
                             <h2 className="text-xl md:text-2xl font-bold mb-4 text-center">
                                 {selectedGender.toUpperCase()}'S CATEGORIES
                             </h2>
@@ -416,11 +507,12 @@ const HomePage = () => {
                                     transition={{ duration: 0.4, delay: index * 0.1 }}
                                     whileHover={{ scale: 1.05, rotateX: 3, rotateY: -3 }}
                                     className="relative overflow-hidden rounded-xl shadow-lg cursor-pointer bg-white transition-all duration-300 ease-out"
+                                    style={{ zIndex: 15 }}
                                   >
                                     <img 
                                       src={category.image}
                                       alt={category.name}
-                                      className="w-full h-40 md:h-48 object-cover rounded-t-xl"
+                                      className="w-full h-60 md:h-50 object-cover rounded-t-xl"
                                     />
                                     <div className="absolute inset-0 bg-opacity-30 flex items-center justify-center">
                                       <h3 className="text-white text-xl font-semibold tracking-wide">{category.name}</h3>
@@ -430,15 +522,15 @@ const HomePage = () => {
                             </div>
                         </section>
 
-                        {/* Updated Brands Section with Navigation */}
-                        <section className="w-full py-4 md:py-6 bg-white px-4 md:px-0">
+                        {/* Brands Section */}
+                        <section className="w-full py-4 md:py-6 bg-white px-4 md:px-0" style={{ zIndex: 10 }}>
                             <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center">Popular Brands</h2>
 
                             <div className="overflow-hidden">
                                 <div
                                   ref={scrollRef}
                                   className="flex overflow-x-scroll no-scrollbar space-x-6 px-1"
-                                  style={{ scrollBehavior: 'smooth' }}
+                                  style={{ scrollBehavior: 'smooth', zIndex: 15 }}
                                 >
                                   {[...brands, ...brands].map((brand, index) => (
                                     <motion.div
@@ -446,6 +538,7 @@ const HomePage = () => {
                                       className="flex-shrink-0 w-40 md:w-48 bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
                                       whileHover={{ scale: 1.05 }}
                                       onClick={() => handleBrandClick(brand)}
+                                      style={{ zIndex: 15 }}
                                     >
                                       <img
                                         src={brand.image}
@@ -460,10 +553,10 @@ const HomePage = () => {
                         </section>
 
                         {/* Footer */}
-                        <footer className="bg-gray-50 py-6 md:py-8 px-4 border-t border-gray-200">
+                        <footer className="bg-gray-50 py-6 md:py-8 px-4 border-t border-gray-200" style={{ zIndex: 10 }}>
                             <div className="flex flex-col md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
                                 <div className="text-center md:text-left">
-                                    <h2 className="text-xl md:text-2xl font-semibold text-red-600 mb-2">FYNDD</h2>
+                                    <h2 className="text-2xl sm:text-3xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h2>
                                     <p className="text-gray-600 text-sm">Your Ultimate Fashion Destination</p>
                                 </div>
 
@@ -479,99 +572,66 @@ const HomePage = () => {
                                 <p>&copy; 2025 FYNDD. All rights reserved.</p>
                             </div>
                         </footer>
-                    </div>
+                    </motion.div>
                 </div>
-                 {/* Fixed Bottom Navigation Bar - Enhanced with better positioning */}
-                <nav 
-                    className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg"
-                    style={{ 
-                        position: 'fixed',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        zIndex: 99999,
-                        backgroundColor: 'white',
-                        borderTop: '1px solid #e5e7eb',
-                        boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)'
-                    }}
-                >
-                    <div className="flex justify-around items-center py-3 px-4 max-w-md mx-auto">
-                        <button className="flex flex-col items-center justify-center p-2 text-red-500 min-w-0 transition-colors duration-200">
-                            <div className="w-6 h-6 mb-1">
-                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                                </svg>
-                            </div>
-                            <span className="text-xs font-medium">Home</span>
-                        </button>
-                        
-                        <button 
-                            className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-500 transition-colors duration-200 min-w-0" 
-                            onClick={() => navigate('/search')}
-                        >
-                            <div className="w-6 h-6 mb-1">
-                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                                </svg>
-                            </div>
-                            <span className="text-xs font-medium">Search</span>
-                        </button>
-                        
-                        <button 
-                            className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-500 transition-colors duration-200 min-w-0" 
-                            onClick={() => navigate('/cart')}
-                        >
-                            <div className="w-6 h-6 mb-1">
-                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                                    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                                </svg>
-                            </div>
-                            <span className="text-xs font-medium">Cart</span>
-                        </button>
-                        
-                        <button 
-                            className="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-500 transition-colors duration-200 min-w-0" 
-                            onClick={() => navigate('/profile')}
-                        >
-                            <div className="w-6 h-6 mb-1">
-                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                </svg>
-                            </div>
-                            <span className="text-xs font-medium">Profile</span>
-                        </button>
-                    </div>
-                </nav>
-
-                <style jsx>{`
-                    @keyframes scroll {
-                        0% {
-                            transform: translateX(0);
-                        }
-                        100% {
-                            transform: translateX(-50%);
-                        }
-                    }
-                    
-                    .animate-scroll {
-                        animation: scroll 30s linear infinite;
-                    }
-                    
-                    .animate-scroll:hover {
-                        animation-play-state: paused;
-                    }
-                    
-                    .no-scrollbar {
-                        -ms-overflow-style: none;
-                        scrollbar-width: none;
-                    }
-                    
-                    .no-scrollbar::-webkit-scrollbar {
-                        display: none;
-                    }
-                `}</style>
             </div>
-        </motion.div>
+                
+            {/* Fixed Bottom Navigation - Always on top */}
+            <BottomNavigation currentPage={currentPage} />
+
+            {/* Custom Styles */}
+            <style jsx>{`
+                @keyframes scroll {
+                    0% {
+                        transform: translateX(0);
+                    }
+                    100% {
+                        transform: translateX(-50%);
+                    }
+                }
+                
+                .animate-scroll {
+                    animation: scroll 30s linear infinite;
+                }
+                
+                .animate-scroll:hover {
+                    animation-play-state: paused;
+                }
+                
+                .no-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                
+                /* Ensure proper scrolling behavior */
+                html, body {
+                    height: 100%;
+                    overflow: hidden;
+                }
+                
+                /* Custom scrollbar for the main content */
+                .overflow-y-auto::-webkit-scrollbar {
+                    width: 4px;
+                }
+                
+                .overflow-y-auto::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                
+                .overflow-y-auto::-webkit-scrollbar-thumb {
+                    background: rgba(156, 163, 175, 0.5);
+                    border-radius: 2px;
+                }
+                
+                .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+                    background: rgba(156, 163, 175, 0.7);
+                }
+            `}</style>
+        </div>
     );
 };
 

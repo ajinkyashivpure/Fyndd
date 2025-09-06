@@ -151,10 +151,7 @@ const LoginPage = () => {
         ← Back
       </button>
         <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-black relative inline-block mb-2">
-            FYNDD
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"></div>
-          </h1>
+          <h1 className="text-2xl sm:text-3xl font-light text-gray-900 tracking-[0.2em]">FYNDD</h1>
           <p className="text-gray-600 text-sm sm:text-base mt-2">
             Welcome back to your fashion destination
           </p>

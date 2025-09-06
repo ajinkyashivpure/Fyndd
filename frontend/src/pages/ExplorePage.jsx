@@ -433,37 +433,13 @@ const fetchProducts = async (type) => {
                                 </div>
                                 <div className="p-4">
                                     <h3 
-                                        className="text-lg font-semibold mb-2 cursor-pointer hover:text-gray-600 line-clamp-2"
+                                        className="text-lg mb-2 cursor-pointer hover:text-gray-600 line-clamp-2"
                                         onClick={() => handleProductClick(product)}
                                     >
                                         {product.title}
                                     </h3>
-                                    <p className="text-black font-bold mb-4">₹{product.price}</p>
-                                    <button
-                                        onClick={() => handleAddToCart(product)}
-                                        disabled={isAddingToCart || isAlreadyAdded}
-                                        className={`w-full px-4 py-2 rounded transition-colors duration-200 ${
-                                            isAlreadyAdded
-                                                ? 'bg-green-500 text-white cursor-not-allowed'
-                                                : isAddingToCart 
-                                                    ? 'bg-gray-400 text-white cursor-not-allowed' 
-                                                    : 'bg-red-600 text-white hover:bg-gray-800'
-                                        }`}
-                                    >
-                                        {isAlreadyAdded ? (
-                                            <div className="flex items-center justify-center">
-                                                <span className="mr-2">✓</span>
-                                                Already Added
-                                            </div>
-                                        ) : isAddingToCart ? (
-                                            <div className="flex items-center justify-center">
-                                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                                Adding...
-                                            </div>
-                                        ) : (
-                                            'Add to Cart'
-                                        )}
-                                    </button>
+                                    <p className="text-black font-bold mb-4 text-base">Rs. {product.price}</p>
+                                    
                                 </div>
                             </div>
                         );

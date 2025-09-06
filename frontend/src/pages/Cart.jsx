@@ -230,7 +230,7 @@ const Cart = () => {
                 >
                     ← Back
                 </button>
-                <h1 className="text-xl sm:text-2xl font-bold text-center flex-1">My Cart</h1>
+                <h1 className="text-xl sm:text-2xl text-center flex-1">MY CART</h1>
                 <div className="w-12 sm:w-16"></div>
             </div>
 

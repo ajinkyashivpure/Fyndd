@@ -111,7 +111,7 @@ return (
             >
                 ← Back
             </button>
-            <h2 className="text-2xl font-bold text-center flex-1">PROFILE</h2>
+            <h2 className="text-2xl  text-center flex-1">PROFILE</h2>
             <div className="w-16"></div>
         </div>
 

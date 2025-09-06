@@ -256,7 +256,7 @@ const ProductPage = () => {
             <nav className="mb-4 sm:mb-6">
                 <button 
                     onClick={() => navigate(-1)}
-                    className="text-blue-600 hover:text-blue-800 mb-4 flex items-center text-sm sm:text-base transition-colors"
+                    className="text-black-600 hover:text-black-800 mb-4 flex items-center text-sm sm:text-base transition-colors"
                 >
                     ← Back
                 </button>
@@ -301,7 +301,7 @@ const ProductPage = () => {
                     {/* Price */}
                     <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-                            <span className="text-2xl sm:text-3xl font-bold text-black">₹{product.price}</span>
+                            <span className="text-2xl sm:text-3xl font-bold text-black">Rs. {product.price}</span>
                             {product.originalPrice && product.originalPrice > product.price && (
                                 <>
                                     <span className="text-lg sm:text-xl text-gray-500 line-through">₹{product.originalPrice}</span>
@@ -367,7 +367,7 @@ const ProductPage = () => {
                             onClick={handleBuyNow}
                             className="w-full bg-black text-white py-3 sm:py-4 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm sm:text-base"
                         >
-                            Buy Now - ₹{product.price}
+                            Buy Now 
                         </button>
                     </div>
 
@@ -383,39 +383,8 @@ const ProductPage = () => {
                 </div>
             </div>
 
-            {/* Mobile Sticky Bottom Bar for Actions (visible only on mobile) */}
-            <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
-                <div className="flex space-x-3">
-                    <button
-                        onClick={() => handleAddToCart(product)}
-                        disabled={addingToCart || isAlreadyAdded}
-                        className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-colors text-sm ${
-                            isAlreadyAdded
-                                ? 'bg-green-500 text-white cursor-not-allowed'
-                                : addingToCart
-                                    ? 'bg-gray-400 text-white cursor-not-allowed'
-                                    : 'bg-red-500 text-white hover:bg-yellow-600'
-                        }`}
-                    >
-                        {isAlreadyAdded ? (
-                            <div className="flex items-center justify-center">
-                                <span className="mr-1">✓</span>
-                                Added
-                            </div>
-                        ) : addingToCart ? 'Adding...' : 'Add to Cart'}
-                    </button>
-                    
-                    <button
-                        onClick={handleBuyNow}
-                        className="flex-1 bg-black text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm"
-                    >
-                        Buy Now
-                    </button>
-                </div>
-            </div>
 
-            {/* Add bottom padding to prevent content from being hidden behind sticky bar on mobile */}
-            <div className="lg:hidden h-20"></div>
+            
         </div>
     );
 };
