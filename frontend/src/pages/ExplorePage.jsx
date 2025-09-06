@@ -388,6 +388,15 @@ const fetchProducts = async (type) => {
         );
     }
 
+    const formatPrice = (price) => {
+  if (!price) return "0";
+  return new Intl.NumberFormat("en-IN", {
+    style: "decimal",
+    maximumFractionDigits: 0, // remove decimals
+  }).format(price);
+};
+
+
     return (
         <div className="max-w-7xl mx-auto p-4">
             <div className="flex items-center justify-between mb-6">
@@ -438,7 +447,8 @@ const fetchProducts = async (type) => {
                                     >
                                         {product.title}
                                     </h3>
-                                    <p className="text-black font-bold mb-4 text-base">Rs. {product.price}</p>
+                                    <p className="text-black font-bold mb-4 text-base">Rs. {formatPrice(product.price)}</p>
+
                                     
                                 </div>
                             </div>

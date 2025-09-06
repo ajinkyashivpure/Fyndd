@@ -349,6 +349,14 @@ const ProductPage = () => {
         );
     }
 
+    const formatPrice = (price) => {
+  if (!price) return "0";
+  return new Intl.NumberFormat("en-IN", {
+    style: "decimal",
+    maximumFractionDigits: 0, // keep whole numbers only
+  }).format(price);
+};
+
     return (
         <div className="min-h-screen bg-white">
             {/* Main Content Container */}
@@ -405,7 +413,7 @@ const ProductPage = () => {
                                 {/* Price */}
                                 <div className="space-y-2">
                                     <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-                                        <span className="text-2xl sm:text-3xl font-bold text-black">Rs. {product.price}</span>
+                                        <span className="text-2xl sm:text-3xl font-bold text-black">Rs. {formatPrice(product.price)}</span>
                                         {product.originalPrice && product.originalPrice > product.price && (
                                             <>
                                                 <span className="text-lg sm:text-xl text-gray-500 line-through">₹{product.originalPrice}</span>
