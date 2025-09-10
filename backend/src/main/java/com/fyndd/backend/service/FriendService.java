@@ -133,7 +133,7 @@ public class FriendService {
 
             Optional<User> friend = userRepository.findById(friendId);
             if (friend.isPresent()) {
-                List<CartProductDTO> cartProducts = cartService.getCartProducts(friendId);
+                List<CartProductDTO> cartProducts = cartService.getCartProducts(friendId, CartType.PRIVATE);
                 friendCarts.add(new FriendCartDTO(friendId, friend.get().getName(), cartProducts));
             }
         }

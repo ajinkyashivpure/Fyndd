@@ -8,8 +8,11 @@ public class CartProductDTO {
     private BigDecimal price;
     private String imageUrl;
     private String url;
+    private CartType cartType;
 
-    public CartProductDTO(String id, String title, BigDecimal price, String imageUrl, String url) {
+    public CartProductDTO() {}
+
+    public CartProductDTO(String id, String title, BigDecimal price, String imageUrl, String url, CartType cartType) {
         this.title = title;
         this.id = id;
         this.price = price;
@@ -55,5 +58,13 @@ public class CartProductDTO {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public CartType getCartType() {
+        return cartType;
+    }
+
+    public void setCartType(CartType cartType) {
+        this.cartType = cartType;
     }
 }

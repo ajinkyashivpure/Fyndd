@@ -14,14 +14,16 @@ public class Cart {
     private String id;
 
     private String userId;
+    private CartType cartType;
 
     private List<String> productIds = new ArrayList<>();
 
     // Constructors
     public Cart() {}
 
-    public Cart(String userId) {
+    public Cart(String userId, CartType cartType) {
         this.userId = userId;
+        this.cartType = cartType;
         this.productIds = new ArrayList<>();
     }
 
@@ -47,5 +49,27 @@ public class Cart {
 
     public void setProductIds(List<String> productIds) {
         this.productIds = productIds;
+    }
+
+    public CartType getCartType() {
+        return cartType;
+    }
+
+    public void setCartType(CartType cartType) {
+        this.cartType = cartType;
+    }
+
+    public void addProductId(String productId) {
+        if (!this.productIds.contains(productId)) {
+            this.productIds.add(productId);
+        }
+    }
+
+    public boolean removeProductId(String productId) {
+        return this.productIds.remove(productId);
+    }
+
+    public void clearProducts() {
+        this.productIds.clear();
     }
 }

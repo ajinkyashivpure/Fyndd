@@ -9,7 +9,7 @@ import org.bson.Document;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -126,6 +126,7 @@ public class ProductController {
     public List<ProductDTO> getProductsByBrand(@RequestParam String brand) {
         return productService.getProductByBrand(brand);
     }
+
 
 
 
