@@ -143,8 +143,7 @@ public class FriendService {
 
     // Remove friend
     public void removeFriend(String currentUserId, String friendId) {
-        friendshipRepository.deleteByUserId1AndUserId2OrUserId2AndUserId1(
-                currentUserId, friendId, friendId, currentUserId);
+        friendshipRepository.deleteFriendship(currentUserId, friendId);
     }
 
     // Helper method to map FriendRequest to DTO
