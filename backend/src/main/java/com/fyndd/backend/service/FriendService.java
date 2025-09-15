@@ -1,6 +1,7 @@
 package com.fyndd.backend.service;
 
 import com.fyndd.backend.model.*;
+import com.fyndd.backend.repository.CartRepository;
 import com.fyndd.backend.repository.FriendRequestRepository;
 import com.fyndd.backend.repository.FriendshipRepository;
 import com.fyndd.backend.repository.UserRepository;
@@ -18,12 +19,14 @@ public class FriendService {
     private final FriendshipRepository friendshipRepository;
     private final UserRepository userRepository;
     private final CartService cartService;
+    private final CartRepository cartRepository;
 
-    public FriendService(FriendRequestRepository friendRequestRepository, FriendshipRepository friendshipRepository, UserRepository userRepository, CartService cartService) {
+    public FriendService(FriendRequestRepository friendRequestRepository, FriendshipRepository friendshipRepository, UserRepository userRepository, CartService cartService, CartRepository cartRepository) {
         this.friendRequestRepository = friendRequestRepository;
         this.friendshipRepository = friendshipRepository;
         this.userRepository = userRepository;
         this.cartService = cartService;
+        this.cartRepository = cartRepository;
     }
 
     // Search users by username
@@ -123,22 +126,51 @@ public class FriendService {
     }
 
     // Get friends' carts
-    public List<FriendCartDTO> getFriendsCartsWithProducts(String userId) {
+    public List<FriendCartsDTO> getFriendsCartsWithProducts(String userId) {
         List<Friendship> friendships = friendshipRepository.findByUserId1OrUserId2(userId, userId);
-        List<FriendCartDTO> friendCarts = new ArrayList<>();
+        List<FriendCartsDTO> friendCartsList = new ArrayList<>();
 
         for (Friendship friendship : friendships) {
             String friendId = friendship.getUserId1().equals(userId) ?
                     friendship.getUserId2() : friendship.getUserId1();
 
-            Optional<User> friend = userRepository.findById(friendId);
-            if (friend.isPresent()) {
-                List<CartProductDTO> cartProducts = cartService.getCartProducts(friendId, CartType.PRIVATE);
-                friendCarts.add(new FriendCartDTO(friendId, friend.get().getName(), cartProducts));
+            Optional<User> friendOpt = userRepository.findById(friendId);
+            if (friendOpt.isPresent()) {
+                User friend = friendOpt.get();
+
+                // Get all carts of the friend
+                List<Cart> carts = cartRepository.findByUserId(friendId);
+
+                List<FriendCartDetailsDTO> publicCarts = new ArrayList<>();
+                List<FriendCartDetailsDTO> privateCarts = new ArrayList<>();
+
+                for (Cart cart : carts) {
+                    List<CartProductDTO> products = cartService.getCartProducts(friendId, cart.getId());
+
+                    FriendCartDetailsDTO cartDTO = new FriendCartDetailsDTO();
+                    cartDTO.setCartId(cart.getId());
+                    cartDTO.setCartName(cart.getName());
+                    cartDTO.setCartVisibility(cart.getCartVisibility().toString());
+                    cartDTO.setProducts(products);
+
+                    if (cart.getCartVisibility() == CartVisibility.PUBLIC) {
+                        publicCarts.add(cartDTO);
+                    } else if (cart.getCartVisibility() == CartVisibility.PRIVATE) {
+                        privateCarts.add(cartDTO);
+                    }
+                }
+
+                FriendCartsDTO friendCarts = new FriendCartsDTO();
+                friendCarts.setFriendId(friendId);
+                friendCarts.setFriendName(friend.getName());
+                friendCarts.setPublicCarts(publicCarts);
+                friendCarts.setPrivateCarts(privateCarts);
+
+                friendCartsList.add(friendCarts);
             }
         }
 
-        return friendCarts;
+        return friendCartsList;
     }
 
     // Remove friend
@@ -161,4 +193,6 @@ public class FriendService {
 
         return dto;
     }
+
+
 }

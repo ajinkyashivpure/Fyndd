@@ -8,16 +8,34 @@ public class CartProductDTO {
     private BigDecimal price;
     private String imageUrl;
     private String url;
-    private CartType cartType;
+    private CartVisibility cartVisibility;
+    private String cartName;
+    private String cartId;
 
     public CartProductDTO() {}
 
-    public CartProductDTO(String id, String title, BigDecimal price, String imageUrl, String url, CartType cartType) {
+    public CartProductDTO(String id, String title, BigDecimal price, String imageUrl, String url, CartVisibility cartVisibility) {
         this.title = title;
         this.id = id;
         this.price = price;
         this.imageUrl = imageUrl;
         this.url = url;
+    }
+
+    public String getCartName() {
+        return cartName;
+    }
+
+    public void setCartName(String cartName) {
+        this.cartName = cartName;
+    }
+
+    public String getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(String cartId) {
+        this.cartId = cartId;
     }
 
     public String getId() {
@@ -60,11 +78,11 @@ public class CartProductDTO {
         this.url = url;
     }
 
-    public CartType getCartType() {
-        return cartType;
+    public CartVisibility getCartVisibility() {
+        return cartVisibility;
     }
 
-    public void setCartType(CartType cartType) {
-        this.cartType = cartType;
+    public void setCartVisibility(CartVisibility cartVisibility) {
+        this.cartVisibility = cartVisibility;
     }
 }

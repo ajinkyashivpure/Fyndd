@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/cart")
@@ -25,57 +25,90 @@ public class CartController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("/add/{productId}")
-    public ResponseEntity<Cart> addToCart(
-            @PathVariable String productId,
-            @RequestParam(defaultValue = "private") String cartType) {
+    @PostMapping("/create")
+    public ResponseEntity<Cart> createCart(
+            @RequestParam String name,
+            @RequestParam(defaultValue = "private") String visibility) {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("Cart add request by userId: " + userId + " to cart: " + cartType);
+        CartVisibility vis = CartVisibility.fromString(visibility);
+        Cart newCart = cartService.createCart(userId, name, vis);
+        return ResponseEntity.ok(newCart);
+    }
 
-        CartType type = CartType.fromString(cartType);
-        Cart updatedCart = cartService.addToCart(userId, productId, type);
+    @PostMapping("/{cartId}/add/{productId}")
+    public ResponseEntity<Cart> addToCart(@PathVariable String cartId, @PathVariable String productId) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Cart updatedCart = cartService.addToCart(userId, cartId, productId);
         return ResponseEntity.ok(updatedCart);
     }
 
-    @GetMapping
-    public ResponseEntity<List<CartProductDTO>> getCart(@RequestParam(defaultValue = "private") String cartType) {
+    @GetMapping("/{cartId}")
+    public ResponseEntity<List<CartProductDTO>> getCart(@PathVariable String cartId) {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        CartType type = CartType.fromString(cartType);
-        List<CartProductDTO> cartProducts = cartService.getCartProducts(userId, type);
+        List<CartProductDTO> cartProducts = cartService.getCartProducts(userId, cartId);
         return ResponseEntity.ok(cartProducts);
     }
 
-    @DeleteMapping("/remove/{productId}")
-    public ResponseEntity<Cart> removeFromCart(@PathVariable String productId) {
+    @DeleteMapping("/{cartId}")
+    public ResponseEntity<String> deleteCart(@PathVariable String cartId) {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        Cart updatedCart = cartService.removeFromCart(userId, productId);
+        cartService.deleteCart(userId, cartId);
+        return ResponseEntity.ok("Cart deleted successfully");
+    }
+
+    @DeleteMapping("/{cartId}/remove/{productId}")
+    public ResponseEntity<Cart> removeFromCart(
+            @PathVariable String cartId,
+            @PathVariable String productId) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Cart updatedCart = cartService.removeFromCart(userId, cartId, productId);
         return ResponseEntity.ok(updatedCart);
     }
 
-    @DeleteMapping("/clear")
-    public ResponseEntity<String> clearCart() {
+    @DeleteMapping("/{cartId}/clear")
+    public ResponseEntity<String> clearCart(@PathVariable String cartId) {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        cartService.clearCart(userId);
+        cartService.clearCart(userId, cartId);
         return ResponseEntity.ok("Cart cleared successfully");
     }
 
-    @GetMapping("/friends")
-    public ResponseEntity<List<FriendCartDTO>> getFriendsCartsWithProducts() {
+    @GetMapping("/visibility/{visibility}")
+    public ResponseEntity<List<Cart>> getCartsByVisibility(@PathVariable String visibility) {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<FriendCartDTO> friendCarts = friendService.getFriendsCartsWithProducts(userId);
+        CartVisibility vis = CartVisibility.fromString(visibility);
+        List<Cart> carts = cartService.getUserCartsByVisibility(userId, vis);
+        return ResponseEntity.ok(carts);
+    }
+
+//    @PostMapping("/add/{productId}")
+//    public ResponseEntity<Cart> addToCart(
+//            @PathVariable String productId,
+//            @RequestParam(defaultValue = "private") String cartType) {
+//        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+//        System.out.println("Cart add request by userId: " + userId + " to cart: " + cartType);
+//
+//        CartVisibility type = CartVisibility.fromString(cartType);
+//        Cart updatedCart = cartService.addToCart(userId, productId, type);
+//        return ResponseEntity.ok(updatedCart);
+//    }
+
+    @GetMapping("/all")
+    public ResponseEntity<UserCartsDTO> getAllCartsOfUser() {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserCartsDTO userCarts = cartService.getUserCartsWithProducts(userId);
+        return ResponseEntity.ok(userCarts);
+    }
+
+
+
+
+
+    @GetMapping("/friends")
+    public ResponseEntity<List<FriendCartsDTO>> getFriendsCartsWithProducts() {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<FriendCartsDTO> friendCarts = friendService.getFriendsCartsWithProducts(userId);
         return ResponseEntity.ok(friendCarts);
     }
 
-    @GetMapping("/public/{username}")
-    public ResponseEntity<PublicCartDTO> getPublicCart(@PathVariable String username) {
-        // Get user by username
-        Optional<User> user = userRepository.findByName(username);
-        if (user.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
 
-        List<CartProductDTO> publicCartProducts = cartService.getCartProducts(user.get().getId(), CartType.PUBLIC);
-        PublicCartDTO publicCart = new PublicCartDTO(user.get().getId(), username, publicCartProducts);
-        return ResponseEntity.ok(publicCart);
-    }
 }

@@ -1,13 +1,13 @@
 package com.fyndd.backend.model;
 
-public enum CartType {
+public enum CartVisibility {
     PUBLIC("public"),
     PRIVATE("private"),
     HIDDEN("hidden");
 
     private final String value;
 
-    CartType(String value) {
+    CartVisibility(String value) {
         this.value = value;
     }
 
@@ -15,8 +15,8 @@ public enum CartType {
         return value;
     }
 
-    public static CartType fromString(String value) {
-        for (CartType type : CartType.values()) {
+    public static CartVisibility fromString(String value) {
+        for (CartVisibility type : CartVisibility.values()) {
             if (type.value.equalsIgnoreCase(value)) {
                 return type;
             }

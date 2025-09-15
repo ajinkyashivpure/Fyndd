@@ -14,17 +14,24 @@ public class Cart {
     private String id;
 
     private String userId;
-    private CartType cartType;
+    private CartVisibility cartVisibility;
+    private String name;
 
     private List<String> productIds = new ArrayList<>();
 
     // Constructors
     public Cart() {}
 
-    public Cart(String userId, CartType cartType) {
+    public Cart(String userId, CartVisibility cartVisibility) {
         this.userId = userId;
-        this.cartType = cartType;
+        this.cartVisibility = cartVisibility;
         this.productIds = new ArrayList<>();
+    }
+
+    public Cart(String userId, String name , CartVisibility cartVisibility) {
+        this.userId = userId;
+        this.cartVisibility = cartVisibility;
+        this.name = name;
     }
 
     public String getId() {
@@ -51,12 +58,12 @@ public class Cart {
         this.productIds = productIds;
     }
 
-    public CartType getCartType() {
-        return cartType;
+    public CartVisibility getCartType() {
+        return cartVisibility;
     }
 
-    public void setCartType(CartType cartType) {
-        this.cartType = cartType;
+    public void setCartType(CartVisibility cartVisibility) {
+        this.cartVisibility = cartVisibility;
     }
 
     public void addProductId(String productId) {
@@ -71,5 +78,21 @@ public class Cart {
 
     public void clearProducts() {
         this.productIds.clear();
+    }
+
+    public CartVisibility getCartVisibility() {
+        return cartVisibility;
+    }
+
+    public void setCartVisibility(CartVisibility cartVisibility) {
+        this.cartVisibility = cartVisibility;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
