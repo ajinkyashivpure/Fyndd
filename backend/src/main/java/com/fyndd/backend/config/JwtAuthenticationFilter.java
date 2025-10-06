@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        System.out.println("🔥 JwtAuthenticationFilter is running for request: " + request.getRequestURI());
+        System.out.println(" JwtAuthenticationFilter is running for request: " + request.getRequestURI());
 
         String authHeader = request.getHeader("Authorization");
         String token = null;
@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                System.out.println("✅ Set authentication for userId: " + user.getId());
+                System.out.println(" Set authentication for userId: " + user.getId());
             }
 
 
