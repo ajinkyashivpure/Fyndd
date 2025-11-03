@@ -21,7 +21,7 @@ export default function LandingPage() {
                 style={{ scale, opacity }}
                 className="fixed top-0 left-0 w-full h-screen flex flex-col items-center justify-center"
             >
-                <h2 className="text-[120px] font-extralight text-gray-900 tracking-[0.2em]">
+                <h2 className="text-[100px] font-extralight text-gray-900 tracking-[0.2em]">
                     FYNDD
                 </h2>
                 <p className="text-xl font-light">ONE SEARCH DOES IT ALL</p>
