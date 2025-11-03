@@ -4,6 +4,31 @@ spring:
       database: ecommerce
       uri: ${MONGODB_ATLAS_URI}
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  webflux:
+    base-path: /api
+
+
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
+    region: ${AWS_REGION:us-east-1}
+    bucket-name: ${S3_BUCKET_NAME:fyndd-ai-assistant}
+
+ai:
+  service:
+    base-url: ${AI_SERVICE_URL:http://localhost:8000}
+    timeout: 120000
+    retry:
+      max-attempts: 3
+      delay: 1000
+
 
 together-ai:
   api-key: ${TOGETHER_AI_API_KEY}

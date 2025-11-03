@@ -13,7 +13,15 @@ public class User {
     private String name;
     private String password;
     private String email;
+    private UserProfile profile;
 
+    public UserProfile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(UserProfile profile) {
+        this.profile = profile;
+    }
 
     public String getId() {
         return id;

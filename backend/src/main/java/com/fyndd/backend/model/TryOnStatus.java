@@ -1,4 +1,9 @@
 package com.fyndd.backend.model;
 
-public class TryOnStatus {
+public enum TryOnStatus {
+    PENDING,
+    PROCESSING,
+    COMPLETED,
+    FAILED
 }
+

@@ -22,6 +22,7 @@ import LandingPage from "./pages/LandingPage.jsx";
 import {AnimatePresence} from "framer-motion";
 import {motion} from "framer-motion";
 
+
 function AnimatedRoutes() {
     const location = useLocation();
 
