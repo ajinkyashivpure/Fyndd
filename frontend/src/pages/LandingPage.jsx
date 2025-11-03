@@ -83,7 +83,7 @@ export default function LandingPage() {
                         {
                             title: "Shop Together. Stay Inspired.",
                             desc: "Join friends, creators, and shoppers in a vibrant social shopping network.",
-                            img: ""
+                            img: "https://fyndd-storage.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2025-11-03+at+23.06.15-2-3.jpeg"
 
                         },
                     ].map((feature, i) => (
