@@ -1,6 +1,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 
 export default function LandingPage() {
     const ref = useRef(null);
@@ -10,12 +12,17 @@ export default function LandingPage() {
         offset: ["start start", "end end"],
     });
 
+
+
     // Animate Fyndd scaling + fading with scroll (capped for mobile)
     const scale = useTransform(scrollYProgress, [0, 0.3], [1, 3.5]);
     const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
     const color = useTransform(scrollYProgress, [0, 0.25], ["#111111", "#FFFFFF"]);
 
+
+
     return (
+
         <div
             className="min-h-[300vh] bg-white text-black overflow-hidden font-sans"
             ref={ref}
