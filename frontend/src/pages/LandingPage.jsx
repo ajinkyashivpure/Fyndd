@@ -56,7 +56,7 @@ export default function LandingPage() {
             <div className="h-screen" />
 
             {/* FEATURES SECTION */}
-            <section className="relative z-10 bg-white py-16 px-6 sm:px-8 md:px-16">
+            <section className="relative z-10 bg-white py-16 px-6 sm:px-8 md:px-16 mb-10 sm:mb-8 md:mb-20">
                 <div className="max-w-6xl mx-auto space-y-10 sm:space-y-20 md:space-y-24">
 
                 {[
@@ -138,17 +138,19 @@ export default function LandingPage() {
             </section>
 
 
-            {/* CTA SECTION */}
-            <section className="relative z-50 h-screen flex flex-col items-center justify-center px-6 text-center">
+            {/* CTA Section */}
+            <section className="relative z-50 flex flex-col items-center justify-center sm:mt-8 pb-10 sm:pb-12">
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.97 }}
-                    className="px-10 py-4 bg-black text-white rounded-full text-lg sm:text-xl font-medium shadow-md cursor-pointer focus:outline-none focus:ring-4 focus:ring-gray-400"
+                    className="px-8 py-4 bg-black text-white rounded-full text-lg font-medium shadow-md cursor-pointer"
                     onClick={() => navigate("/home")}
                 >
                     Try Fyndd Now
                 </motion.button>
             </section>
+
+
         </div>
     );
 }
