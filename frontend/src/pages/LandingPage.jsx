@@ -35,7 +35,7 @@ export default function LandingPage() {
             {showButton && (
                 <button
                     onClick={() =>
-                        window.open("https://forms.gle/your-google-form-id", "_blank")
+                        window.open("https://forms.gle/9ppmdUBgjzQBm7DQA", "_blank")
                     }
                     className="relative z-10 mt-64 px-8 py-4 bg-white text-black rounded-full text-lg font-semibold shadow-md transition-all duration-300 hover:bg-black hover:text-white border border-white animate-fadeIn"
                 >
