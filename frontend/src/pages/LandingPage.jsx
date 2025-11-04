@@ -46,17 +46,17 @@ export default function LandingPage() {
                 </motion.h2>
 
                 {/* Tagline */}
-                <motion.p
-                    className="text-base sm:text-lg md:text-xl font-light text-gray-700 tracking-wide"
-                    style={{
-                        position: "relative",
-                        left: "4px", // 👈 move tagline independently (e.g. slightly left)
-                        top: "-4px",
-                        color,// 👈 controls vertical spacing from FYNDD
-                    }}
-                >
-                    ONE SEARCH DOES IT ALL
-                </motion.p>
+                {/*<motion.p*/}
+                {/*    className="text-base sm:text-lg md:text-xl font-light text-gray-700 tracking-wide"*/}
+                {/*    style={{*/}
+                {/*        position: "relative",*/}
+                {/*        left: "4px", // 👈 move tagline independently (e.g. slightly left)*/}
+                {/*        top: "-4px",*/}
+                {/*        color,// 👈 controls vertical spacing from FYNDD*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    ONE SEARCH DOES IT ALL*/}
+                {/*</motion.p>*/}
             </motion.div>
 
             {/* Spacer for scroll */}
