@@ -364,7 +364,7 @@ const HomePage = () => {
                 </button>
             )}
         </div>
-    );
+    ) ;
 
     // const [selectedGender, setSelectedGender] = useState('women');
     // const [currentImageIndex, setCurrentImageIndex] = useState(0);
