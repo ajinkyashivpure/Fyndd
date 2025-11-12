@@ -22,22 +22,25 @@
   animation: fadeIn 1s ease-in-out;
 }
 
+/* Add this to your index.css */
+
 @font-face {
   font-family: "HelveticaCustom";
-  src: url("/helvetica-thin.ttf") format("truetype");
+  src: url("https://fyndd-storage.s3.ap-south-1.amazonaws.com/helvetica-thin.ttf") format("truetype");
 }
 
 /* Add this to your index.css */
 
 @font-face {
   font-family: 'Briston';
-  src: url('./briston.otf') format('opentype');
+  src: url('https://fyndd-storage.s3.ap-south-1.amazonaws.com/briston.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'Helvetica';
-  src: url('/helvetica.ttf') format('truetype');
+  src: url('https://fyndd-storage.s3.ap-south-1.amazonaws.com/helvatica.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
