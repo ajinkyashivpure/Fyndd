@@ -21,3 +21,23 @@
 .animate-fadeIn {
   animation: fadeIn 1s ease-in-out;
 }
+
+@font-face {
+  font-family: "HelveticaCustom";
+  src: url("/helvetica-thin.ttf") format("truetype");
+}
+
+/* Add this to your index.css */
+
+@font-face {
+  font-family: 'Briston';
+  src: url('./briston.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Helvetica';
+  src: url('/helvetica.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
