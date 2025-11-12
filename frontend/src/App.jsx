@@ -1,160 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 
 function App() {
     const [scrollY, setScrollY] = useState(0);
 
-    // --- State for the form ---
-    const [email, setEmail] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [error, setError] = useState(null);
-
-    // Refs to control the animation state
-    const isSnappingRef = useRef(false);
-    const animationFrameRef = useRef(null);
-    
-    // --- NEW: Ref to track touch start position for interruption ---
-    const touchStartYRef = useRef(null);
-
     useEffect(() => {
-        const SNAP_DURATION_MS = 1000;
-        const MAX_SCROLL_MOBILE = 300;
-        const MAX_SCROLL_DESKTOP = 600;
+        const MAX_SCROLL = 600;
 
-        const easeInOutCubic = (t) =>
-            t < 0.5
-                ? 4 * t * t * t
-                : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-        // This is the listener that is removed/re-added.
-        // It's responsible for updating the scrollY state.
-        const handleScrollTrigger = () => {
-            const currentScrollY = window.scrollY;
-            setScrollY(currentScrollY); // This maps scroll to state
-
-            const maxScroll =
-                window.innerWidth < 640 ? MAX_SCROLL_MOBILE : MAX_SCROLL_DESKTOP;
-
-            if (currentScrollY > maxScroll) {
-                window.scrollTo(0, maxScroll);
-                return;
-            }
-
-            // If we are not snapping and user scrolls, start the snap
-            if (!isSnappingRef.current && currentScrollY > 0) {
-                window.removeEventListener("scroll", handleScrollTrigger); // Detach
-                smoothSnap(maxScroll);
+        const handleScroll = () => {
+            const y = Math.min(window.scrollY, MAX_SCROLL);
+            setScrollY(y);
+            if (window.scrollY > MAX_SCROLL) {
+                window.scrollTo(0, MAX_SCROLL);
             }
         };
 
-        const smoothSnap = (targetY) => {
-            isSnappingRef.current = true;
-            const startY = window.scrollY;
-            const distance = targetY - startY;
-            if (distance === 0) {
-                isSnappingRef.current = false;
-                return;
-            }
-            let startTime = null;
-
-            const step = (currentTime) => {
-                if (startTime === null) startTime = currentTime;
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / SNAP_DURATION_MS, 1);
-                const easedProgress = easeInOutCubic(progress);
-
-                const newScrollY = startY + distance * easedProgress;
-                window.scrollTo(0, newScrollY);
-                setScrollY(newScrollY); // Update state during animation
-
-                if (progress < 1) {
-                    animationFrameRef.current = requestAnimationFrame(step);
-                } else {
-                    isSnappingRef.current = false;
-                    animationFrameRef.current = null;
-                    // Re-add listener once snap is complete
-                    window.addEventListener("scroll", handleScrollTrigger);
-                }
-            };
-            animationFrameRef.current = requestAnimationFrame(step);
-        };
-
-        const handleWheel = (e) => {
-            const currentScrollY = window.scrollY;
-            const maxScroll =
-                window.innerWidth < 640 ? MAX_SCROLL_MOBILE : MAX_SCROLL_DESKTOP;
-
-            // --- MODIFIED: Added check to re-attach listener ---
-            // If snapping and user scrolls up (deltaY < 0)
-            if (isSnappingRef.current && e.deltaY < 0) {
-                cancelAnimationFrame(animationFrameRef.current);
-                isSnappingRef.current = false;
-                window.addEventListener("scroll", handleScrollTrigger); // Re-attach listener
-            }
-
-            if (e.deltaY > 0 && currentScrollY >= maxScroll) {
-                e.preventDefault();
-                window.scrollTo(0, maxScroll);
-            }
-        };
-
-        // --- NEW: Interrupt logic for Touch (Mobile) ---
-        const handleTouchStart = (e) => {
-            if (isSnappingRef.current) {
-                // Record the starting touch position
-                touchStartYRef.current = e.touches[0].clientY;
-            }
-        };
-
-        const handleTouchMove = (e) => {
-            if (!isSnappingRef.current || touchStartYRef.current === null) {
-                return;
-            }
-
-            const currentTouchY = e.touches[0].clientY;
-            const deltaY = currentTouchY - touchStartYRef.current;
-
-            // If user is swiping down (finger moving down, page scrolling up)
-            if (deltaY > 0) {
-                cancelAnimationFrame(animationFrameRef.current); // Stop snap
-                isSnappingRef.current = false; // Release snap lock
-                touchStartYRef.current = null; // Reset
-                window.addEventListener("scroll", handleScrollTrigger); // Re-attach listener
-            }
-        };
-        
-        const handleTouchEnd = () => {
-            // Reset on touch end
-            touchStartYRef.current = null;
-        };
-        // --- End of NEW logic ---
-
-
-        // --- Attach all listeners ---
-        window.addEventListener("scroll", handleScrollTrigger);
-        window.addEventListener("wheel", handleWheel, { passive: false });
-        
-        // --- NEW: Attach touch listeners ---
-        window.addEventListener("touchstart", handleTouchStart, { passive: true });
-        window.addEventListener("touchmove", handleTouchMove, { passive: false });
-        window.addEventListener("touchend", handleTouchEnd, { passive: true });
-
-        return () => {
-            // --- MODIFIED: Cleanup all listeners ---
-            window.removeEventListener("scroll", handleScrollTrigger);
-            window.removeEventListener("wheel", handleWheel);
-            window.removeEventListener("touchstart", handleTouchStart);
-            window.removeEventListener("touchmove", handleTouchMove);
-            window.removeEventListener("touchend", handleTouchEnd);
-            cancelAnimationFrame(animationFrameRef.current);
-        };
-    }, []); // Empty dependency array, runs once on mount
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const ANIMATION_END = 300;
-    // This calculation is already correctly mapped to the `scrollY` state.
-    // The problem was that `scrollY` wasn't being updated on scroll-up
-    // because the `handleScrollTrigger` listener was detached.
     const progress = Math.max(0, Math.min(1, scrollY / ANIMATION_END));
 
     const text1Opacity = 1 - progress;
@@ -173,6 +38,12 @@ function App() {
         willChange: "opacity, transform",
     };
 
+    // --- Waitlist form state ---
+    const [email, setEmail] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [error, setError] = useState(null);
+
     const handleWaitlistSubmit = async (e) => {
         e.preventDefault();
         if (isLoading) return;
@@ -184,9 +55,7 @@ function App() {
         apiUrl.searchParams.append("email", email);
 
         try {
-            const response = await fetch(apiUrl.toString(), {
-                method: "POST",
-            });
+            const response = await fetch(apiUrl.toString(), { method: "POST" });
 
             if (!response.ok) {
                 let errorMsg = "Submission failed. Please try again.";
@@ -198,8 +67,7 @@ function App() {
             }
 
             setIsSubmitted(true);
-        } catch (err)
-        {
+        } catch (err) {
             setError(err.message);
         } finally {
             setIsLoading(false);
@@ -217,7 +85,7 @@ function App() {
             bg-[url('https://fyndd-storage.s3.ap-south-1.amazonaws.com/background+(1).png')]
           "
         >
-            {/* --- THIS IS THE UPDATED VIDEO BLOCK --- */}
+            {/* --- Background Video --- */}
             <video
                 className="absolute top-0 left-0 w-full h-full object-cover -z-10"
                 autoPlay
@@ -225,19 +93,16 @@ function App() {
                 loop
                 playsInline
             >
-                {/* Source 1: For modern browsers like Chrome, Firefox */}
                 <source
                     src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/bg_vid.webm"
                     type="video/webm"
                 />
-                {/* Source 2: The fallback for Safari (iPhone, iPad, Mac) */}
                 <source
                     src="https://fyndd-storage.s3.ap-south-1.amazonaws.com/bg_vid_web.mp4"
                     type="video/mp4"
                 />
                 Your browser does not support the video tag.
             </video>
-            {/* --- END OF UPDATED BLOCK --- */}
 
             <div className="absolute top-0 left-0 w-full h-full bg-orange-500 opacity-10 -z-5" />
 
@@ -247,7 +112,7 @@ function App() {
                 className="fixed top-5 left-5 w-24 sm:w-50 z-50"
             />
 
-            {/* --- Text Block 1 ("Finding Fits") --- */}
+            {/* --- Text Block 1 --- */}
             <h1
                 className="
                     fixed top-1/2 left-1/2
@@ -298,12 +163,7 @@ Be Easier.`}
                         onSubmit={handleWaitlistSubmit}
                     >
                         <div className="flex w-full max-w-xs sm:max-w-xs">
-                            <label htmlFor="email-input" className="sr-only">
-                                Your Email
-                            </label>
-
                             <input
-                                id="email-input"
                                 type="email"
                                 placeholder="your email"
                                 required
@@ -347,7 +207,6 @@ Be Easier.`}
                                     disabled:opacity-50 disabled:cursor-not-allowed
                                 "
                             >
-                                <span className="sr-only">Submit email</span>
                                 {isLoading ? (
                                     <svg
                                         className="animate-spin h-5 w-5 sm:h-6 sm:w-6"
