@@ -167,20 +167,22 @@ Be Easier.`}
           FYNDD.
         </div>
 
-        {/* Subtitle */}
-        <div
-          className="
-            text-[1rem] sm:text-2xl
-            font-['HelveticaCustom']
-            tracking-wide opacity-90
-            mt-1 sm:mt-2
-            font-bold
-          "
-        >
-          Be among the first to experience the future
-          <br />
-          Join The Waitlist!
-        </div>
+        {/* --- Subtitle (Already bold) --- */}
+        {!isSubmitted && (
+          <div
+            className="
+              text-[1rem] sm:text-2xl
+              font-['HelveticaCustom']
+              tracking-wide opacity-90
+              mt-1 sm:mt-2
+              font-bold
+            "
+          >
+            Be among the first to experience the future
+            <br />
+            Join The Waitlist!
+          </div>
+        )}
 
         {/* Conditional Form / Success Message */}
         {!isSubmitted ? (
@@ -280,8 +282,14 @@ Be Easier.`}
             )}
           </form>
         ) : (
-          // --- Success Message ---
-          <div className="mt-4 sm:mt-6 text-lg sm:text-xl font-['HelveticaCustom'] text-[#ffd68a]">
+          // --- UPDATED: Success Message (Now bold) ---
+          <div
+            className="
+              mt-4 sm:mt-6 text-lg sm:text-xl 
+              font-['HelveticaCustom'] text-[#5e4fb7]
+              font-bold
+            "
+          >
             Thank you for joining the waitlist!
           </div>
         )}
