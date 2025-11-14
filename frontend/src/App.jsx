@@ -126,11 +126,31 @@ function App() {
         "
         style={text1Style}
       >
+        {/* --- Main Text --- */}
         {`Finding Fits
 Will `}
         <span style={{ color: "#5e4fb7ff" }}>Never</span>
         {`
 Be Easier.`}
+
+        {/* --- UPDATED: Swipe Down Hint --- */}
+        <div
+          className="
+            flex flex-col items-center justify-center /* <-- CHANGED: to flex-col */
+            mt-4 sm:mt-6 
+            font-['HelveticaCustom'] 
+            text-base sm:text-lg /* <-- CHANGED: increased text size */
+            opacity-70
+          "
+        >
+          SWIPE DOWN
+          <img
+            src="./sd.gif"
+            alt="Swipe down animation"
+            className="w-6 h-6 sm:w-8 sm:h-8 mt-2" /* <-- CHANGED: increased size and added margin-top */
+          />
+        </div>
+        {/* --- End of Updated Hint --- */}
       </h1>
 
       {/* Text 2: "FYNDD." + Form */}
@@ -182,7 +202,7 @@ Be Easier.`}
                   flex-grow w-full py-3 pl-5
                   text-black placeholder-black placeholder-opacity-70
                   rounded-l-lg focus:outline-none
-                  focus:ring-2 focus:ring-[#5e4fb7]/80 /* <-- CHANGED from yellow to purple */
+                  focus:ring-2 focus:ring-[#5e4fb7]/80
                   text-sm sm:text-base
                   border border-black/20
                   appearance-none transition-all duration-300
@@ -200,13 +220,13 @@ Be Easier.`}
                 disabled={isLoading}
                 className="
                   flex-shrink-0 flex items-center justify-center
-                  py-3 aspect-square bg-[#5e4fb7] text-white /* <-- CHANGED */
-                  rounded-r-lg border border-[#5e4fb7] /* <-- CHANGED */
+                  py-3 aspect-square bg-[#5e4fb7] text-white
+                  rounded-r-lg border border-[#5e4fb7]
                   transition-all duration-300
-                  hover:bg-[#50439a] /* <-- CHANGED (darker purple hover) */
+                  hover:bg-[#50439a]
                   active:scale-95
                   focus:outline-none
-                  focus:ring-4 focus:ring-[#5e4fb7]/70 /* <-- CHANGED */
+                  focus:ring-4 focus:ring-[#5e4fb7]/70
                   disabled:opacity-50 disabled:cursor-not-allowed
                 "
               >
