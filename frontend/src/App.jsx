@@ -143,7 +143,7 @@ Be Easier.`}
             opacity-70
           "
         >
-          SWIPE DOWN
+          Swipe Up
           <img
             src="./sd.gif"
             alt="Swipe down animation"
