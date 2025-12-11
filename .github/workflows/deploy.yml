@@ -12,45 +12,66 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-
+      
     - name: Deploy to EC2
       run: |
+        # Create SSH key file
         mkdir -p ~/.ssh
         echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         
+        # Add EC2 host to known_hosts
         ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
         
-        ssh \
-          -o StrictHostKeyChecking=no \
-          -o ServerAliveInterval=60 \
-          -o ServerAliveCountMax=30 \
-          -o TCPKeepAlive=yes \
-          -o ConnectTimeout=60 \
-          -T \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-        
-        set -e
+        # Deploy to EC2 server
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+        set -e  # Exit on any error
         
         echo "Starting deployment..."
-
+        
+        # Navigate to project directory
         cd ${{ secrets.PROJECT_DIR }}
+        echo "Current directory: $(pwd)"
+        
+        # Check current branch and status
+        echo "Current branch: $(git branch --show-current)"
+        echo "Current commit: $(git rev-parse HEAD)"
+        
+        # Pull latest changes
+        echo "Pulling latest changes..."
         git fetch origin
         git reset --hard origin/main
         
+        # Navigate to backend directory
         cd backend
-        echo "Building backend..."
-
-        # Less verbose output to avoid SSH overflow
-        mvn -q clean package -DskipTests
-
-        # Kill existing app
+        echo "Backend directory: $(pwd)"
+        
+        # Clean and build the project
+        echo "Building the project..."
+        mvn clean package -DskipTests
+        
+        # Check if JAR file exists
+        if [ ! -f "target/backend-0.0.1-SNAPSHOT.jar" ]; then
+          echo "Error: JAR file not found!"
+          exit 1
+        fi
+        
+        # Kill existing Java processes
+        echo "Stopping existing application..."
         pkill -f 'backend-0.0.1-SNAPSHOT.jar' || true
         sleep 5
-
-        # Restart app
+        
+        # Start the new application
+        echo "Starting new application..."
         nohup java -jar target/backend-0.0.1-SNAPSHOT.jar > ../app.log 2>&1 &
-
-        echo "Deployment done!"
-
+        
+        # Wait a moment and check if process started
+        sleep 3
+        if pgrep -f 'backend-0.0.1-SNAPSHOT.jar' > /dev/null; then
+          echo "Application started successfully!"
+        else
+          echo "Warning: Application may not have started properly. Check logs."
+        fi
+        
+        echo "Deployment completed!"
         EOF
