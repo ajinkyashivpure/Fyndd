@@ -122,7 +122,7 @@ const LoginPage = () => {
             navigate(from, { replace: true });
           } else {
             // Default redirect to home page
-            navigate('/', { replace: true });
+            navigate('/home', { replace: true });
           }
         }, 1500);
         
