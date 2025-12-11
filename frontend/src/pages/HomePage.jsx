@@ -214,7 +214,7 @@ const BottomNavigation = ({ currentPage }) => {
                 </svg>
             ),
             label: 'Home',
-            path: '/'
+            path: '/home'
         },
         {
             key: 'search',
