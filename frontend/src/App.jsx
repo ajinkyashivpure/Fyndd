@@ -64,6 +64,7 @@ function App() {
   const [error, setError] = useState(null);
 
   // Form submission handler
+  // Form submission handler
   const handleWaitlistSubmit = async (e) => {
     e.preventDefault();
     if (isLoading) return;
@@ -71,26 +72,9 @@ function App() {
     setIsLoading(true);
     setError(null);
 
-    // Build API URL with email as a query parameter
-    const apiUrl = new URL("https://api.fyndd.in/api/waitlist");
-    apiUrl.searchParams.append("email", email);
-
-    try {
-      const response = await fetch(apiUrl.toString(), { method: "POST" });
-
-      if (!response.ok) {
-        // Try to parse error message from API, otherwise use a default
-        const errorData = await response.json().catch(() => {});
-        throw new Error(errorData?.message || "Submission failed.");
-      }
-
-      // Success
-      setIsSubmitted(true);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
+    // Backend removed — always succeed
+    setIsSubmitted(true);
+    setIsLoading(false);
   };
 
   return (
